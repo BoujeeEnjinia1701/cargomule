@@ -2,7 +2,12 @@
 name: CargoMule
 slug: cargomule
 area: Mobility and Logistics
-status: concept          # concept | design | prototype | tested | released
+trl: 2                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
+trl_target: 3
+trl_evidence:
+  - docs/01-problem.md
+  - docs/02-concept.md
+  - docs/03-requirements.md
 shortlisted: false
 pitch: >-
   Electric-assist cargo trailer that fits any bicycle. A load cell in the drawbar measures pull force and the trailer's hub motor pushes in proportion, so the rider feels almost no added load.
