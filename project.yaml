@@ -1,0 +1,17 @@
+# Card metadata consumed by https://amishchadha.com
+name: CargoMule
+slug: cargomule
+area: Mobility and Logistics
+status: concept          # concept | design | prototype | tested | released
+shortlisted: false
+pitch: >-
+  Electric-assist cargo trailer that fits any bicycle. A load cell in the drawbar measures pull force and the trailer's hub motor pushes in proportion, so the rider feels almost no added load.
+problem: >-
+  Small businesses and households need to move 100 to 150 kg loads short distances, but cargo e-bikes are costly and ordinary bikes cannot pull that weight up hills.
+budget_usd: 900
+difficulty: 3  # 1 easiest, 5 hardest
+hero_image: media/hero.png
+licenses:
+  hardware: CERN-OHL-S-2.0
+  software: MIT
+tags: [mobility-and-logistics, open-hardware, cern-ohl-s]
