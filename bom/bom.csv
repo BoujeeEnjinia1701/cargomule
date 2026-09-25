@@ -1,9 +1,19 @@
 item,qty,spec,supplier,unit_cost_usd,make_buy,notes
-Welded steel or aluminum trailer frame,,,,,,
-250 W rear hub motor wheel,,,,,,
-Drawbar load cell with HX711 amplifier,,,,,,
-Motor controller,,,,,,
-36 V LiFePO4 pack,,,,,,
-Microcontroller,,,,,,
-Hydraulic or mechanical disc brake,,,,,,
-Universal hitch,,,,,,
+1 Chassis frame,1,"Welded mild steel box section 30 x 30 x 1.5 mm; 1,200 x 700 mm deck frame with three crossmembers, A-frame nose and 6 mm dropout plates; painted",Local steel stockist and welder,80.00,make,Indicative material and welding cost; steel or aluminium proposed awaiting Amish; about 11 kg
+2 Deck and side boards,1,"12 mm exterior plywood deck 1,200 x 700 mm; removable 150 mm side boards; tie-down eyes",Timber merchant,45.00,make,Indicative price
+3 Drawbar,1,"Steel tube 32 mm OD x 2 mm in two sections either side of the coupler, about 1.2 m overall, offset to clear the bike's rear wheel",Local steel stockist,30.00,make,Indicative price
+4 Universal axle hitch,1,"Axle-end plate for 9 mm quick release and 12 mm thru-axle (adapters), three-axis elastomer or ball joint, locking pin and secondary safety strap",Bicycle trailer parts supplier,45.00,buy,Indicative price
+5 Drawbar load cell and amplifier,1,"S-type load cell about 1 kN (100 kg) range, IP66, pinned clevis ends; 24-bit HX711-class amplifier board potted in the enclosure",Electronics distributor,30.00,buy,Indicative price
+6 Overrun brake coupler,1,"Sliding coupler on two polymer bushings, preload spring, small hydraulic or friction damper, cable lever and equalizer for two brake cables",Local fabricator with bought spring and damper,45.00,make,Indicative price; mechanical so it brakes with the power off
+7 Hub motor wheel,1,"36 V 250 W geared hub motor with disc mount and Hall sensors, laced into a 20 in (ETRTO 406) rim, 20 x 2.15 in tyre",E-bike parts supplier,160.00,buy,Indicative price
+8 Idler wheel,1,"20 in (ETRTO 406) wheel with disc hub and 20 x 2.15 in tyre, stub axle",Bicycle parts supplier,55.00,buy,Indicative price; salvaged wheel could cut cost
+9 Mechanical disc brakes,2,"Cable-actuated caliper with 160 mm rotor, adapter and cable",Bicycle parts supplier,30.00,buy,Indicative price per wheel
+10 Battery and electronics enclosure,1,"Folded 1.2 mm steel box about 400 x 460 x 170 mm, vent directed away from the load, lockable lid, cable glands",Local fabricator,30.00,make,Indicative price
+11 Battery pack,1,"12S1P LiFePO4, 38.4 V nominal, 10 Ah, 384 Wh, BMS with cell protection and low-temperature charge cutoff, about 4.2 kg",Battery supplier,180.00,buy,Indicative price; SwapCell option proposed awaiting Amish
+12 Motor controller,1,"36 V, 15 A, sine wave, torque (current) mode input, Hall sensor input, IP65",E-bike parts supplier,35.00,buy,Indicative price
+13 Control board,1,"Microcontroller board with load cell input, Hall speed input, key switch input, status LED, in a potted housing",Electronics distributor,30.00,buy,Indicative price
+14 Wiring harness fuse and key switch,1,"Keyed waterproof connectors, 20 A fuse in a sealed holder, key switch, 2.5 mm2 cable, spiral wrap",E-bike parts supplier,30.00,buy,Indicative price
+15 Lights reflectors and flag,1,"Two rear red LED lights powered from the pack through a DC-DC converter, side and rear reflectors, flag on a 1.15 m pole",Bicycle parts supplier,30.00,buy,Indicative price
+16 Parking stand,1,"Drop-down steel leg with foot plate under the drawbar nose",Local fabricator,15.00,make,Indicative price
+17 Charger,1,"Certified LiFePO4 charger, 43.8 V, 4 A, mains input",Battery supplier,40.00,buy,Indicative price; not on the trailer; no exploded-view callout
+18 Hardware and consumables,1,"Bolts, bushings, cable ties, end caps, paint, dielectric grease",Local hardware shop,25.00,buy,Indicative price; no exploded-view callout

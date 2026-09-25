@@ -6,32 +6,36 @@
 
 Electric-assist cargo trailer that fits any bicycle. A load cell in the drawbar measures pull force and the trailer's hub motor pushes in proportion, so the rider feels almost no added load.
 
+![CargoMule concept](media/hero.png)
+
+[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [Review note](docs/REVIEW.md)
+
 ## Problem
 
 Small businesses and households need to move 100 to 150 kg loads short distances, but cargo e-bikes are costly and ordinary bikes cannot pull that weight up hills.
 
 ## Concept
 
-Electric-assist cargo trailer that fits any bicycle. A load cell in the drawbar measures pull force and the trailer's hub motor pushes in proportion, so the rider feels almost no added load.
+A two-wheel, 150 kg trailer hitches to the bicycle's rear axle with no wiring to the bike. An S-type load cell in the drawbar coupling measures pull force, and a 250 W geared hub motor in one trailer wheel pushes with about four times that force, so the rider feels about 20 % of the trailer's resistance: about 4 N on the flat and about 33 N on an 8 % grade (estimates). When the bike slows, the drawbar goes into compression, the motor cuts out and a mechanical overrun coupler applies disc brakes on both trailer wheels. First-order estimates give about 24 km per charge on a hilly loaded route, an empty mass of about 38 kg and parts costing about $965, over the $900 budget (a budget change is proposed, awaiting Amish).
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
 ## Key components
 
-- Welded steel or aluminum trailer frame
-- 250 W rear hub motor wheel
-- Drawbar load cell with HX711 amplifier
-- Motor controller
-- 36 V LiFePO4 pack
-- Microcontroller
-- Hydraulic or mechanical disc brake
-- Universal hitch
+- Welded steel trailer frame with a 1,200 x 700 mm plywood deck (aluminium option proposed)
+- Universal axle hitch for quick-release and thru-axle bikes
+- Drawbar S-type load cell with HX711-class amplifier
+- Overrun brake coupler driving mechanical disc brakes on both wheels
+- 250 W, 36 V geared hub motor in one 20 in wheel, plus an idler wheel
+- 36 V, 15 A sine-wave motor controller and a microcontroller control board
+- 36 V class LiFePO4 pack, 384 Wh, with BMS (SwapCell option proposed)
+- Lights, reflectors, flag and parking stand
 
 The working bill of materials is in [bom/bom.csv](bom/bom.csv).
 
 ## Safety
 
-> Check local rules for electrically assisted trailers. The controller must cut assist whenever the drawbar goes into compression during braking. Contains a lithium battery pack. Use a BMS with cell-level protection, fuse the pack, and charge on a non-combustible surface.
+> **Safety:** Check local rules for electrically assisted trailers before riding on public roads. The trailer must brake itself: at 150 kg it is well above the 45 to 60 kg limits for unbraked cycle trailers in ASTM F1975 and EN 15918. The controller must cut assist whenever the drawbar goes into compression, at standstill, above 25 km/h and on any sensor fault. Use a hitch with a secondary safety strap. The trailer contains a lithium (LiFePO4) battery pack: use a BMS with cell-level protection, fuse the pack, and charge on a non-combustible surface. See the safety section of the [design precis](docs/02-concept.md).
 
 ## Repository layout
 
