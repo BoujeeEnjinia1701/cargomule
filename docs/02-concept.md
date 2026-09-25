@@ -3,7 +3,7 @@ doc_id: CGM-PRC-001
 title: CargoMule design precis
 project: CargoMule
 doc_type: Design precis
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,55 +17,59 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (architecture, control law, first-order numbers, braking, safety, media)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: TRL 3. Record Amish's decisions (CGM-DDR-001); numbers checked against CGM-CAL-001; offset drawbar, 0.7 Hz assist filter, wheel arch frames, 12 mm deck; parametric model and drawing CGM-DWG-001
 ---
 
 # CargoMule design precis
 
-CargoMule is a two-wheel, 150 kg cargo trailer that hitches to a bicycle's rear axle and pushes itself. A load cell inside the drawbar coupling measures how hard the bicycle pulls, a small controller commands a 250 W geared hub motor in one trailer wheel to push with four times that force, and the rider feels about one fifth of the trailer's resistance. When the bicycle slows, the drawbar goes into compression: the controller cuts the motor and a mechanical overrun coupler applies disc brakes on both trailer wheels. First-order estimates give about 24 km per charge of a 384 Wh LiFePO4 pack on a hilly loaded route, about 33 N of felt pull on an 8 % grade, an empty mass of about 38 kg and parts costing about $965. The mass and the cost miss their targets, by about 3 kg and $65.
+CargoMule is a two-wheel, 150 kg cargo trailer that hitches to a bicycle's rear axle and pushes itself. A load cell inside the drawbar coupling measures how hard the bicycle pulls, a small controller commands a 250 W geared hub motor in one trailer wheel to push with four times that force, and the rider feels a fraction of the trailer's load. When the bicycle slows, the drawbar goes into compression: the controller cuts the motor and a mechanical overrun coupler applies disc brakes on both trailer wheels. TRL 3 calculations (CGM-CAL-001) give about 25 km per charge of a 384 Wh LiFePO4 pack on a hilly loaded route, about 6.5 N of felt pull on the flat and about 37 N on an 8 % grade, and parts costing $969 against the $1,000 budget. The empty trailer weighs about 43.1 kg, which misses the relaxed 40 kg target (R8). The hill climb, braking and hitch fit are at risk (R3, R6, R7).
 
 ![Hero render](../media/hero.png)
 
-*Figure 1. CargoMule hitched to an ordinary bicycle with a 150 kg load, and a 1.75 m person for scale. Trailer parts are colored; the bicycle and load are grey. Massing model, not for fabrication.*
+*Figure 1. CargoMule hitched to an ordinary bicycle with a 150 kg load, and a 1.75 m person for scale. Trailer parts are colored; the bicycle and load are grey. Generated from the parametric model; not for fabrication.*
 
 ## How it works
 
-1. **Hitch.** A universal hitch clamps under the bicycle's left rear axle end (quick release or thru-axle) and joins the drawbar through a joint that allows pitch, yaw and roll, so the bike can lean and turn freely. Nothing else attaches to the bike and there is no cable.
-2. **Sense.** Near the trailer end, the drawbar passes through a sliding coupler. The coupler's bushings carry bending and the tongue load; the axial force passes through an S-type load cell, so the cell reads only pull (tension) or push (compression). A 24-bit amplifier (HX711 class) samples at 80 Hz.
-3. **Decide.** The control board filters the signal below about 2 Hz to remove the pulse of each pedal stroke and road bumps, then sets motor force to a gain G times the measured pull. With G = 4 the rider supplies 1/(1 + G), or 20 %, of the force needed to move the trailer. The board also reads wheel speed from the motor's Hall sensors and a key switch.
-4. **Push.** A 36 V sine-wave controller drives a 250 W geared hub motor laced into the left 20 in wheel. The right wheel is an idler. Assist stops above 25 km/h, when the trailer stands still, and whenever the drawbar is not in tension.
-5. **Brake.** When the bicycle brakes, the trailer's momentum pushes the drawbar into compression. Above a small threshold (about 20 N) the controller zeroes the motor within 100 ms. Further compression slides the coupler against a preloaded spring and damper and pulls cables to mechanical disc brakes on both wheels, as in a car trailer's overrun brake. The brakes work with the electronics off or failed.
-6. **Store and charge.** A 12S LiFePO4 pack (38.4 V nominal, 10 Ah, 384 Wh) with its own BMS sits in a closed steel enclosure under the front of the deck, beside the controller and control board. It charges from a 43.8 V, 4 A charger off the trailer.
+1. **Hitch.** A universal hitch clamps under the bicycle's left rear axle end (quick release or thru-axle) and joins the drawbar through a joint that allows pitch, yaw and roll, so the bike can lean and turn freely. Nothing else attaches to the bike and there is no cable. The drawbar runs out 360 mm to the left before turning in, so it clears the bike's rear tyre up to 55° of yaw.
+2. **Sense.** Near the trailer, the drawbar runs straight along the center line through a sliding coupler. The coupler's bushings carry bending and the tongue load; the axial force passes through an S-type load cell with a mechanical overload stop, so the cell reads only pull (tension) or push (compression). A 24-bit amplifier (HX711 class) samples at 80 Hz.
+3. **Decide.** The control board filters the signal with a second-order 0.7 Hz low-pass to remove the pulse of each pedal stroke and road bumps, then sets motor force to a gain G times the measured pull above a 3 N deadband. The rider selects G from 2 to 6 on the trailer; with the default G = 4 the rider supplies about 1/(1 + G), or 20 %, of the force needed to move the trailer. The board also reads wheel speed from the motor's Hall sensors and a key switch.
+4. **Push.** A 36 V sine-wave controller (15 A pack and 30 A phase current limits, torque-mode input) drives a 250 W geared hub motor laced into the left 20 in wheel. The right wheel is an idler. Assist stops above 25 km/h, when the trailer stands still and whenever the drawbar is not in tension.
+5. **Brake.** When the bicycle brakes, the trailer's momentum pushes the drawbar into compression. A fast path on the raw load cell signal zeroes the motor within about 60 ms once compression passes 20 N. Beyond a 30 N preload, the coupler slides against its spring and damper and a 7.7:1 lever pulls cables to mechanical disc brakes on both wheels, as in a car trailer's overrun brake. The brakes work with the electronics off or failed.
+6. **Store and charge.** A 12S LiFePO4 pack (38.4 V nominal, 10 Ah, 384 Wh) with its own BMS sits in a closed steel enclosure under the front of the deck, beside the controller and control board. It charges from a 43.8 V, 4 A charger off the trailer in about 3 h.
 
-Sensing force at the drawbar is what lets CargoMule fit any bicycle without wiring: it does not need to know how hard the rider pedals, only how hard the bike pulls. It also gives braking detection for free, since a pushing drawbar means the bike is slowing.
+Sensing force at the drawbar is what lets CargoMule fit most bicycles without wiring: it does not need to know how hard the rider pedals, only how hard the bike pulls. It also detects braking, since a pushing drawbar means the bike is slowing.
 
 ![Energy flow](../media/flow.png)
 
-*Figure 2. Energy for one 10 km loaded round trip with 120 m of climbing and 20 stops, in Wh. All values are estimates.*
+*Figure 2. Energy for one 10 km loaded round trip with 120 m of climbing and 20 stops, in Wh (CGM-CAL-001, E6). All values are estimates.*
 
 ## Main components
 
-Numbers match the exploded view (Figure 3) and `bom/bom.csv`.
+Numbers match the exploded view (Figure 3) and `bom/bom.csv`. The general arrangement is drawing CGM-DWG-001 (`cad/drawings/CGM-DWG-001.pdf`), generated from `cad/src/model.py`.
 
 Table 1. Main components.
 
-| # | Component | Proposed choice | Notes |
+| # | Component | Choice | Notes |
 | --- | --- | --- | --- |
-| 1 | Chassis frame | Welded steel box section, 30 mm, deck frame with three crossmembers, A-frame nose, dropout plates | Steel or aluminium is proposed, awaiting Amish |
-| 2 | Deck and side boards | 12 mm exterior plywood deck, 1,200 x 700 mm, removable 150 mm side boards | Tie-down points on the frame |
-| 3 | Drawbar | Steel tube, two sections either side of the coupler, about 1.2 m | Offset to clear the bike's rear wheel |
-| 4 | Universal axle hitch | Plate under the axle end with a three-axis joint (elastomer or ball) | QR and thru-axle adapters |
-| 5 | Drawbar load cell and amplifier | S-type cell, about 1 kN (100 kg) range, pinned both ends, HX711-class amplifier | Reads axial force only |
-| 6 | Overrun brake coupler | Sliding coupler on bushings, preload spring, damper, cable lever | Mechanical; works with power off |
-| 7 | Hub motor wheel | 36 V, 250 W geared hub in a 20 in (ETRTO 406) wheel, disc mount | Left side |
-| 8 | Idler wheel | 20 in wheel with a disc hub | Right side |
-| 9 | Mechanical disc brakes | Two cable calipers, 160 mm rotors | Actuated by item 6 |
-| 10 | Battery and electronics enclosure | Folded steel box, about 400 x 460 x 170 mm, vented, lockable | Under the deck front |
-| 11 | Battery pack | 12S1P LiFePO4, 38.4 V, 10 Ah, 384 Wh, with BMS | Option: SwapCell pack (see Key design choices) |
-| 12 | Motor controller | 36 V, 15 A, sine wave, torque-mode input, IP65 | Commanded by item 13 |
-| 13 | Control board | Microcontroller, load cell input, Hall speed input, key switch, status LED | Firmware is a TRL 3 sketch at most |
+| 1 | Chassis frame | Welded mild steel: 30 x 30 x 1.5 mm box perimeter and three crossmembers, A-frame nose, wheel arch frames carrying the outer dropouts, dropouts for 100 mm hubs | Steel (CGM-DDR-001, D3); about 12.4 kg |
+| 2 | Deck and side boards | 12 mm exterior plywood deck, 1,200 x 700 mm; removable 9 mm side boards, 150 mm high | Tie-down eyes on the frame |
+| 3 | Drawbar | S355 tube 38 x 2.5 mm, offset 360 mm left of the center line, straight coupler section on the center line | Upsized from 32 x 2 mm for the offset |
+| 4 | Universal axle hitch | Plate under the axle end with a three-axis joint, lock indicator and a secondary strap rated 3.8 kN or more | QR and thru-axle adapters |
+| 5 | Drawbar load cell and amplifier | S-type cell, 1 kN (100 kg) range, pinned both ends, overload stop, HX711-class amplifier | Reads axial force only |
+| 6 | Overrun brake coupler | Sliding coupler on bushings, 50 mm stroke, 30 N preload, damper, 7.7:1 cable lever and equalizer | Mechanical; works with power off |
+| 7 | Hub motor wheel | 36 V, 250 W geared front-style hub, about 230 rpm winding, 20 in (ETRTO 406) wheel, disc mount | Left side (CGM-DDR-001, D4) |
+| 8 | Idler wheel | 20 in wheel with a 100 mm disc hub, salvaged or budget grade | Right side |
+| 9 | Mechanical disc brakes | Two budget cable calipers, 160 mm rotors, metallic pads | Actuated by item 6 |
+| 10 | Battery and electronics enclosure | Folded 0.8 mm galvanized steel, 320 x 300 x 170 mm, vented, lockable | Under the deck front; 208 mm ground clearance |
+| 11 | Battery pack | 12S1P LiFePO4, 38.4 V, 10 Ah, 384 Wh, with BMS | 36 V LFP (CGM-DDR-001, D2) |
+| 12 | Motor controller | 36 V sine wave, 15 A pack and 30 A phase limits, torque-mode input, IP65 | Commanded by item 13 |
+| 13 | Control board | Microcontroller, load cell input, Hall speed input, key switch, gain selector, status LED | Firmware is a TRL 3 sketch at most |
 | 14 | Wiring harness | Keyed waterproof connectors, 20 A fuse, key switch | |
-| 15 | Lights, reflectors and flag | Rear red lights powered from the pack, side reflectors, flag on a 1.15 m pole | |
-| 16 | Parking stand | Drop-down leg under the nose | Holds the drawbar level when unhitched |
+| 15 | Lights, reflectors and flag | Rear red lights powered from the pack, side reflectors, flag on a pole at the front left corner, top at 1,570 mm | |
+| 16 | Parking stand | Drop-down leg under the A-frame nose | Holds the drawbar level when unhitched |
 
 ![Exploded view](../media/exploded.png)
 
@@ -73,114 +77,132 @@ Table 1. Main components.
 
 ![Cutaway](../media/cutaway.png)
 
-*Figure 4. Section on the trailer's center line, showing the pack, controller and control board in the enclosure under the deck, and the load cell and overrun coupler in the drawbar.*
+*Figure 4. Section on the trailer's center line, showing the pack, controller and control board in the enclosure under the deck, and the load cell and overrun coupler on the drawbar.*
 
-## First-order numbers
+## Checked numbers
 
-All values are estimates for concept review and will be checked at TRL 3. Assumptions are listed in CGM-REQ-001: rolling resistance coefficient 0.010, extra drag area 0.1 m², drive efficiency 75 %, charger 90 %, cell charging 96 %, 90 % usable pack energy, gain G = 4.
+All values come from CGM-CAL-001 and its script `docs/04-calcs/sizing.py`; the tag in brackets is the script line. Assumptions are listed there and in CGM-REQ-001.
 
 ### Mass and balance
 
-Table 2. Mass estimate.
+Table 2. Mass and balance.
 
-| Group | Estimate |
+| Group | Value |
 | --- | --- |
-| Frame 11 kg, deck and boards 6 kg, drawbar, hitch, load cell and coupler 5 kg | about 22 kg |
-| Wheels, motor and brakes | about 8 kg |
-| Enclosure, pack, controller, board, harness | about 7.5 kg |
-| Lights, flag and stand | about 1.0 kg |
-| **Empty trailer** | **about 38 kg (84 lb); R8 (35 kg) not met** |
-| Loaded trailer, design case | about 188 kg |
-| Hitch down load, payload centered | about 9 kg (axle 50 mm behind the deck center; R10 met) |
+| Frame 12.4 kg, deck and boards 8.4 kg, drawbar, hitch, load cell and coupler 5.5 kg, stand 0.5 kg | 26.7 kg |
+| Wheels, motor and brakes | 7.0 kg |
+| Enclosure, pack, controller, board, harness | 8.1 kg |
+| Lights, flag, hardware and paint | 1.3 kg |
+| **Empty trailer** | **43.1 kg (95 lb) [A3]; R8 (40 kg) not met** |
+| Loaded trailer, design case | 193.1 kg [A4] |
+| Hitch down load, payload centered | 7.8 kg [A6]; axle 20 mm behind the deck center; R10 met |
+| Loading window for 3 to 10 kg on the hitch | payload center 28 mm ahead to 62 mm behind the deck center [A7] |
+| Static rollover threshold | 0.76 g on the 800 mm track [A8] |
 
-An aluminium frame would save about 5 kg and meet R8, at higher cost and with welding that fewer workshops can do.
+Without the side boards the trailer weighs 40.3 kg. An aluminium frame would save about 5 kg, but steel was decided for the first prototype (CGM-DDR-001, D3); a response to the R8 miss is proposed in `docs/REVIEW.md`.
 
-### Forces and assist
+### Forces, motor and heating
 
-Table 3. Drawbar forces with G = 4 (rider feels 20 %).
+Table 3. Drawbar forces with G = 4 and a 3 N deadband.
 
-| Case | Trailer resistance | Motor force | Felt by rider | Motor output | Requirement |
+| Case | Trailer resistance | Motor force | Felt by rider | Motor | Requirement |
 | --- | --- | --- | --- | --- | --- |
-| Flat at 18 km/h | about 20 N (rolling 18.4 N, drag 1.5 N) | about 16 N | about 4 N | about 80 W | R4 (15 N) met |
-| 8 % grade at 8 km/h | about 165 N (grade 147 N, rolling 18 N) | about 132 N | about 33 N | about 290 W, about 34 N·m at the 0.258 m wheel radius | R3 force (40 N) met |
-| Starting, 0.5 m/s² | about 94 N plus rolling | about 90 N | about 22 N | | |
-| Same 8 % grade, no assist | about 165 N | 0 | about 165 N, about 370 W extra at 8 km/h | | Why assist is needed |
+| Flat, 5 to 20 km/h | 19.1 to 20.8 N | 12.8 to 14.2 N | 6.2 to 6.6 N [B1] | | R4 (15 N) met |
+| 8 % grade at 8 km/h | 170.8 N [B2] | 134.2 N | 36.6 N [C3] | 298 W, 34.6 N·m, 24.1 A phase, 14.9 A pack [C2] | R3 force (40 N) met |
+| Same grade, no assist | 170.8 N | 0 | 170.8 N, 380 W extra | | Why assist is needed |
 
-On the 8 % climb the motor gives about 290 W, above its 250 W continuous rating. Geared 250 W hubs are commonly driven to peaks of 400 to 500 W by a 15 A controller, so a 300 m climb (about 2.5 min) is plausible, but motor heating is unverified (R3). Motor current is about 10 A at 38 V, within the 15 A controller limit.
+The motor runs at about 55 % efficiency on the climb, so it loses about 245 W. After flat cruising the winding sits near 52 °C; the 300 m design climb brings it to about 95 °C against a 100 °C limit, and a 1,000 m climb would reach about 174 °C [C6]. R3 is therefore at risk, and the controller or firmware needs thermal derating for long climbs. The result also depends on the controller: with a 12 A pack limit the rider would feel 57 N [C4]. Assisted or not, the rider still lifts their own bike and body; at 150 W a rider climbs the 8 % grade at about 4.5 km/h [C5].
 
-The motor drives only the left wheel, so it applies a yaw moment of about 132 N x 0.425 m, about 56 N·m, on the steepest climb. The hitch reacts about 29 N of this sideways at a 1.95 m lever, and the tyres the rest. This should be small in practice but needs checking for handling (open question).
+The motor drives only the left wheel, so on the climb it applies a yaw moment of about 134 N x 0.40 m, about 54 N·m, reacted mostly by the tyres. This should be small in practice but is unverified for handling on gravel or in the wet.
+
+### Assist loop stability
+
+The drawbar, hitch joint and load cell act as a spring between the bike and the trailer, and the motor feeds the measured pull back with a delay of about 39 ms [D1]. The TRL 2 filter (first order, 2 Hz) makes this loop oscillate above G = 0.5 at the softest stiffness considered. A second-order 0.7 Hz filter is stable for G = 2 to 6 across drawbar stiffnesses of 20 to 500 N/mm, with a gain margin of 2.9 (9.3 dB) at G = 4 and 1.9 (5.8 dB) at G = 6 [D3]. The price is a slower assist: about 0.47 s to reach 90 % after a step in pull [D4]. The compression cut does not wait for the filter; it acts on the raw signal in about 60 ms [D6].
 
 ### Energy and range
 
-Table 4. Energy on the design route (10 km, 120 m total climbing, 20 stops from 20 km/h).
+Table 4. Energy on the design route (10 km, 120 m up and down, 20 stops).
 
-| Quantity | Estimate | Basis |
+| Quantity | Value | Basis |
 | --- | --- | --- |
-| Rolling and drag | about 55 Wh | 19.9 N over 10 km |
-| Climbing | about 62 Wh | 188 kg x 9.81 m/s² x 120 m |
-| Stop and start | about 16 Wh | 20 x ½ x 188 kg x (5.56 m/s)², lost to brakes |
-| **Trailer work** | **about 133 Wh** | Rider about 27 Wh (20 %), motor about 106 Wh |
-| Pack output | about 141 Wh | 106 / 0.75 |
-| **Pack energy per km** | **about 14 Wh/km** | |
-| Usable pack energy | about 346 Wh | 384 Wh x 90 % |
-| **Range on the design route** | **about 24 km** | R2 (20 km) met |
-| Range on flat roads, few stops | about 45 km | about 7.5 Wh/km |
-| Mains energy per 10 km trip | about 163 Wh | Figure 2 |
-| Charge time, empty to full | about 3 h | 10 Ah at 4 A, plus the constant-voltage phase |
+| Flat, 5.2 km at 18 km/h | 27 Wh from the pack | [E1] |
+| Climbs, 2.4 km at 5 % and 10 km/h | 94 Wh | [E1]; motor at low efficiency |
+| Descents, 2.4 km | 0 Wh | Overrun brake holds speed |
+| Stops, 20 from 18 km/h | 18 Wh | [E2] |
+| **Pack energy per km** | **13.9 Wh/km** | [E3] |
+| Usable pack energy | 346 Wh | 384 Wh x 90 % |
+| **Range on the design route** | **25.0 km** | R2 (20 km) met [E3] |
+| Range on flat roads, few stops | about 62 km | 5.6 Wh/km [E4] |
+| Mains energy per 10 km trip | 160 Wh | Figure 2 [E6] |
+| Charge time, empty to full | about 3 h | 10 Ah at 4 A plus the constant-voltage phase [E7] |
 
 ### Braking
 
-At 20 km/h the loaded trailer carries about 2.9 kJ of kinetic energy, more than the bicycle and rider (about 1.5 kJ). For the combination to slow at 3 m/s², the trailer needs about 560 N of braking force. Without trailer brakes that force would come through the hitch and push the bike's rear wheel sideways, which can jackknife the combination. The overrun coupler is sized so that 100 N of drawbar compression gives about 460 N of trailer brake force (R6), leaving the hitch push at or below 100 N. Stopping distance from 20 km/h at 3 m/s² is about 5 m plus about 5.5 m during a 1 s reaction, about 10.7 m. Brake gain, fade on long descents and behavior on gravel are TRL 3 checks.
+At 20 km/h the loaded trailer carries 2.98 kJ of kinetic energy, about twice the bicycle and rider (1.54 kJ). For the combination to slow at 3 m/s², the trailer needs 579 N of braking force; with the bike taking at most 100 N of push, the trailer brakes must give 479 N [F1]. The overrun coupler (30 N preload, 7.7:1 lever, 27 mm of its 50 mm stroke used to take up clearance) gives that at 100 N of compression with dry pads [F3]. With wet pads the push rises to about 120 N [F4], so R6 is at risk. Stopping distance from 20 km/h is 10.7 m with a 1 s reaction [F5]. On a long 8 % descent at 20 km/h the rider feels about 43 N of push and each rotor absorbs about 249 W, tending to a temperature rise of about 166 K; on 10 % at 25 km/h this becomes about 284 K [F6]. Metallic pads and a descent speed limit are needed.
+
+### Structure and fit
+
+- Side rails: 148 MPa at a 2 g bump, a factor of 1.6 on S235 [G1]. Drawbar: a factor of 3.0 at a 3 g tongue load and 1.6 in the ultimate hitch case of 1,895 N [G3], [G4]. Hitch axle: factors of 2.4 (QR) and 3.9 (thru-axle); safety strap 3.8 kN or more [G6]. Deck: 8.4 MPa under a 75 kg point load against 10 MPa allowable [G7].
+- Overall 960 mm wide and 2.52 m long from the bike axle [H2]; tyre to side rail 22.5 mm [H3]; articulation 55.5° toward the drawbar side and 105.5° away from it [H5], enough for steady turns down to about 1.3 m radius [H6].
 
 ### Cost
 
-Table 5. Indicative parts cost from `bom/bom.csv`.
+Table 5. Parts cost from `bom/bom.csv` (CGM-CAL-001, I1).
 
-| Group | Items | Indicative cost |
+| Group | Items | Cost |
 | --- | --- | --- |
-| Structure | 1 to 4, 16 | about $215 |
-| Sensing and braking | 5, 6, 9 | about $135 |
-| Drive | 7, 8, 12 | about $250 |
-| Energy and control | 10, 11, 13, 14, 17 | about $310 |
-| Lights and hardware | 15, 18 | about $55 |
-| **Total** | | **about $965; R12 ($900) not met, about 7 % over** |
+| Structure | 1 to 4, 16 | $262 |
+| Sensing and braking | 5, 6, 9 | $122 |
+| Drive | 7, 8, 12 | $225 |
+| Energy and control | 10, 11, 13, 14, 17 | $305 |
+| Lights and hardware | 15, 18 | $55 |
+| **Total** | | **$969; R12 ($1,000) met** |
+
+The D1 cost cuts (salvaged or budget idler wheel, budget calipers, smaller enclosure) save $50; the TRL 3 changes (arch frames, repriced plywood, the larger offset drawbar, a stronger hitch strap, the coupler lever and the load cell overload stop) add $54.
 
 ## Key design choices
 
-Every choice below is **Proposed, awaiting Amish**.
+Amish decided the choices below on 2026-09-25 (CGM-DDR-001), in each case going with the recommendation.
 
-- **Force sensing at the drawbar (pitch-level, kept).** It needs no sensor on the bike, works with any bike and rider, and detects braking. Alternatives: a crank or cadence sensor on the bike (Carla Cargo's early approach; ties the trailer to one bike and needs a cable) or wheel-speed matching (Biomega Ein; cannot tell a hill from a headwind or know how hard the rider is working). Recommendation: drawbar load cell, as in the pitch.
-- **Control law and gain.** Proportional assist, motor force = G x measured pull, with G = 4 by default. Options: a fixed gain; a rider-selectable gain of 2 to 6 by a switch on the trailer; or a closed loop that drives the pull toward a small set tension (near zero felt load, but a higher risk of oscillation). Recommendation: selectable fixed gain, default 4, with a stability check at TRL 3.
-- **One hub motor in one wheel.** Option A: one 250 W geared hub in the left wheel (cheapest, one controller, small yaw moment). Option B: two 125 W hubs, one per wheel (symmetric push, two controllers, higher cost). Option C: a third, central drive wheel (symmetric, but adds a wheel and mass). Recommendation: A.
-- **Overrun mechanical brake plus assist cut.** Option A: mechanical overrun coupler on both disc brakes (works unpowered, known from car trailers and Carla Cargo). Option B: an electrically actuated brake commanded from the load cell (lighter, but fails if the electronics fail). Option C: a brake cable from the bike's lever (not compatible with "any bicycle"). Recommendation: A.
-- **Battery: 36 V LiFePO4 or a SwapCell pack.** Option A: a 12S 36 V class LiFePO4 pack, 384 Wh, about $180 (as in the scaffold; LFP is thermally more stable, which matters under a 150 kg load, and 24 km meets R2). Option B: the portfolio's SwapCell pack (48 V class, about 468 Wh, about $370, needs a CAN host heartbeat and a 48 V motor and controller). SwapCell suits fleets that already share packs, but pushes the cost further over budget. Recommendation: A, with a SwapCell receiver as a later fleet variant.
-- **Frame material.** Option A: welded mild steel (cheap, repairable by most welders, about 38 kg empty, misses R8). Option B: aluminium (about 33 kg, meets R8, costs about $60 more and needs TIG welding). Option C: bolted steel angle kit (no welding, heavier). Recommendation: A for the first prototype, with R8 relaxed to 40 kg or revisited later.
-- **20 in wheels and hitch on the left axle end.** Small wheels keep the deck low (420 mm) and the drawbar near level with a 700c or 26 in bike's axle; the left side keeps clear of the derailleur. Recommendation: as proposed.
-- **Budget.** Parts are about $65 over the $900 budget. Options: (a) raise `budget_usd` to $1,000; (b) cut cost with salvaged 20 in wheels and brakes and a lighter enclosure to reach about $900; (c) drop the side boards and lights from the prototype (not recommended; lights are a safety item). Recommendation: try (b) first, then (a). `project.yaml` is unchanged.
+- **Force sensing at the drawbar (D8).** No sensor on the bike, works with most bikes and riders, and detects braking. Alternatives were a crank sensor on the bike or wheel-speed matching.
+- **Control law (D5).** Proportional assist, motor force = G x measured pull, with a rider-selectable gain of 2 to 6 and a default of 4. TRL 3 adds the 0.7 Hz second-order filter and the 3 N deadband that keep this loop stable and quiet.
+- **One hub motor in the left wheel (D4).** Cheapest, one controller, small yaw moment.
+- **Overrun mechanical brake plus assist cut (D6).** Works unpowered; known from car trailers and Carla Cargo.
+- **Battery (D2).** A 12S 36 V class LiFePO4 pack, 384 Wh. A SwapCell receiver is a later fleet variant; it would build to SwapCell interface v0.3 (wake without CAN, charge while discharging, vehicle latch vibration rating), and the shared pack would be priced once and left out of this kit's budget.
+- **Frame material (D3).** Welded mild steel for the first prototype, with R8 relaxed to 40 kg. At 43.1 kg the relaxed target is still missed (see Open questions).
+- **20 in wheels and a hitch on the left axle end (D9).** Small wheels keep the deck low (420 mm) and the drawbar near level with a 700c or 26 in bike's axle; the left side keeps clear of the derailleur.
+- **Budget (D1).** Cost cuts first, then `budget_usd` raised to $1,000.
+- **Handcart mode (D10).** Out of scope for now.
+
+Still open, with no recommendation: the first users and region for co-design (O1) and the legal status of a motorized trailer on public roads (O2).
 
 ## Safety
 
-> **Safety:** CargoMule is a 190 kg moving load behind a bicycle, driven by a motor and powered by a lithium battery. Braking, hitch failure, runaway assist and battery fire are the main hazards, and each must be designed out before any ride.
+> **Safety:** CargoMule is a 190 kg moving load behind a bicycle, driven by a motor and powered by a lithium battery. Braking, hitch failure, runaway assist, motor and brake heat, and battery fire are the main hazards, and each must be designed out before any ride.
 
-- **Runaway or unintended push.** A motor that pushes when the bike slows can shove the bike into traffic or jackknife it. Assist only while the drawbar is in tension; zero motor current within 100 ms of compression above about 20 N, above 25 km/h, at standstill, on any load cell fault (open or short, out of range, stuck value, failed plausibility check against speed) and when the key is off. The controller must run in torque mode with its own current limit, so a firmware fault cannot command more than the rated force. No throttle.
-- **Braking and jackknife.** The loaded trailer has about twice the kinetic energy of the bicycle and rider. Trailer brakes are mandatory above the 45 to 60 kg limits in ASTM F1975 and EN 15918, and the overrun brake must work with the power off. Long descents can overheat small rotors; this is a TRL 3 check.
-- **Hitch failure.** A detached 190 kg trailer is a serious hazard to others. The hitch needs a secondary safety strap or cable, a clear locking indicator and a design load well above peak braking and pothole loads (to be calculated at TRL 3).
+- **Runaway or unintended push.** A motor that pushes when the bike slows can shove the bike into traffic or jackknife it. Assist only while the drawbar is in tension above the 3 N deadband; zero motor current within 100 ms of compression above 20 N (about 60 ms on paper, on the raw signal), above 25 km/h, at standstill, on any load cell fault (open or short, out of range, stuck value, failed plausibility check against speed) and when the key is off. The controller must run in torque mode with its own current limit, so a firmware fault cannot command more than the rated force. No throttle.
+- **Assist oscillation.** With the TRL 2 filter the assist loop would oscillate and could pump the drawbar. The 0.7 Hz second-order filter is required, and gains above 6 must not be selectable.
+- **Braking and jackknife.** The loaded trailer has about twice the kinetic energy of the bicycle and rider. Trailer brakes are mandatory above the 45 to 60 kg limits in ASTM F1975 and EN 15918, and the overrun brake must work with the power off. Wet pads raise the push on the bike to about 120 N, and long, steep descents can heat rotors by 170 to 280 K; use metallic pads and limit descent speed.
+- **Hitch failure.** A detached 190 kg trailer is a serious hazard to others. The hitch needs a secondary safety strap rated 3.8 kN or more, a clear locking indicator and a design load above the 1,895 N ultimate case.
+- **Load placement.** The hitch load swings by 7.8 kg per 100 mm of payload shift, and the drawbar unloads with the payload center 100 mm behind the deck center. Mark the loading zone on the deck and strap loads down; a lifting drawbar makes the trailer unstable.
+- **Motor heat.** Climbs longer than about 300 m at 8 % can overheat the motor; derate current on temperature or time. The left rotor sits on the motor, so brake heat also reaches it.
 - **Lithium battery.** A 384 Wh LiFePO4 pack is less prone to thermal runaway than other lithium-ion chemistries, but a short circuit can still start a fire. Use a BMS with cell-level protection and low-temperature charge cutoff, a 20 A fuse at the pack, a closed steel enclosure with a vent directed away from the load, and charge on a non-combustible surface away from sleeping areas. Never charge a damaged or wet pack.
 - **Mains charging.** The charger is a certified off-the-shelf unit; no mains wiring is built into the trailer.
-- **Load security and tipping.** Loads must be strapped down and centered. A high or off-center load raises the center of mass and can tip the trailer in a fast turn; the hitch down load must stay positive so the drawbar does not lift.
-- **Pinch points and sharp edges.** The overrun coupler slides under load and the parking stand folds; both need guards. Deburr all frame edges and fit end caps to open tube ends.
+- **Tipping.** The static rollover threshold is 0.76 g with the design load; a high or off-center load lowers it. Keep loads low and centered.
+- **Pinch points and sharp edges.** The overrun coupler slides 50 mm under load and the parking stand folds; both need guards. Deburr all frame edges and fit end caps to open tube ends. The tyres run 22.5 mm from the side rails.
 - **Visibility.** A long, wide combination is easy to misjudge; lights, reflectors and a flag are part of the design, not accessories.
 
-## Open questions for TRL 3
+## Open questions
 
-- Legal status of a motorized bicycle trailer in the first target country (EU pedal-assist exclusion, US federal and state rules).
-- Stability of the proportional loop: drawbar stiffness, trailer mass, filter and sample rate; does G = 4 oscillate, and is a small set tension better?
-- Motor heating on a 300 m, 8 % climb at 30 °C (R3).
+TRL 4 is on hold by Amish's instruction. These questions remain at TRL 3:
+
+- Response to the R8 miss (43.1 kg against 40 kg): proposed options are in `docs/REVIEW.md`, awaiting Amish.
+- Legal status of a motorized bicycle trailer in the first target country (CGM-DDR-001, O2); first users and region (O1).
+- Motor constants (winding, resistance, thermal) from a real datasheet, which decide whether R3 holds.
+- Stiffness and damping of the hitch joint, which set the real loop margin.
+- Wet braking, pad choice and rotor size on long descents (R6).
+- Hitch axles for each thru-axle thread and length, and adapters for nutted axles (R7).
 - Yaw effect of driving one wheel, especially on gravel or in the wet.
-- Overrun brake gain, spring preload and damper rate so the coupler does not chatter on bumps or brake during normal pedaling pulses.
-- Hitch design load and fit across common rear axle types (R7), plus a secondary safety strap.
-- Frame stress at 150 kg with a 2 g bump factor, and the steel versus aluminium decision (R1, R8).
-- Close the $65 cost gap or propose a budget change (R12).
 - Freedom to operate against coupling-sensor patents such as WO2022223692A1.
 
-Concept media: [blueprint sheet](../media/concept-blueprint.pdf), [interactive 3D model](../media/viewer.html).
+Concept media: [blueprint sheet](../media/concept-blueprint.pdf), [interactive 3D model](../media/viewer.html). General arrangement: [CGM-DWG-001](../cad/drawings/CGM-DWG-001.pdf).

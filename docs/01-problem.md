@@ -3,7 +3,7 @@ doc_id: CGM-PRB-001
 title: CargoMule problem statement
 project: CargoMule
 doc_type: Problem statement
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (users, context, constraints, out of scope, prior work with sources)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: TRL 3. Pitch wording "most bicycles" and $1,000 budget per CGM-DDR-001; open questions linked to the decision record
 ---
 
 # CargoMule problem statement
@@ -31,7 +35,7 @@ Short urban and suburban trips with heavy loads (a market stall's stock, tools a
 2. **Cost of the alternatives.** A mainstream electric longtail such as the RadWagon 5 sells for about $2,399 ([The Inertia](https://www.theinertia.com/gear/rad-power-bikes-radwagon-5-review/)); a premium one such as the Tern GSD Gen 3 starts at $4,999 ([Notebookcheck](https://www.notebookcheck.net/Tern-unveils-the-GSD-electric-cargo-bike-with-an-aluminum-frame-and-63-mile-range.987405.0.html)). Commercial electric-assist trailers exist but are priced for businesses (see Prior work).
 3. **Braking.** A heavy trailer without its own brakes pushes the bicycle when it slows. Voluntary trailer standards set low limits for unbraked trailers: 60 kg in EN 15918 and 45.4 kg (100 lb) in ASTM F1975 ([Wikipedia summary of both standards](https://en.wikipedia.org/wiki/Bicycle_trailer); [EN 15918 catalog entry](https://standards.iteh.ai/catalog/standards/cen/e11b5f02-592a-45fb-9a47-3d8c2c11275d/en-15918-2011a2-2017)). A 150 kg trailer therefore needs its own brakes.
 
-CargoMule is an electric-assist cargo trailer that hitches to any ordinary bicycle with no wiring to the bike. A load cell in the drawbar measures how hard the bicycle is pulling and the trailer's hub motor pushes in proportion, so the rider feels a small fraction of the trailer's weight on the flat and on hills.
+CargoMule is an electric-assist cargo trailer that hitches to most bicycles with no wiring to the bike. A load cell in the drawbar measures how hard the bicycle is pulling and the trailer's hub motor pushes in proportion, so the rider feels a fraction of the trailer's load on the flat and on hills.
 
 ## Users and context
 
@@ -53,8 +57,8 @@ CargoMule is an electric-assist cargo trailer that hitches to any ordinary bicyc
 
 ## Constraints
 
-- Garage-buildable prototype, about $900 USD in parts (`project.yaml`).
-- Hitches to common bicycles with no change to the bike and no wiring to it. "Any bicycle" is the aim; the realistic first target is bikes with a quick-release or thru-axle rear wheel (see CGM-REQ-001, R7).
+- Garage-buildable prototype, $1,000 USD or less in parts (`project.yaml`; raised from $900 by CGM-DDR-001, D1).
+- Hitches to most bicycles with no change to the bike and no wiring to it: bikes with a quick-release or thru-axle rear wheel first, with adapters for others (see CGM-REQ-001, R7).
 - Assist within e-bike limits: 250 W rated power and assist to 25 km/h at most, matching the EU pedal-assist exclusion in Regulation (EU) No 168/2013 ([EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX%3A32013R0168)) and within the US federal low-speed electric bicycle definition of under 750 W and 20 mph ([15 U.S.C. 2085](https://www.law.cornell.edu/uscode/text/15/2085)). Whether a motorized trailer falls under these rules is an open question.
 - The trailer must brake itself so it never pushes the bicycle hard when slowing.
 - Generic, replaceable parts (e-bike hub motor, controller, disc brakes, 20 in wheels) so a local bike shop can repair it.
@@ -63,8 +67,8 @@ CargoMule is an electric-assist cargo trailer that hitches to any ordinary bicyc
 
 - A complete cargo bicycle or tricycle (see FlatTrike).
 - Carrying people or children.
-- Handcart or walk-behind mode (a later variant, not at TRL 2).
-- Designing the battery cells or BMS (bought in; see the SwapCell option in CGM-PRC-001).
+- Handcart or walk-behind mode (kept out of scope by CGM-DDR-001, D10).
+- Designing the battery cells or BMS (a bought-in 36 V LiFePO4 pack, CGM-DDR-001 D2; a SwapCell receiver is a later fleet variant).
 - Road registration or type approval.
 
 ## Prior work
@@ -79,8 +83,8 @@ The gap CargoMule addresses is an open, garage-buildable design that senses pull
 
 ## Open questions
 
-- Is a motorized bicycle trailer legal on public roads and bike lanes in the first target country, and under which category? Carla Cargo's sale in Germany suggests a path in the EU; US state rules need checking.
-- Which users first: a market trader group, a trades cooperative, or a community food bank? Proposed, awaiting Amish.
+- Is a motorized bicycle trailer legal on public roads and bike lanes in the first target country, and under which category? Carla Cargo's sale in Germany suggests a path in the EU; US state rules need checking. Proposed, awaiting Amish (CGM-DDR-001, O2).
+- Which users first: a market trader group, a trades cooperative, or a community food bank? Proposed, awaiting Amish (CGM-DDR-001, O1); co-design partners are to be picked per area later.
 - Is 150 kg the right payload, or do most target loads fall under 100 kg, which would allow a lighter trailer?
 - How many target bikes have a quick-release or thru-axle rear wheel, and what share need a nutted-axle or hub-gear adapter?
 
