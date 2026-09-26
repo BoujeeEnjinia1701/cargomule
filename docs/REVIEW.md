@@ -1,5 +1,20 @@
 # Review note: CargoMule
 
+## Session 2026-09-26: sources strengthened
+
+Amish asked on 2026-09-26 to "fix the weaker sources." Links in the README sections Concept rationale to What sparked the idea were checked; the three uncited country rows were rewritten or replaced with cited rows, and trade-press price sources were replaced with the manufacturer's page.
+
+| Item | Old source | New source |
+| --- | --- | --- |
+| Netherlands row | None (uncited claim about cargo-bike habit and bridges) | KiM Netherlands Institute for Transport Policy Analysis, *Cycling Facts 2023* (1.3 bicycles per person, 28 % of journeys, cargo bikes 2 % of new e-bike sales); row rewritten to match |
+| Kenya and East Africa row | None | Replaced by Uganda and East Africa, citing the World Bank case study by Malmberg Calvo (1994), SSATP Working Paper 12 (bicycle traders with about 100 kg loads pushing up hills) |
+| Colombia and Andean cities row | None | Replaced by Colombia (Bogotá), citing the Secretaría Distrital de Movilidad's 2023 mobility survey release (886,655 daily bicycle trips, 7 %) |
+| United States row, cargo e-bike price | The Inertia (review) and Notebookcheck (trade press) | Rad Power Bikes RadWagon 5 product page ($2,399); the unverified $4,999 Tern figure removed |
+| India row | Street Vendors Act only; uncited claim about daily hand-cart and bicycle use | Uncited clause removed; row now states only what the Act supports |
+| CGM-PRB-001 cost of alternatives | The Inertia and Notebookcheck | Rad Power Bikes product page; CGM-PRB-001 v0.3 to v0.4 |
+
+Kept and re-checked: European Environment Agency transport indicator, WHO ambient air quality fact sheet, and the 2013 CycleLogistics baseline study (Reiter and Wrighton, FGM-AMOR, EU IEE grant IEE/10/277), which is the primary report (hosted by cargobike.jetzt). Kept but not re-fetched this session: Carla Cargo's own eCARLA page, India Code (Street Vendors Act, 2014) and Cornell LII (15 U.S.C. 2085). No budget change.
+
 ## Session 2026-09-25: recommendations accepted
 
 Amish wrote on 2026-09-25: "i accept all your recommendations, go with them across all repos." Every open item with a recommendation is now decided by Amish, 2026-09-25: go with recommendation, and recorded in `docs/decisions/0002-recommendations-accepted.md` (CGM-DDR-002 v0.1). TRL stays at 3; TRL 4 remains on hold.

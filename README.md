@@ -40,11 +40,11 @@ The same traffic fouls city air. The World Health Organization estimates that [a
 | Country or region | Why it matters there |
 | --- | --- |
 | Germany | Electric-assist cargo trailers are already sold under EU pedelec rules, but at a premium: the eCARLA starts at [€6,490](https://www.carlacargo.de/products/ecarla). An open design brings the idea to smaller users |
-| Netherlands | Dense bike networks and a strong cargo-bike habit, but flat-country trailers still struggle with bridges and heavy loads; an assisted trailer reuses the bikes people already own |
-| United States | Cargo e-bikes cost about [$2,399](https://www.theinertia.com/gear/rad-power-bikes-radwagon-5-review/) to [$4,999](https://www.notebookcheck.net/Tern-unveils-the-GSD-electric-cargo-bike-with-an-aluminum-frame-and-63-mile-range.987405.0.html); a trailer for an existing bike is a cheaper entry, within the federal [low-speed electric bicycle definition](https://www.law.cornell.edu/uscode/text/15/2085) for the motor rating |
-| India | Street vending is a recognized livelihood under the [Street Vendors Act, 2014](https://www.indiacode.nic.in/handle/123456789/2124?view_type=browse); vendors move heavy stock by hand cart or bicycle every day |
-| Kenya and East Africa | Bicycles already carry goods to and from markets; assist on hills and a proper braked trailer widen the loads a rider can move safely |
-| Colombia and Andean cities | Steep, dense cities where short goods trips are common and the grade, not the distance, is what stops unassisted bicycles |
+| Netherlands | The Dutch own about 1.3 bicycles per person and make 28 % of all journeys by bicycle, yet cargo bikes were only 2 % of new e-bike sales ([KiM Netherlands Institute for Transport Policy Analysis, *Cycling Facts 2023*](https://english.kimnet.nl/site/binaries/site-content/collections/documents/2024/01/10/cycling-facts-2023/KiM+brochure+Cycling+facts+2023_def.pdf)); an assisted trailer puts heavy loads on the bikes people already own |
+| United States | A mainstream cargo e-bike such as the RadWagon 5 lists at [$2,399](https://www.radpowerbikes.com/products/radwagon-electric-cargo-bike) (Rad Power Bikes); a trailer for an existing bike is a cheaper entry, within the federal [low-speed electric bicycle definition](https://www.law.cornell.edu/uscode/text/15/2085) for the motor rating |
+| India | Street vending is a recognized livelihood under the [Street Vendors Act, 2014](https://www.indiacode.nic.in/handle/123456789/2124?view_type=browse); an assisted trailer could help vendors move a stall and its stock to the pitch |
+| Uganda and East Africa | A World Bank case study in eastern Uganda found bicycle traders carrying loads of around 100 kg of bananas and millet beer to market, pushing rather than riding up hills ([Malmberg Calvo, 1994](https://www.ssatp.org/sites/default/files/publication/SSATPWP12.pdf)); assist on hills and a braked trailer widen the loads a rider can move safely |
+| Colombia (Bogotá) | Bogotá's 2023 mobility survey counted 886,655 bicycle trips a day, 7 % of all trips ([Secretaría Distrital de Movilidad](https://www.movilidadbogota.gov.co/en-bogota-el-70-de-los-viajes-diarios-se-realizan-en-modos-sostenibles-segun-encuesta-de-movilidad)); an assisted trailer lets those riders take on goods trips as well |
 
 ## What sparked the idea
 
@@ -95,6 +95,12 @@ The bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is 
 ## Documentation
 
 Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (CGM-PRC-001 for the precis), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `CGM-PRC-001/v1.0`.
+
+## Credits
+
+Designed by Amish Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
+
+AI assistance (Claude) was used to accelerate concept renders, prototype documentation and first-pass sizing calculations. Design direction and all decisions are Amish Chadha's, recorded in this repository's decision records (`docs/decisions/`).
 
 ## Licenses
 

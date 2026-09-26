@@ -3,9 +3,9 @@ doc_id: CGM-PRB-001
 title: CargoMule problem statement
 project: CargoMule
 doc_type: Problem statement
-version: "0.3"
+version: "0.4"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -21,18 +21,22 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: TRL 3. Pitch wording "most bicycles" and $1,000 budget per CGM-DDR-001; open questions linked to the decision record
+- version: "0.4"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Stronger sources
 ---
 
 # CargoMule problem statement
 
-Small businesses and households need to move 100 to 150 kg loads a few kilometers at a time, but a cargo e-bike costs roughly $2,400 to $5,000, the few electric-assist trailers on the market cost as much or more, and an ordinary bicycle cannot pull that weight up a hill. CargoMule aims to turn the bicycle a person already owns into a 150 kg load carrier for well under the price of a cargo e-bike.
+Small businesses and households need to move 100 to 150 kg loads a few kilometers at a time, but a mainstream cargo e-bike lists at about $2,400, the few electric-assist trailers on the market cost as much or more, and an ordinary bicycle cannot pull that weight up a hill. CargoMule aims to turn the bicycle a person already owns into a 150 kg load carrier for well under the price of a cargo e-bike.
 
 ## The problem
 
 Short urban and suburban trips with heavy loads (a market stall's stock, tools and materials for a trade job, a week of groceries for a large household, a delivery round) are usually made by car or van. A bicycle with a cargo trailer can do many of these trips, but the rider becomes the limit:
 
 1. **Hills.** On level ground most people can pull about 137 kg (300 lb) on a trailer at modest speed, but a 2 % grade already triples the effort and a 4 % grade needs very low gearing ([Bikes At Work](https://www.bikesatwork.com/blog/how-much-weight-can-a-bicycle-carry)). A first-order estimate for CargoMule's design load (about 188 kg of loaded trailer) on an 8 % grade is about 165 N of extra pull, or about 370 W at 8 km/h on top of the rider's own climb. That is beyond most riders.
-2. **Cost of the alternatives.** A mainstream electric longtail such as the RadWagon 5 sells for about $2,399 ([The Inertia](https://www.theinertia.com/gear/rad-power-bikes-radwagon-5-review/)); a premium one such as the Tern GSD Gen 3 starts at $4,999 ([Notebookcheck](https://www.notebookcheck.net/Tern-unveils-the-GSD-electric-cargo-bike-with-an-aluminum-frame-and-63-mile-range.987405.0.html)). Commercial electric-assist trailers exist but are priced for businesses (see Prior work).
+2. **Cost of the alternatives.** A mainstream electric longtail such as the RadWagon 5 lists at $2,399 ([Rad Power Bikes](https://www.radpowerbikes.com/products/radwagon-electric-cargo-bike)). Commercial electric-assist trailers exist but are priced for businesses (see Prior work).
 3. **Braking.** A heavy trailer without its own brakes pushes the bicycle when it slows. Voluntary trailer standards set low limits for unbraked trailers: 60 kg in EN 15918 and 45.4 kg (100 lb) in ASTM F1975 ([Wikipedia summary of both standards](https://en.wikipedia.org/wiki/Bicycle_trailer); [EN 15918 catalog entry](https://standards.iteh.ai/catalog/standards/cen/e11b5f02-592a-45fb-9a47-3d8c2c11275d/en-15918-2011a2-2017)). A 150 kg trailer therefore needs its own brakes.
 
 CargoMule is an electric-assist cargo trailer that hitches to most bicycles with no wiring to the bike. A load cell in the drawbar measures how hard the bicycle is pulling and the trailer's hub motor pushes in proportion, so the rider feels a fraction of the trailer's load on the flat and on hills.
