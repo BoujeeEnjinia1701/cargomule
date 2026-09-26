@@ -3,7 +3,7 @@ doc_id: CGM-DDR-001
 title: CargoMule TRL 2 review decisions
 project: CargoMule
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -13,6 +13,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's decisions on the TRL 2 review items and the items that remain open
+- version: "0.2"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002). The R8 response is now decided; see CGM-DDR-002
 ---
 
 # 0001: TRL 2 review decisions
@@ -58,5 +62,5 @@ The options for each item are those listed in `docs/REVIEW.md` (session 2026-09-
 - CGM-PRB-001, CGM-PRC-001 and CGM-REQ-001 are revised to v0.3. R8 is relaxed to 40 kg and R12 is redefined as $1,000 (the budget). No other requirement target changes. The key design choices in the precis are no longer "proposed".
 - The BOM carries the D1 cost cuts: idler wheel $30 (was $55), disc calipers $20 each (were $30) and a 0.8 mm, 320 x 300 x 170 mm enclosure at $25 (was $30). The TRL 3 total is $969 (CGM-CAL-001, I1).
 - The SwapCell fleet variant under D2 is not designed at TRL 3. If it is taken up, it would build to SwapCell interface v0.3 (wake without CAN, charge while discharging, vehicle latch vibration rating), and the shared pack would be priced once in the SwapCell repo and left out of the CargoMule kit budget.
-- TRL 3 calculations (CGM-CAL-001) show that R8 is still not met at 40 kg with the steel frame (about 43 kg). A response is proposed in `docs/REVIEW.md` and awaits Amish; this record does not decide it.
+- TRL 3 calculations (CGM-CAL-001 v0.1) showed that R8 was still not met at 40 kg with the steel frame (about 43 kg). Decided by Amish, 2026-09-25: go with recommendation. R8 is relaxed to 45 kg for the first prototype, recorded in CGM-DDR-002 with the other TRL 3 review items.
 - TRL 4 is on hold by Amish's instruction. Nothing in this record authorizes building or testing.

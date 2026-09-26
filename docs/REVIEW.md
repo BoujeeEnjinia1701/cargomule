@@ -1,5 +1,59 @@
 # Review note: CargoMule
 
+## Session 2026-09-25: recommendations accepted
+
+Amish wrote on 2026-09-25: "i accept all your recommendations, go with them across all repos." Every open item with a recommendation is now decided by Amish, 2026-09-25: go with recommendation, and recorded in `docs/decisions/0002-recommendations-accepted.md` (CGM-DDR-002 v0.1). TRL stays at 3; TRL 4 remains on hold.
+
+### Decisions applied and what changed
+
+| # | Decision | Before | After |
+| --- | --- | --- | --- |
+| D11 | R8 relaxed to 45 kg for the first prototype; straps or mesh side boards kept as a later weight option | R8 40 kg; 43.1 kg, not met | R8 45 kg; 43.2 kg, met on paper |
+| D12 | Keep the 250 W motor, add thermal derating and state a use limit of about 300 m of continuous 8 % climbing; confirm motor constants from a datasheet | R3 at risk; derating only suggested | R3 restated with the derating rule and use limit; derating starts after about 336 m [C10]; felt pull rises toward about 114 N on an endless climb; datasheet check on hold (TRL 4 part selection); R3 still at risk |
+| D13 | 180 mm rotors with metallic pads | 160 mm rotors; push 100 N dry, 119 N wet; rotor rise 166 K on 8 %; BOM $969 | 180 mm rotors; push 92 N dry, 110 N wet; rotor rise 129 K; BOM $979; R6 still at risk in the wet |
+| D14 | Keep G = 2 to 6 on paper; set the top gain once hitch joint stiffness is known | Open | Decided; the stiffness measurement is TRL 4, on hold; no design change |
+
+Files changed:
+
+- `cad/src/model.py`: `rotor_d` 160 to 180 mm; `cad/step/` and `cad/stl/` re-exported.
+- `cad/src/sheets.py` and `cad/drawings/CGM-DWG-001.svg`, `.pdf`, `.png`: Rev P1 to P2 (rotor note and revision row).
+- `bom/bom.csv` item 9: $20 to $25 per wheel, 180 mm rotors, metallic pads; `bom/bom-notes.md` updated. Total $969 to $979; `budget_usd` stays $1,000.
+- `docs/04-calcs/sizing.py` and `01-sizing.md`: CGM-CAL-001 v0.1 to v0.2 (rotor mass and area scaled, lever kept at 7.7:1, brake gain 6.9 to 7.8, new [C10] derating check, R8 at 45 kg, results table).
+- CGM-REQ-001 v0.3 to v0.4 (R8 45 kg, R3 restated); CGM-PRC-001 v0.3 to v0.4; CGM-DDR-001 v0.1 to v0.2 (R8 note points to DDR-002); new CGM-DDR-002 v0.1. CGM-PRB-001 unchanged at v0.3.
+- `project.yaml`: DDR-002 added to `trl_evidence`; budget, pitch and problem unchanged; `trl: 3`, `trl_target: 3`.
+- `README.md`: new sections Concept rationale, Burning platform, Where it could be used and What sparked the idea (the 2013 CycleLogistics baseline study); Concept paragraph and key components updated.
+- `cad/src/concept_media.py` key figures ($979, 180 mm brakes); all media, drawings and `docs/pdf/` regenerated with the designmolecule.com footer. Temporary `media/_views*` folders deleted.
+
+### Requirement status (CGM-CAL-001 v0.2)
+
+Nine met (seven on paper, two by design), three at risk, none not met, two not verifiable at TRL 3.
+
+| ID | Status | Value against target |
+| --- | --- | --- |
+| **R3 hills** | **At risk** | 36.6 N felt (40 N); winding about 95 °C against 100 °C after 300 m on assumed constants; derating beyond about 336 m |
+| **R6 braking** | **At risk** | 92 N push dry, about 110 N wet (100 N); cut about 60 ms |
+| **R7 hitch fit** | **At risk** | Axle stresses pass; thru-axle threads vary; nutted axles need adapters |
+| R1, R2, R4, R8, R9, R10, R12 | Met on paper | 0.84 m², factor 1.6; 24.9 km; 6.2 to 6.6 N; 43.2 kg (45 kg); 960 mm, 2.52 m; 7.8 kg; $979 |
+| R5, R14 | Met by design | 250 W, tension only, 25 km/h, no throttle; flag top 1,570 mm |
+| R11, R13 | Not verifiable at TRL 3 | Datasheet items; 60 ms fault path on paper |
+
+### Still awaiting Amish
+
+1. **O1, first users and region** for co-design. No recommendation; Proposed, awaiting Amish.
+2. **O2, road legality** of a motorized bicycle trailer in the first target country. No recommendation; Proposed, awaiting Amish.
+
+### Cross-repo actions
+
+None. The four decisions affect CargoMule only. (The SwapCell fleet variant under CGM-DDR-001, D2 is unchanged and not designed at TRL 3.)
+
+### Safety
+
+The safety sections stay in the README, precis and calculation note. New points: the motor derating means assist fades near the top of long climbs, so riders must be warned of the use limit; wet braking still gives about 110 N of push; descents still need a speed limit.
+
+### TRL 4
+
+TRL 4 remains on hold by Amish's instruction. Decided but on hold: the motor datasheet and bench thermal check (D12) and the hitch joint stiffness measurement that settles the top gain setting (D14). No tests, build procedures, purchasing lists, firmware or PCB files were created.
+
 ## Session 2026-09-25: TRL 3
 
 Amish approved all recommendations from the TRL 2 review on 2026-09-25 ("proceed with all of your recommendations across all batches. Make sure we don't proceed to TRL 4 on any of them."). This session took CargoMule to TRL 3 and stopped there.
@@ -50,6 +104,8 @@ All decided by Amish, 2026-09-25: go with recommendation. D1 budget: cost cuts, 
 4. **New: long climbs (R3).** Options: (a) keep the 250 W motor, add thermal derating and state a use limit of about 300 m of continuous 8 % climbing; (b) a larger motor, which would break the 250 W pedal-assist limit (R5). Recommendation: (a), and confirm the motor constants from a datasheet. Proposed, awaiting Amish.
 5. **New: wet braking and descents (R6).** Options: (a) accept about 120 N of wet push; (b) 180 mm rotors with metallic pads (about $10 more, raises brake gain and heat capacity); (c) a higher coupler lever ratio (more stroke). Recommendation: (b). Proposed, awaiting Amish.
 6. **New: highest gain setting.** G = 6 has a 5.8 dB margin at the softest stiffness, just under 6 dB. Options: keep 2 to 6, or cap at 5. Recommendation: keep 2 to 6 on paper and decide once the hitch joint stiffness is known. Proposed, awaiting Amish.
+
+Update: items 3 to 6 were decided by Amish, 2026-09-25: go with recommendation (CGM-DDR-002). See the session above.
 
 ### Safety concerns
 
@@ -111,6 +167,8 @@ Requirements not met or at risk:
 - **R4 and R6 unverified:** the proportional loop's stability and the overrun brake gain are TRL 3 calculations.
 
 ### Proposed, awaiting Amish
+
+Update: all items below that carried a recommendation were decided by Amish, 2026-09-25: go with recommendation (CGM-DDR-001). Item 8 had none and stays open (O1).
 
 1. **Budget.** Parts are about $65 over. Options: (a) raise `budget_usd` to $1,000; (b) cut cost with salvaged 20 in wheels and brakes and a lighter enclosure to reach about $900; (c) drop side boards and lights from the prototype (not recommended; lights are safety items). Recommendation: (b), then (a) if needed. `project.yaml` is unchanged.
 2. **Battery.** Option A: 36 V class LiFePO4, 384 Wh, about $180 (scaffold choice, meets R2, more thermally stable under a load). Option B: the portfolio's SwapCell pack (48 V class, about 468 Wh, about $370, CAN host heartbeat, 48 V drive), which suits shared fleets but adds about $190. Recommendation: A, with a SwapCell variant later for fleets.

@@ -21,7 +21,8 @@ from pathlib import Path
 # Top-level parameters (mm). Edit these, not the geometry below.
 PARAMS = {
     # wheels: 20 x 2.15 in (ETRTO 406), front-style hubs with 100 mm over-locknut spacing
-    "wheel_r": 258.0, "tyre_w": 55.0, "hub_old": 100.0, "rotor_d": 160.0,
+    "wheel_r": 258.0, "tyre_w": 55.0, "hub_old": 100.0, "rotor_d": 180.0,
+    # rotor_d: 180 mm rotors with metallic pads (CGM-DDR-002), was 160 mm
     "track": 800.0,                  # wheel center to wheel center
     "axle_x": 1920.0,                # 20 mm behind the deck center (tongue load, CGM-CAL-001 section A)
     # deck and chassis

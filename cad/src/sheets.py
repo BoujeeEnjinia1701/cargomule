@@ -1,4 +1,4 @@
-"""CargoMule general arrangement sheet CGM-DWG-001, Rev P1 (TRL 3).
+"""CargoMule general arrangement sheet CGM-DWG-001, Rev P2 (TRL 3).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CGM-DWG-001.svg, .pdf and .png from the parametric model in
@@ -88,10 +88,11 @@ def main():
     asm = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P1",
+    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P2",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="S235 box frame, S355 drawbar; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
-              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC")])
+              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
+                         ("P2", "180 mm rotors, metallic pads (CGM-DDR-002)", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -139,6 +140,7 @@ def main():
     cx0, cx1 = P["cell_x"]
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Wheels 20 in (ETRTO 406), 100 mm hubs; dropout faces {D['d_in']:.0f} and {D['d_out']:.0f} off center",
+        f"Disc brakes both wheels, {P['rotor_d']:.0f} rotors, metallic pads",
         f"Deck {P['deck_len']:.0f} x {P['deck_w']:.0f} x {P['deck_t']:.0f} plywood at Z {P['deck_z']:.0f}; axle {D['axle_behind_center']:.0f} behind deck center",
         f"Frame {P['rail']:.0f} x {P['rail']:.0f} x {P['rail_t']} box; drawbar {P['drawbar'][0]:.0f} x {P['drawbar'][1]} tube",
         f"Hitch point X 0, Y {P['hitch'][1]:.0f}, Z {P['hitch'][2]:.0f} (bike left axle end)",

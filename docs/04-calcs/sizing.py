@@ -1,4 +1,4 @@
-"""CargoMule sizing calculations, CGM-CAL-001 (TRL 3).
+"""CargoMule sizing calculations, CGM-CAL-001 v0.2 (TRL 3; 180 mm rotors, R8 45 kg and motor derating per CGM-DDR-002).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number that CGM-CAL-001 (docs/04-calcs/01-sizing.md) quotes, each on a line
@@ -41,19 +41,24 @@ A = {
     "zeta_s": 0.05, "fs": 80.0, "t_ctrl": 0.020, "k_range": (20e3, 50e3, 100e3, 200e3, 500e3),
     # braking
     "decel": 3.0, "push_max": 100.0, "preload": 30.0, "mu_dry": 0.40, "mu_wet": 0.30,
-    "caliper_ratio": 4.0, "cable_travel": 3.5, "rotor_m": 0.12, "c_steel": 460.0, "h_rotor": 60.0,
-    "rotor_area": 0.025, "reaction": 1.0,
+    "caliper_ratio": 4.0, "cable_travel": 3.5, "lever": 7.7, "c_steel": 460.0, "h_rotor": 60.0,
+    "rotor_m_160": 0.12, "rotor_area_160": 0.025, "reaction": 1.0,
     # structure
     "fy_s355": 355.0, "fy_s235": 235.0, "fy_axle": 650.0, "ply_allow": 10.0,
     "n_bump": 2.0, "n_tongue": 3.0, "ult_long_g": 1.0, "hitch_lever": 12.0,
 }
+
+# 180 mm rotors (CGM-DDR-002): mass and cooled area scaled from a 160 mm rotor by the braking annulus (hub bore 60 mm)
+ROTOR_SCALE = ((P["rotor_d"] / 2) ** 2 - 30 ** 2) / (80 ** 2 - 30 ** 2)
+A["rotor_m"] = A["rotor_m_160"] * ROTOR_SCALE
+A["rotor_area"] = A["rotor_area_160"] * ROTOR_SCALE
 
 # bought-in part masses, kg (typical catalog values, to confirm by weighing)
 BOUGHT = {
     "4 Universal axle hitch": 0.60, "5 Load cell, clevises and amplifier": 0.45,
     "6 Overrun coupler (sleeve, spring, damper, lever)": 1.60,
     "7 Hub motor wheel (geared hub 2.6 kg, rim, spokes, tyre 1.7 kg)": 4.30,
-    "8 Idler wheel with disc hub": 1.90, "9 Disc brakes, two (caliper, rotor, cable)": 0.80,
+    "8 Idler wheel with disc hub": 1.90, "9 Disc brakes, two (caliper, 180 mm rotor, cable)": round(0.80 + 2 * (A["rotor_m"] - A["rotor_m_160"]), 2),
     "11 Battery pack, 12S LiFePO4 384 Wh with BMS": 4.20, "12 Motor controller": 0.40,
     "13 Control board": 0.15, "14 Harness, fuse and key switch": 0.50,
     "15 Lights, reflectors and flag": 0.50, "18 Hardware, paint and consumables": 0.80,
@@ -122,7 +127,7 @@ for k, v in {**made, **BOUGHT}.items():
     say("A2", f"{k}: {v:.2f} kg")
 m_empty = sum(made.values()) + sum(BOUGHT.values())
 m_loaded = m_empty + A["payload"]
-say("A3", f"Empty trailer {m_empty:.1f} kg ({m_empty*2.2046:.0f} lb) against R8 40 kg (relaxed from 35 kg); "
+say("A3", f"Empty trailer {m_empty:.1f} kg ({m_empty*2.2046:.0f} lb) against R8 45 kg (relaxed from 35 kg to 40 kg, then 45 kg by CGM-DDR-002); "
           f"without side boards {m_empty-m_boards:.1f} kg")
 say("A4", f"Loaded trailer, design case: {m_loaded:.1f} kg")
 
@@ -135,7 +140,7 @@ cm = [
     (BOUGHT["5 Load cell, clevises and amplifier"], sum(P["cell_x"]) / 2, 355),
     (BOUGHT["6 Overrun coupler (sleeve, spring, damper, lever)"], sum(P["coupler_x"]) / 2, 358),
     (BOUGHT["7 Hub motor wheel (geared hub 2.6 kg, rim, spokes, tyre 1.7 kg)"], ax, P["wheel_r"]),
-    (BOUGHT["8 Idler wheel with disc hub"], ax, P["wheel_r"]), (BOUGHT["9 Disc brakes, two (caliper, rotor, cable)"], ax + 40, P["wheel_r"]),
+    (BOUGHT["8 Idler wheel with disc hub"], ax, P["wheel_r"]), (BOUGHT["9 Disc brakes, two (caliper, 180 mm rotor, cable)"], ax + 40, P["wheel_r"]),
     (m_enc, ex0 + el / 2, (ez0 + ez1) / 2), (BOUGHT["11 Battery pack, 12S LiFePO4 384 Wh with BMS"], ex0 + 12 + 125, ez0 + 80),
     (BOUGHT["12 Motor controller"] + BOUGHT["13 Control board"], ex0 + 100, ez0 + 30),
     (BOUGHT["14 Harness, fuse and key switch"], 1500, 300), (BOUGHT["15 Lights, reflectors and flag"], 2000, 700),
@@ -256,6 +261,20 @@ say("C8", f"At 20 km/h on a nearly empty pack ({A['v_pack_low']} V) the motor ca
           f"against the {felt(resist(20))[1]:.1f} N asked (R4 holds to 20 km/h)")
 say("C9", f"Assist cut-off 25 km/h is above the motor's {A['no_load_rpm']*2*pi/60*r_w*3.6:.1f} km/h no-load speed, "
           f"so the firmware limit is a backstop (R5)")
+# thermal derating (CGM-DDR-002): hold the winding at the limit on a climb that never ends
+L_allow = (A["T_limit"] - A["T_amb"]) / A["Rth"]
+lo_, hi_ = 0.0, Fc
+for _ in range(60):
+    mid = (lo_ + hi_) / 2
+    if motor_point(mid, 8)[3] <= L_allow:
+        lo_ = mid
+    else:
+        hi_ = mid
+F_der = lo_
+t_hit = -tau * np.log(1 - (A["T_limit"] - T_pre) / (Lc * A["Rth"]))
+say("C10", f"Thermal derating: full assist reaches {A['T_limit']:.0f} °C after {t_hit:.0f} s ({t_hit*8/3.6:.0f} m of 8 % climb at 8 km/h); "
+           f"derated to hold {A['T_limit']:.0f} °C the motor may lose {L_allow:.0f} W, giving {F_der:.0f} N, and the rider "
+           f"feels {R8-F_der:.0f} N on a climb that never ends")
 
 # ================================================================== D. Assist loop stability
 def poly_pade(T, n=3):
@@ -378,7 +397,7 @@ say("E7", f"Mains energy per design trip {mains:.0f} Wh; charge time about {A['p
 # ================================================================== F. Braking
 F_need = mt * A["decel"]
 F_brk = F_need - A["push_max"]
-kb = F_brk / (A["push_max"] - A["preload"])
+kb_req = F_brk / (A["push_max"] - A["preload"])  # gain the 100 N push limit needs
 ke_t = 0.5 * mt * (20 / 3.6) ** 2
 ke_b = 0.5 * mb * (20 / 3.6) ** 2
 say("F1", f"At 20 km/h: trailer {ke_t/1000:.2f} kJ, bike and rider {ke_b/1000:.2f} kJ; trailer needs {F_need:.0f} N to slow at "
@@ -386,15 +405,32 @@ say("F1", f"At 20 km/h: trailer {ke_t/1000:.2f} kJ, bike and rider {ke_b/1000:.2
 r_eff = (P["rotor_d"] / 2 - 8) / 1000
 Fw = F_brk / 2
 T_cab = Fw * (r_w / r_eff) / (2 * A["mu_dry"] * A["caliper_ratio"])
-i_lev = 2 * T_cab / (A["push_max"] - A["preload"])
+i_lev = A["lever"]
 stroke = i_lev * A["cable_travel"]
-say("F2", f"Per wheel {Fw:.0f} N at the tyre, {Fw*r_w/r_eff:.0f} N at the {r_eff*1000:.0f} mm rotor radius; clamp "
+say("F2", f"Per wheel {Fw:.0f} N at the tyre, {Fw*r_w/r_eff:.0f} N at the {r_eff*1000:.0f} mm rotor radius ({P['rotor_d']:.0f} mm rotor); clamp "
           f"{Fw*r_w/r_eff/(2*A['mu_dry']):.0f} N; cable tension {T_cab:.0f} N per caliper (caliper ratio {A['caliper_ratio']:.0f})")
-say("F3", f"Coupler: preload {A['preload']:.0f} N, lever ratio {i_lev:.1f} to the equalizer, brake gain {kb:.2f} N per N above preload; "
-          f"take-up travel {stroke:.0f} mm of the {P['coupler_stroke']:.0f} mm stroke")
-kb_wet = kb * A["mu_wet"] / A["mu_dry"]
-push_wet = (F_need + kb_wet * A["preload"]) / (1 + kb_wet)
-say("F4", f"Wet pads (mu {A['mu_wet']}): push at 3 m/s² rises to {push_wet:.0f} N (R6 target 100 N, dry case)")
+
+
+def gain(mu):
+    """Brake force per newton of drawbar compression above the preload, lever kept at A['lever']."""
+    return i_lev * A["caliper_ratio"] * 2 * mu * r_eff / r_w
+
+
+def push(k):
+    return (F_need + k * A["preload"]) / (1 + k)
+
+
+kb = gain(A["mu_dry"])
+kb_wet = gain(A["mu_wet"])
+push_dry = push(kb)
+push_wet = push(kb_wet)
+r160 = (160 / 2 - 8) / 1000
+say("F3", f"Coupler: preload {A['preload']:.0f} N, lever ratio {i_lev:.1f} to the equalizer (sized for 100 N dry on 160 mm rotors, "
+          f"gain {i_lev*A['caliper_ratio']*2*A['mu_dry']*r160/r_w:.2f}); with {P['rotor_d']:.0f} mm rotors the gain is {kb:.2f} N per N above preload "
+          f"and the dry push at 3 m/s² is {push_dry:.0f} N; take-up travel {stroke:.0f} mm of the {P['coupler_stroke']:.0f} mm stroke")
+push_wet160 = push(i_lev * A["caliper_ratio"] * 2 * A["mu_wet"] * r160 / r_w)
+say("F4", f"Wet pads (mu {A['mu_wet']}): push at 3 m/s² is {push_wet:.0f} N with {P['rotor_d']:.0f} mm rotors "
+          f"({push_wet160:.0f} N with 160 mm rotors); R6 target 100 N")
 v = 20 / 3.6
 stop = v ** 2 / (2 * A["decel"]) + v * A["reaction"]
 say("F5", f"Stopping distance from 20 km/h at 3 m/s² with a 1 s reaction: {stop:.1f} m")
@@ -403,12 +439,13 @@ for gr, vk in ((0.08, 20), (0.10, 25)):
     Fc_ = (drive + kb * A["preload"]) / (1 + kb)
     Pb_ = kb * (Fc_ - A["preload"]) * vk / 3.6
     per = Pb_ / 2
-    Cth_r = A["rotor_m"] * A["c_steel"]
+    Cth_r = A["rotor_m"] * A["c_steel"]  # 180 mm rotor, scaled
     hA = A["h_rotor"] * A["rotor_area"]
     Tss = per / hA
     t60 = 60 * (1 - exp(-120 / (Cth_r / hA)))
     say("F6", f"Descent {gr:.0%} at {vk} km/h: rider feels {Fc_:.0f} N push; trailer brakes absorb {Pb_:.0f} W "
-              f"({per:.0f} W per rotor); rotor rise tends to {Tss:.0f} K (time constant {Cth_r/hA:.0f} s)")
+              f"({per:.0f} W per rotor); {P['rotor_d']:.0f} mm rotor ({A['rotor_m']:.3f} kg, {A['rotor_area']:.4f} m²) rise tends to "
+              f"{Tss:.0f} K (time constant {Cth_r/hA:.0f} s)")
     if gr == 0.08:
         dT8 = Tss
 
@@ -518,13 +555,13 @@ say("I1", f"BOM: {len(rows)} lines, total ${total:,.2f} against budget_usd ${bud
 status = [
     ("R1", "Payload 150 kg, deck 0.8 m² or more", f"{D['deck_area_m2']:.2f} m²; rail factor {A['fy_s235']/s_rail:.1f}, drawbar {A['fy_s355']/s_knee:.1f} at ultimate", "Met on paper"),
     ("R2", "Range 20 km or more, design route", f"{rng:.1f} km", "Met on paper" if rng >= 20 else "Not met"),
-    ("R3", "8 % for 300 m at 8 km/h, felt 40 N or less, no over-temperature", f"{Ffelt_climb:.0f} N felt; winding {T_pre + Lc*A['Rth']*(1-exp(-300/(8/3.6)/tau)):.0f} °C",
+    ("R3", "8 % for 300 m at 8 km/h, felt 40 N or less, no over-temperature; derating beyond", f"{Ffelt_climb:.0f} N felt; winding {T_pre + Lc*A['Rth']*(1-exp(-300/(8/3.6)/tau)):.0f} °C; derated {R8-F_der:.0f} N",
      "At risk" if Ffelt_climb <= 40 else "Not met"),
     ("R4", "Felt pull 15 N or less at 5 to 20 km/h, stable", f"{felt(resist(5))[0]:.1f} to {felt(resist(20))[0]:.1f} N; G crit {crit2:.1f}", "Met on paper"),
     ("R5", "250 W rated, tension only, 25 km/h, no throttle", "250 W nameplate; no-load 22 km/h", "Met by design"),
-    ("R6", "Push 100 N or less at 3 m/s²; cut 100 ms", f"100 N dry by sizing, {push_wet:.0f} N wet; cut {t_cut*1000:.0f} ms", "At risk"),
+    ("R6", "Push 100 N or less at 3 m/s²; cut 100 ms", f"{push_dry:.0f} N dry, {push_wet:.0f} N wet; cut {t_cut*1000:.0f} ms", "Met on paper" if push_wet <= 100 else "At risk"),
     ("R7", "QR and 12 mm thru-axle, 30 s, no wiring", "Axle loads pass; thru-axle threads vary", "At risk"),
-    ("R8", "Empty 40 kg or less (relaxed)", f"{m_empty:.1f} kg", "Met on paper" if m_empty <= 40 else "Not met"),
+    ("R8", "Empty 45 kg or less (relaxed, CGM-DDR-002)", f"{m_empty:.1f} kg", "Met on paper" if m_empty <= 45 else "Not met"),
     ("R9", "Width 1,000 mm, length 2.6 m", f"{D['width']:.0f} mm, {D['length']/1000:.2f} m", "Met on paper"),
     ("R10", "Hitch load 3 to 10 kg, centered", f"{tongue:.1f} kg", "Met on paper" if 3 <= tongue <= 10 else "Not met"),
     ("R11", "IP65 electronics, -10 to 40 °C, charge block below 0 °C", "Datasheet items", "Not verifiable at TRL 3"),
