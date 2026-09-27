@@ -215,3 +215,35 @@ Update: all items below that carried a recommendation were decided by Amish, 202
 ### Recommended next step
 
 Review this note and the media, then decide items 1 to 3 and 7. If approved, run `/advance-trl3` to check the assist loop stability, motor heating, overrun brake gain, hitch loads and frame stress by calculation, and produce the parametric model and drawing sheet.
+
+## Session 2026-09-26: product appearance model and photoreal renders
+
+Amish chose this repo for the first batch of product renders on 2026-09-26.
+
+### What was added
+
+`cad/src/product_model.py` exposes `product_parts()` (80 parts: 60 shell, 9 internal, 2 accessory, 9 context), `TITLE` and `RENDER_VIEWS` (hero, exploded, and a detail view of the trailer alone from the drawbar side). It reuses PARAMS, derived(), drawbar_points() and build_parts() from `cad/src/model.py`; the chassis frame, drawbar and harness are the model.py solids, and every other part keeps the model.py position and main dimensions. It adds:
+
+- Deck and boards: rounded plywood deck with two aluminium tie-down tracks; off-white side and end boards with hand slots, aluminium corner caps, teal trim bands and a raised CARGOMULE badge on each side.
+- Drawbar load cell: S-shaped cell body in the model.py envelope, pinned clevises, gauge plugs and cable, under a clear polycarbonate guard with teal end rings.
+- Overrun coupler: sleeve, rubber gaiter over the sliding end, filleted damper housing, brake lever and equalizer, bolts and brake cables to the calipers.
+- Hitch: filleted axle plate and nut, joint with a ribbed rubber boot, arm, locking pin with a green lock indicator, and the secondary safety strap to the bicycle's chainstay.
+- Wheels and brakes: tyres, rims and laced spokes as separate parts; the 250 W hub motor shell with spoke flanges, a teal cover ring, bolts and cable exit; the idler hub; slotted 180 mm rotors and calipers.
+- Enclosure: closed, filleted galvanized box with a parting seam, louvre vents, screws, cable glands, a warning label, a clear inspection window onto the pack, and on its front face the key switch, the knurled assist gain dial with its 2 to 6 scale, a lit green status light and a capped charge port. Inside: the pack with its label, a finned controller and the control board with components.
+- Lights and stand: lit red rear lights in black housings, amber side and drawbar reflectors, a fabric safety flag on its pole, and the stand leg with a rubber foot.
+- Accessory: the off-trailer charger and lead (BOM 17), shown in the exploded view only.
+- Context (not in the BOM): a simple bicycle whose rear axle sits at the hitch height (340 mm), the shared clay mannequin in the "ride" pose placed from its landmarks so the feet meet the pedals, the seat meets the saddle and the hands meet the grips, and a small strapped load of a crate and two cartons.
+
+`README.md` now shows `media/render-hero.png` and links `media/render-exploded.png`; the orchestrator produces both files. Matplotlib self-check previews were made in `/tmp/cargomule-prod/` (outside the repo).
+
+### Differences from model.py (Proposed, awaiting Amish)
+
+1. **Closed enclosure with a parting seam.** model.py draws an open-top box so the section views show the pack; BOM line 10 calls for a lockable lid. The appearance model closes the box and shows a seam 28 mm below the top, but the top sits against the frame rails, so a top lid could not open in place. Proposed, awaiting Amish. Recommendation: specify a bolted bottom or front access panel (or a removable box on slides) at the next design step, and keep the lock on the key switch.
+2. **Controls on the enclosure front face.** The key switch, gain dial, status light and charge port are placed on the face toward the drawbar, where the rider can reach them at a stop. The concept does not yet say where they go. Proposed, awaiting Amish. Recommendation: accept this location.
+3. **Clear guard over the load cell and an inspection window on the enclosure.** Neither is in the BOM. The guard shields the cell and its cable from spray and stones; the window lets the render show the pack. Proposed, awaiting Amish. Recommendation: adopt the guard (a short polycarbonate tube, a few dollars under BOM line 5), and treat the enclosure window as render-only: a plain steel side is cheaper, keeps the pack out of the sun and keeps the enclosure robust.
+4. **Finish and small parts.** Graphite powder coat for the frame (BOM line 1 says painted), off-white faced side boards with hand slots and name badges (BOM line 2 says sealed plywood), deck tie-down tracks in place of loose eyes on the deck, a rubber gaiter on the coupler and a drawbar reflector. Proposed, awaiting Amish. Recommendation: keep the plywood and paint of the BOM for the prototype; treat the faced boards, tracks and badges as finished-product styling.
+5. **Hero composition.** With the bicycle and rider in the scene the trailer fills about half of the hero frame. The views cannot frame a single subsystem, so the "detail" view shows the trailer alone from the front left, with the load cell, coupler and hitch nearest the camera. Proposed, awaiting Amish. Recommendation: accept; if a tighter shot of the load cell is wanted, add a close-up camera option to the kit renderer rather than changing the model.
+
+### Status
+
+This is an appearance model only: no tolerances, no fabrication detail, nothing past TRL 3. `trl: 3` and `trl_target: 3` are unchanged, and TRL 4 remains on hold. model.py, the BOM and the other documents were not edited.
