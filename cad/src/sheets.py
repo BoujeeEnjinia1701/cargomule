@@ -88,11 +88,12 @@ def main():
     asm = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P2",
+    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P3",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="S235 box frame, S355 drawbar; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
-                         ("P2", "180 mm rotors, metallic pads (CGM-DDR-002)", DATE, "AC")])
+                         ("P2", "180 mm rotors, metallic pads (CGM-DDR-002)", DATE, "AC"),
+                         ("P3", "Layout and labels tidied", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -104,13 +105,10 @@ def main():
     X = lambda mx: x + (mx - bb.min.X) * k
     Z = lambda mz: y + h - (mz - bb.min.Z) * k
     zg = Z(0)
-    L += [ext(X(bb.min.X), Z(P['hitch'][2]) - 2, X(bb.min.X), Z(1250) - 2), ext(X(bb.max.X), Z(P['deck_z']) - 2, X(bb.max.X), Z(1250) - 2)]
-    L += dim_h(X(bb.min.X), X(bb.max.X), Z(1250), f"{bb.size.X:,.0f} overall")
     L += [ext(X(0), Z(P['hitch'][2]) - 2, X(0), Z(1000) - 2), ext(X(ax), Z(P['wheel_r']), X(ax), Z(1000) - 2)]
-    L += dim_h(X(0), X(ax), Z(1000), f"{ax:,.0f} bike axle to trailer axle")
+    L += dim_h(X(0), X(ax), Z(1000), f"{ax:,.0f} axle to axle")
     L += [ext(X(x0), Z(P['deck_z']) - 1, X(x0), Z(bb.max.Z) - 3), ext(X(x1), Z(P['deck_z']) - 1, X(x1), Z(bb.max.Z) - 3)]
     L += dim_h(X(x0), X(x1), Z(bb.max.Z) - 2, f"{P['deck_len']:,.0f} deck")
-    L += dim_v(x - 4, Z(bb.max.Z), zg, f"{bb.size.Z:,.0f} to flag top")
     L += [ext(X(x1) + 1, Z(P['deck_z']), X(bb.max.X) + 9, Z(P['deck_z']))]
     L += dim_v(X(bb.max.X) + 7, Z(P["deck_z"]), zg, f"{P['deck_z']:.0f} deck")
     L += [ext(X(0) - 1, Z(P['hitch'][2]), x - 9, Z(P['hitch'][2]))]
@@ -120,20 +118,19 @@ def main():
     x, y, w, h = c["top"]
     Xt = lambda mx: x + (mx - bb.min.X) * k
     Yt = lambda my: y + h - (my - bb.min.Y) * k
-    L += dim_v(X(bb.max.X) + 7, y, y + h, f"{bb.size.Y:,.0f} overall")
-    L += [ext(Xt(ax), Yt(D['yc']), Xt(ax) + 30 * k * 10, Yt(D['yc'])), ext(Xt(ax), Yt(-D['yc']), Xt(ax) + 30 * k * 10, Yt(-D['yc']))]
-    L += dim_v(Xt(ax) + 29 * k * 10, Yt(D["yc"]), Yt(-D["yc"]), f"{P['track']:.0f} track")
-    L += dim_v(Xt(2400), Yt(D["hw"]), Yt(-D["hw"]), f"{P['deck_w']:.0f} deck")
-    L.append(_t(Xt(300), Yt(-360) + 6, "offset drawbar run, 360 off center line", 2.0, 400, MUTED, "middle"))
+    xt1, xt2 = Xt(bb.max.X) + 8, Xt(bb.max.X) + 17
+    L += [ext(Xt(ax), Yt(D['yc']), xt1 + 1, Yt(D['yc'])), ext(Xt(ax), Yt(-D['yc']), xt1 + 1, Yt(-D['yc']))]
+    L += dim_v(xt1, Yt(D["yc"]), Yt(-D["yc"]), f"{P['track']:.0f} track")
+    L.append(_t(Xt(bb.min.X) + 2, Yt(-360) + 10, "offset drawbar run, 360 off center line", 2.0, 400, MUTED, "start"))
 
     # right view (from +X, looking forward): Y to the right
     x, y, w, h = c["right"]
     Yr = lambda my: x + (my - bb.min.Y) * k
     Zr = lambda mz: y + h - (mz - bb.min.Z) * k
-    L += [ext(Yr(-D['d_out']), Zr(P['wheel_r']), Yr(-D['d_out']), Zr(0) + 9),
-          ext(Yr(-D['d_in']), Zr(P['wheel_r']), Yr(-D['d_in']), Zr(0) + 9)]
-    L += dim_h(Yr(-D["d_out"]), Yr(-D["d_in"]), Zr(0) + 7, f"{P['hub_old']:.0f} hub")
-    L += dim_v(x + w + 5, Zr(D["arch_top"]), Zr(0), f"{D['arch_top']:.0f} arch")
+    L += [ext(Yr(-D['d_out']), Zr(P['wheel_r']), Yr(-D['d_out']), Zr(0) + 12),
+          ext(Yr(-D['d_in']), Zr(P['wheel_r']), Yr(-D['d_in']), Zr(0) + 12)]
+    L += dim_h(Yr(-D["d_out"]), Yr(-D["d_in"]), Zr(0) + 10, f"{P['hub_old']:.0f} hub")
+    L += dim_v(x + w + 9, Zr(D["arch_top"]), Zr(0), f"{D['arch_top']:.0f} arch")
 
     s._layers += L
     s.add_svg(views["iso"], 276, 32, 140, 100, label="Isometric view", sublabel="Not to scale")
