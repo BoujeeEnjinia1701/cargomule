@@ -3,7 +3,7 @@ doc_id: CGM-REQ-001
 title: CargoMule requirements
 project: CargoMule
 doc_type: Requirements
-version: "0.5"
+version: "0.6"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -29,11 +29,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Status from CGM-CAL-001 v0.3 for the constructable design (CGM-DDR-003); R8 now not met at 46.2 kg; no target changed
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target; cost wording only, no number changed
 ---
 
 # CargoMule requirements
 
-These requirements are checked by calculation in CGM-CAL-001 v0.3 at TRL 3, for the constructable design of CGM-DDR-003. Targets changed with Amish's decisions of 2026-09-25. Under CGM-DDR-001, R8 was relaxed from 35 kg to 40 kg for the steel frame (D3) and R12 was redefined as the $1,000 prototype budget (D1). Under CGM-DDR-002, R8 is relaxed again to 45 kg for the first prototype, and R3 is restated: the 300 m climb target stands, and beyond it the controller derates motor current to protect the winding, with the use limit stated to riders. Against the calculations, **one is missed (R8, 46.2 kg against 45 kg) and three are at risk (R3, R6, R7)**; eight are met on paper or by design, and two cannot be verified at TRL 3. The response to the R8 miss is proposed to Amish in CGM-DDR-003 (A1); no target has been changed. Targets are not yet validated with users; the first users and region for co-design are still open (CGM-DDR-001, O1).
+These requirements are checked by calculation in CGM-CAL-001 v0.3 at TRL 3, for the constructable design of CGM-DDR-003. Targets changed with Amish's decisions of 2026-09-25. Under CGM-DDR-001, R8 was relaxed from 35 kg to 40 kg for the steel frame (D3) and R12 was redefined against the $1,000 prototype value-engineering target (D1). Under CGM-DDR-002, R8 is relaxed again to 45 kg for the first prototype, and R3 is restated: the 300 m climb target stands, and beyond it the controller derates motor current to protect the winding, with the use limit stated to riders. Against the calculations, **one is missed (R8, 46.2 kg against 45 kg) and three are at risk (R3, R6, R7)**; eight are met on paper or by design, and two cannot be verified at TRL 3. The response to the R8 miss is proposed to Amish in CGM-DDR-003 (A1); no target has been changed. Targets are not yet validated with users; the first users and region for co-design are still open (CGM-DDR-001, O1).
 
 The **design load case** is 150 kg of payload centered on the deck, the trailer (about 46 kg, CGM-CAL-001) and a towing bicycle with rider of about 100 kg, on a dry paved road. The **design route** is a 10 km round trip with 120 m of climbing, 120 m of descent and 20 stops.
 
@@ -52,7 +56,7 @@ Table 1. Requirements, targets and status at TRL 3.
 | R9 | Fit bike paths and doors | Overall width 1,000 mm or less; length 2.6 m or less hitched from the bike's rear axle | Model check | Met on paper: 960 mm wide (972 mm over the motor cable), 2.52 m long |
 | R10 | Stable hitch load | Downward load on the hitch 3 to 10 kg with the design payload centered | Mass and balance estimate | Met on paper: 7.5 kg; holds only for a payload center 32 mm ahead to 57 mm behind the deck center |
 | R11 | Weather and temperature | Electronics IP65; motor IP54 or better; operate −10 to 40 °C; the BMS blocks charging below 0 °C | Datasheets and design review | Not verifiable at TRL 3 |
-| R12 | Affordable | Prototype parts $1,000 or less, including charger, equal to `budget_usd` (redefined, CGM-DDR-001 D1) | Priced BOM (`bom/bom.csv`) | Met on paper: $997 |
+| R12 | Affordable | Prototype parts within the $1,000 value-engineering target, including charger, equal to `budget_usd` (a hypothetical control target, not a limit; redefined, CGM-DDR-001 D1) | Priced BOM (`bom/bom.csv`) | Within the value-engineering target: $997 estimated, $3 under |
 | R13 | Fail safe | Loss of the load cell signal, a reading out of range, a stuck value or a controller fault sets motor current to zero within 100 ms; the trailer stays towable as an unpowered, braked trailer | Fault tree and design review | Not verifiable at TRL 3 (60 ms fast path on paper) |
 | R14 | Be seen | Rear red lights and reflectors, side reflectors, and a flag at 1.5 m or more above the ground | Design review | Met by design: flag top 1,570 mm |
 

@@ -3,7 +3,7 @@ doc_id: CGM-PRC-001
 title: CargoMule design precis
 project: CargoMule
 doc_type: Design precis
-version: "0.5"
+version: "0.6"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -29,6 +29,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Constructable design (CGM-DDR-003). Load cell inside the coupler housing, bent drawbar, enclosure with a front door between two crossmembers, fixings; numbers from CGM-CAL-001 v0.3; R8 now not met
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target; cost wording only, no number changed
 ---
 
 # CargoMule design precis
@@ -164,7 +168,7 @@ Table 5. Parts cost from `bom/bom.csv` (CGM-CAL-001, I1).
 | Drive | 7, 8, 12 | $225 |
 | Energy and control | 10, 11, 13, 14, 17 | $305 |
 | Lights and hardware | 15, 18 | $60 |
-| **Total** | | **$997; R12 ($1,000) met** |
+| **Total** | | **$997; within the $1,000 value-engineering target (R12), $3 under** |
 
 The D1 cost cuts (salvaged or budget idler wheel, budget calipers, smaller enclosure) save $50; the TRL 3 changes (arch frames, repriced plywood, the larger offset drawbar, a stronger hitch strap, the coupler lever and the load cell overload stop) add $54. The 180 mm rotors and metallic pads of CGM-DDR-002 add $10, and the fittings and coupler parts of CGM-DDR-003 add $18.
 
@@ -182,7 +186,7 @@ Amish decided the choices below on 2026-09-25 (CGM-DDR-001 and CGM-DDR-002), in 
 - **Brakes (DDR-002).** 180 mm rotors with metallic pads on both wheels, with the 7.7:1 coupler lever kept.
 - **Gain range (DDR-002).** Keep G = 2 to 6 on paper; settle the top setting when the hitch joint stiffness is measured (TRL 4, on hold).
 - **20 in wheels and a hitch on the left axle end (D9).** Small wheels keep the deck low (420 mm) and the drawbar near level with a 700c or 26 in bike's axle; the left side keeps clear of the derailleur.
-- **Budget (D1).** Cost cuts first, then `budget_usd` raised to $1,000.
+- **Value-engineering target (D1).** Cost cuts first, then `budget_usd` raised to $1,000 as a hypothetical control target, not a limit.
 - **Handcart mode (D10).** Out of scope for now.
 
 Still open, with no recommendation: the first users and region for co-design (O1) and the legal status of a motorized trailer on public roads (O2). Every open decision is listed in the design decisions register, CGM-DEC-001 (`docs/06-design-decisions.md`).

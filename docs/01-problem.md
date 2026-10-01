@@ -3,9 +3,9 @@ doc_id: CGM-PRB-001
 title: CargoMule problem statement
 project: CargoMule
 doc_type: Problem statement
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Stronger sources
+- version: "0.5"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target; cost wording only, no number changed
 ---
 
 # CargoMule problem statement
@@ -61,7 +65,7 @@ CargoMule is an electric-assist cargo trailer that hitches to most bicycles with
 
 ## Constraints
 
-- Garage-buildable prototype, $1,000 USD or less in parts (`project.yaml`; raised from $900 by CGM-DDR-001, D1).
+- Garage-buildable prototype, with a $1,000 USD value-engineering target for parts (`project.yaml`, a hypothetical control target, not a limit; raised from $900 by CGM-DDR-001, D1).
 - Hitches to most bicycles with no change to the bike and no wiring to it: bikes with a quick-release or thru-axle rear wheel first, with adapters for others (see CGM-REQ-001, R7).
 - Assist within e-bike limits: 250 W rated power and assist to 25 km/h at most, matching the EU pedal-assist exclusion in Regulation (EU) No 168/2013 ([EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX%3A32013R0168)) and within the US federal low-speed electric bicycle definition of under 750 W and 20 mph ([15 U.S.C. 2085](https://www.law.cornell.edu/uscode/text/15/2085)). Whether a motorized trailer falls under these rules is an open question.
 - The trailer must brake itself so it never pushes the bicycle hard when slowing.

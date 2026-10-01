@@ -3,7 +3,7 @@ doc_id: CGM-CAL-001
 title: CargoMule sizing calculations
 project: CargoMule
 doc_type: Calculation
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Constructable design (CGM-DDR-003). Made-part masses from the model's volumes; coupler, enclosure and fixings added; R8 now not met at 46.2 kg; drawbar moment taken at the coupler's front bushing; all figures rerun
+- version: "0.4"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target; cost wording only, no number changed
 ---
 
 # CargoMule sizing calculations
@@ -159,7 +163,7 @@ R1 is met on paper: the deck is 0.84 m² and every member passes the screen with
 
 ## I. Cost (R12)
 
-The BOM has 18 lines totalling $997 against the $1,000 `budget_usd`, $3 inside it [I1]. The 180 mm rotors and metallic pads added $10 to the $969 of v0.1, and the parts that make the design buildable added $18 (board fittings, coupler parts, rivet nuts; CGM-DDR-003). R12, redefined to the $1,000 budget by CGM-DDR-001 D1, is met on paper with almost no margin.
+The BOM has 18 lines totalling $997 (the estimated cost of the constructable design) against the $1,000 value-engineering target `budget_usd`, $3 under it [I1]. The 180 mm rotors and metallic pads added $10 to the $969 of v0.1, and the parts that make the design buildable added $18 (board fittings, coupler parts, rivet nuts; CGM-DDR-003). R12, redefined against the $1,000 value-engineering target by CGM-DDR-001 D1 (a hypothetical control target, not a limit), is within the target with almost no margin.
 
 ## J. Results against every requirement
 
@@ -176,7 +180,7 @@ The BOM has 18 lines totalling $997 against the $1,000 `budget_usd`, $3 inside i
 | R4 | Near-zero added load on the flat | 6.3 to 6.6 N; stable, G crit 11.7 | 15 N or less at 5 to 20 km/h | Met on paper |
 | R9 | Fit bike paths and doors | 960 mm wide (972 mm over the motor cable), 2.52 m long | 1,000 mm; 2.6 m | Met on paper |
 | R10 | Stable hitch load | 7.5 kg centered | 3 to 10 kg | Met on paper (narrow loading window) |
-| R12 | Affordable | $997 | $1,000 or less (redefined) | Met on paper |
+| R12 | Affordable | $997 | $1,000 value-engineering target (redefined) | Within the value-engineering target ($3 under) |
 | R5 | Stay within pedal-assist limits | 250 W rated; tension only; 25 km/h; no throttle | As stated | Met by design |
 | R14 | Be seen | Flag top 1,570 mm; lights and reflectors | 1,500 mm or more | Met by design |
 | R11 | Weather and temperature | Datasheet items (IP65, IP54, BMS charge block) | As stated | Not verifiable at TRL 3 |

@@ -3,7 +3,7 @@ doc_id: CGM-DDR-003
 title: CargoMule design for construction
 project: CargoMule
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -13,6 +13,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Changes that make the concept physically buildable, with the reason for each; made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review
+- version: "0.2"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target; cost wording only, no number changed
 ---
 
 # 0003: Design for construction
@@ -56,7 +60,7 @@ The changes keep what CargoMule does: the same deck, wheels, track, hitch point 
 | Balance | Hitch load 7.5 kg with the payload centred (was 7.8 kg) [A6]; loading window 32 mm ahead to 57 mm behind the deck centre [A7]. R10 still met. | Enclosure moved rearward; coupler heavier. |
 | Performance | Felt pull on the 8 % climb 38.7 N (was 36.6 N, R3 target 40 N) [C3]; range 24.5 km (was 24.9 km) [E3]; push 93 N dry and 111 N wet (was 92 N and 110 N) [F3], [F4]. Statuses unchanged: R3 and R6 at risk, R2 met. | The trailer is 3 kg heavier. |
 | Structure | Drawbar factor 4.3 at the coupler's front bushing [G3] (was 3.0, quoted at the nose); ultimate case 1.6 unchanged [G4]. | The drawbar is now held by the bushing, 320 mm ahead of the old nose point. |
-| Cost | BOM lines 2, 5, 6, 7, 9, 10, 15, 16 and 18 respecified; total $997 (was $979) within the unchanged $1,000 `budget_usd` [I1]. | Fittings, rivet nuts, coupler parts. |
+| Cost | BOM lines 2, 5, 6, 7, 9, 10, 15, 16 and 18 respecified; total $997 (was $979) against the unchanged $1,000 value-engineering target `budget_usd`, $3 under it [I1]. | Fittings, rivet nuts, coupler parts. |
 | Drawing | CGM-DWG-001 Rev P4; making sketches CGM-DWG-101 to 111 added. | Follows the model. |
 | Documents | CGM-CAL-001 v0.3, CGM-PRC-001 v0.5, CGM-REQ-001 v0.5. R8 changes from met to not met; no other requirement changes status. | Follows the model. |
 

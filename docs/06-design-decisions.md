@@ -3,7 +3,7 @@ doc_id: CGM-DEC-001
 title: CargoMule design decisions register
 project: CargoMule
 doc_type: Design decisions register
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -13,6 +13,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Register opened with the open decisions from the decision records, the review note and the build plan work
+  - version: "0.2"
+    date: '2026-10-01'
+    author: Amish Chadha
+    change: Budget treated as a value-engineering target
 ---
 
 # CargoMule design decisions register
@@ -45,6 +49,18 @@ The review note of 2026-09-26 also proposed a closed enclosure with a bottom or 
 | 5 | The preload spring: about 30 N installed, free length about 96 mm, OD 40 mm or less, solid length under 40 mm | It sets the brake's onset and must not go solid within the 50 mm stroke | CGM-CAL-001, F3 |
 | 6 | Motor constants (winding, resistance, thermal) from the datasheet | They decide whether R3 holds (decided under CGM-DDR-002; part selection is TRL 4) | CGM-DDR-002, D12 |
 | 7 | Rivet nuts rated for 1.5 mm wall box section | They carry the deck, the enclosure and the lights | CGM-DDR-003, P8, P11 |
+
+## Value engineering
+
+Value-engineering target: USD 1,000 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 997 (USD 3 under the target).
+
+Main cost drivers (CGM-CAL-001, I1): the battery pack (line 11, $180), the hub motor wheel (line 7, $160), the chassis frame (line 1, $95), the deck and side boards (line 2, $77) and the overrun brake coupler (line 6, $58). The parts added to make the design buildable added $18 (CGM-DDR-003).
+
+Savings worth trying:
+
+- Salvaged 20 in wheels and brakes and a lighter enclosure, which the TRL 3 review estimated could bring the parts to about $900.
+- Straps or mesh in place of the plywood side boards (about 43.9 kg), which also answers the R8 mass miss (CGM-DDR-003, A1).
+- A SwapCell receiver in the fleet variant, which would price the shared pack once and leave it out of this kit (CGM-DDR-001, D2).
 
 ## Decisions made
 
