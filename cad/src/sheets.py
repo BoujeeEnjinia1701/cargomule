@@ -1,10 +1,11 @@
-"""CargoMule general arrangement sheet CGM-DWG-001, Rev P2 (TRL 3).
+"""CargoMule general arrangement sheet CGM-DWG-001, Rev P4 (TRL 3, constructable design).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CGM-DWG-001.svg, .pdf and .png from the parametric model in
 cad/src/model.py with .kit/drawing.py. Dimensions are taken from the model and PARAMS,
 so they follow any parameter change. The concept sheet in media/ is CGM-DWG-010.
 """
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -15,6 +16,22 @@ from drawing import Sheet, _viewbox, _t, M, TB_Y, INK, MUTED  # noqa: E402
 from model import PARAMS as P, assembly, derived  # noqa: E402
 
 DATE = "2026-09-25"
+DATE_P4 = "2026-10-01"
+
+
+_NUM = r"[-+]?\d*\.?\d+(?:e[-+]?\d+)?"
+_ARC = re.compile(rf"A ?({_NUM}),({_NUM}) {_NUM} [01],[01] ({_NUM},{_NUM})")
+
+
+def _fix_flat_arcs(svg):
+    """Replace elliptical arcs that have collapsed to a line (one radius near zero) with a straight
+    line: the SVG renderer would otherwise draw them as a long stray stroke across the sheet."""
+    def sub(m):
+        rx, ry = abs(float(m.group(1))), abs(float(m.group(2)))
+        if min(rx, ry) < 1e-3 or max(rx, ry) > 1e4 * max(min(rx, ry), 1e-12):
+            return "L " + m.group(3)
+        return m.group(0)
+    return _ARC.sub(sub, svg)
 
 
 def safe_project_views(part, workdir, line_weight=0.35):
@@ -35,11 +52,16 @@ def safe_project_views(part, workdir, line_weight=0.35):
         for layer, edges in (("Visible", visible), ("Hidden", hidden if name != "iso" else [])):
             for e in edges:
                 try:
+                    eb = e.bounding_box()
+                    if max(eb.size.X, eb.size.Y, eb.size.Z) > 1.2 * max(bb.size.X, bb.size.Y, bb.size.Z):
+                        skipped += 1          # a degenerate edge projected to a long stray line
+                        continue
                     ex.add_shape(e, layer=layer)
                 except (AssertionError, ValueError, ZeroDivisionError):
                     skipped += 1
         p = workdir / f"{name}.svg"
         ex.write(str(p))
+        p.write_text(_fix_flat_arcs(p.read_text()))
         out[name] = p
     print(f"projected views; skipped {skipped} degenerate edges")
     return out
@@ -88,12 +110,13 @@ def main():
     asm = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P3",
-              author="Amish Chadha", date=DATE, scale=None, theme="technical",
+    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P4",
+              author="Amish Chadha", date=DATE_P4, scale=None, theme="technical",
               material="S235 box frame, S355 drawbar; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "180 mm rotors, metallic pads (CGM-DDR-002)", DATE, "AC"),
-                         ("P3", "Layout and labels tidied", DATE, "AC")])
+                         ("P3", "Layout and labels tidied", DATE, "AC"),
+                         ("P4", "Design for construction (CGM-DDR-003)", DATE_P4, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -133,7 +156,7 @@ def main():
     L += dim_v(x + w + 9, Zr(D["arch_top"]), Zr(0), f"{D['arch_top']:.0f} arch")
 
     s._layers += L
-    s.add_svg(views["iso"], 276, 32, 140, 100, label="Isometric view", sublabel="Not to scale")
+    s.add_svg(views["iso"], 276, 42, 140, 86, label="Isometric view", sublabel="Not to scale")
     cx0, cx1 = P["cell_x"]
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Wheels 20 in (ETRTO 406), 100 mm hubs; dropout faces {D['d_in']:.0f} and {D['d_out']:.0f} off center",
@@ -141,12 +164,13 @@ def main():
         f"Deck {P['deck_len']:.0f} x {P['deck_w']:.0f} x {P['deck_t']:.0f} plywood at Z {P['deck_z']:.0f}; axle {D['axle_behind_center']:.0f} behind deck center",
         f"Frame {P['rail']:.0f} x {P['rail']:.0f} x {P['rail_t']} box; drawbar {P['drawbar'][0]:.0f} x {P['drawbar'][1]} tube",
         f"Hitch point X 0, Y {P['hitch'][1]:.0f}, Z {P['hitch'][2]:.0f} (bike left axle end)",
-        f"Load cell X {cx0:.0f} to {cx1:.0f}, coupler to X {P['coupler_x'][1]:.0f}, on center line",
-        f"Coupler stroke {P['coupler_stroke']:.0f}; enclosure {P['enc'][1]:.0f} x {P['enc'][2]:.0f} x {P['enc'][3]:.0f}",
+        f"Coupler housing X {P['housing'][2]:.0f} to {P['coupler_x'][1]:.0f}; load cell inside, X {cx0:.0f} to {cx1:.0f}",
+        f"Coupler stroke {P['coupler_stroke']:.0f}; brake lever {D['lever_ratio']:.1f} to 1",
+        f"Enclosure {P['enc'][1]:.0f} x {P['enc'][2]:.0f} x {P['enc'][3]:.0f}, X {P['enc'][0]:.0f}, door at front",
         f"Ground clearance {D['ground_clear']:.0f} under enclosure; tyre to rail {D['tyre_gap']:.1f}",
-        "Empty about 43 kg; hitch load about 7.8 kg (CGM-CAL-001)",
+        "Empty about 46 kg; hitch load about 7.5 kg (CGM-CAL-001)",
         "Third-angle; front view from -Y; X rearward from bike axle",
-    ], x=276, y=158, width=146)
+    ], x=276, y=144, width=146)
     out = s.save(ROOT / "cad" / "drawings" / "CGM-DWG-001")
     shutil.rmtree(work, ignore_errors=True)
     print(f"wrote {out} and .pdf, .png at scale 1:{1 / k:g}")

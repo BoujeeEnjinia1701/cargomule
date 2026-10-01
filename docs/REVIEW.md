@@ -1,5 +1,65 @@
 # Review note: CargoMule
 
+## Session 2026-10-01: kit 1.7.0, design for construction and prototype build plan
+
+Following Amish's 2026-09-30 instruction ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations") and the build plan format he approved for FieldNode, with outstanding decisions kept out of the plan and in a separate register.
+
+### What was done
+
+- Kit 1.7.0 installed (`.kit/`, `.claude/commands/`); `CLAUDE.md` replaced by `.kit/CLAUDE.md`.
+- Constructability review of the TRL 3 model with build123d (overlaps, contacts, fixings, assembly order, process). `cad/src/model.py` rewritten as a constructable model with `build_components()` and 73 checks (`python cad/src/model.py --check`), all passing.
+- `docs/decisions/0003-design-for-construction.md` (CGM-DDR-003 v0.1, Draft): every change, made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review.
+- `cad/src/build_plan_media.py`: overview, eleven making sketches (`cad/drawings/CGM-DWG-101` to `111`), ten joint close-ups and sixteen assembly step pictures in `docs/05-build-plan/`.
+- `docs/05-build-plan.md` (CGM-BLD-001 v0.1) and `docs/06-design-decisions.md` (CGM-DEC-001 v0.1).
+- Calculations rerun: `docs/04-calcs/sizing.py` now takes made-part masses from the model's volumes; CGM-CAL-001 v0.3, CGM-REQ-001 v0.5, CGM-PRC-001 v0.5. `bom/bom.csv` and `bom/bom-notes.md` updated ($997).
+- CGM-DWG-001 Rev P4 regenerated; `cad/src/sheets.py` now repairs collapsed elliptical arcs in the projected views, which drew a stray line across the sheet. STEP and STL re-exported; concept media regenerated.
+- `project.yaml`: `design_state: constructable`; DDR-003, the build plan, the register, the overview picture and the media script added to `trl_evidence`. README: links line and a "Building the prototype" section.
+
+### Design changes made for construction (CGM-DDR-003)
+
+1. Load cell moved inside a coupler housing welded into the frame nose; the drawbar slides in two bushings that carry its bending and tongue load; pull goes through a rod end, clevis pin, cell and pull rod to a spring cage's bulkhead.
+2. Overload stop and anti-rotation: a slotted fork on the housing with a closed front end; an M12 pin through the drawbar rests 0.5 mm behind it.
+3. Assembly order: spring, rod and cell go in from the rear as a cartridge under a bolted end cap; the clevis pin goes in through a 70 x 24 mm side window with a rubber cover.
+4. Brake lever: 20 x 6 mm lever, 7.7 to 1, on a bolt between cheeks under the housing; friction washers in place of a hydraulic damper; one cable to a splitter, then one to each caliper.
+5. Drawbar: one tube with three 115 mm radius bends; straight rear part from 700 mm; welded end plug.
+6. Nose: nose bars fishmouthed onto the coupler housing (the concept's solid ball removed).
+7. Hitch arm 32 mm into the drawbar's 33 mm bore with a locking pin.
+8. Enclosure: 350 mm long, bolted up into the crossmembers at 1,600 and 1,920 mm, front door hinged at the bottom with a lock; the pack slides out forward.
+9. Calipers on post-mount adapters on rearward tabs of the inner dropout plates, clear of the motor shell.
+10. Axle slots in all four dropouts; a torque arm on the left inner dropout.
+11. Deck on 16 M6 bolts into rivet nuts; boards held by aluminium corner pieces and brackets with wing nuts.
+12. Flag pole in two clips; rear lights bolted to the rear rail.
+13. Parking stand pivoted in a clevis under the housing.
+14. Harness rerouted (motor cable along the left arch frame; cell cable out of the end cap; light cables under the deck).
+15. Rails and tubes modelled hollow with capped ends.
+
+### Key results (CGM-CAL-001 v0.3)
+
+- **R8 not met:** 46.2 kg against 45 kg (43.2 kg before); the coupler, fixings and fittings add 3.0 kg. Proposed, awaiting Amish (register item 1).
+- R3 still at risk: 38.7 N felt (was 36.6 N, target 40 N); winding 96 °C. R6 still at risk: 93 N dry, 111 N wet. R7 at risk.
+- Range 24.5 km; hitch load 7.5 kg (window 32 mm ahead to 57 mm behind the deck centre); drawbar factor 4.3 at the front bushing; width 960 mm (972 mm over the motor cable); BOM $997 against $1,000.
+
+### Proposed, awaiting Amish
+
+See `docs/06-design-decisions.md`: R8 response (recommend relaxing to 47 kg for the prototype), key switch and charge port position (recommend the enclosure's right wall), coupler damping (recommend friction washers for the prototype), updating the appearance model and renders, render styling and composition (from 2026-09-26), and O1 and O2 (no recommendation).
+
+### Stale media (made on Amish's Mac, not regenerated here)
+
+`media/render-hero.png`, `media/render-exploded.png`, `media/render-detail.png`, `media/card.png` and `media/social-preview.png` show the concept's coupler, load cell guard, top-opening enclosure with a window and harness, so they are stale. `cad/src/product_model.py` still builds from `build_parts()` (same group names) but its appearance parts follow the concept.
+
+### Safety
+
+The coupler adds pinch points at the fork slot, the side window and the lever cheeks; the build plan has safety stops for welding, tube bending, the battery, first motor power, hitching and the first loaded roll (private ground only). The overload pin now protects the load cell. No change to the safety case.
+
+### Problems and notes
+
+- `.kit/drawing.py` `project_views` still fails on this model's degenerate edges; the repo keeps its own `safe_project_views` in `cad/src/sheets.py`, now also repairing collapsed arcs. A kit fix is suggested.
+- In `.kit/build_views.py` sketches, the "Front view" label is the side elevation for this trailer (kit naming), as noted on 2026-09-25.
+
+### Recommended next step
+
+Amish reviews CGM-DDR-003 and decides register items 1 to 4. TRL 4 (building to this plan) stays on hold.
+
 ## Session 2026-09-26: sources strengthened
 
 Amish asked on 2026-09-26 to "fix the weaker sources." Links in the README sections Concept rationale to What sparked the idea were checked; the three uncited country rows were rewritten or replaced with cited rows, and trade-press price sources were replaced with the manufacturer's page.

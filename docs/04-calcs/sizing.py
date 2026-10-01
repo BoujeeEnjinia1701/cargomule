@@ -1,8 +1,9 @@
-"""CargoMule sizing calculations, CGM-CAL-001 v0.2 (TRL 3; 180 mm rotors, R8 45 kg and motor derating per CGM-DDR-002).
+"""CargoMule sizing calculations, CGM-CAL-001 v0.3 (TRL 3; constructable design per CGM-DDR-003).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number that CGM-CAL-001 (docs/04-calcs/01-sizing.md) quotes, each on a line
-tagged like [A1]. Geometry comes from cad/src/model.py (PARAMS and derived), so the calc
+tagged like [A1]. Geometry comes from cad/src/model.py (PARAMS, derived and, for the masses of
+made steel parts, the volumes of the modelled components), so the calc
 note, the STEP files and drawing CGM-DWG-001 use the same dimensions. The BOM total is read
 from bom/bom.csv and the budget from project.yaml. First-principles estimates for a paper
 proof of concept; every assumption is set in the ASSUMPTIONS block below.
@@ -17,7 +18,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "cad" / "src"))
-from model import PARAMS as P, derived, drawbar_points  # noqa: E402
+from model import PARAMS as P, derived, drawbar_points, build_components  # noqa: E402
 
 D = derived(P)
 g = 9.81
@@ -55,8 +56,9 @@ A["rotor_area"] = A["rotor_area_160"] * ROTOR_SCALE
 
 # bought-in part masses, kg (typical catalog values, to confirm by weighing)
 BOUGHT = {
-    "4 Universal axle hitch": 0.60, "5 Load cell, clevises and amplifier": 0.45,
-    "6 Overrun coupler (sleeve, spring, damper, lever)": 1.60,
+    "4 Universal axle hitch": 0.60, "5 Load cell, rod end, clevis and amplifier": 0.45,
+    "6 Coupler internals (bushings, spring, pull rod, nut, bolts)": 0.40,
+    "7 Torque arm and bolt": 0.10, "9 Brake cable splitter and third cable": 0.12,
     "7 Hub motor wheel (geared hub 2.6 kg, rim, spokes, tyre 1.7 kg)": 4.30,
     "8 Idler wheel with disc hub": 1.90, "9 Disc brakes, two (caliper, 180 mm rotor, cable)": round(0.80 + 2 * (A["rotor_m"] - A["rotor_m_160"]), 2),
     "11 Battery pack, 12S LiFePO4 384 Wh with BMS": 4.20, "12 Motor controller": 0.40,
@@ -95,33 +97,31 @@ print("CargoMule sizing, CGM-CAL-001. Units SI unless stated; lengths from cad/s
 rho = A["steel_rho"] / 1e9          # kg/mm3
 hw, x0, x1, ax = D["hw"], P["deck_x0"], D["deck_x1"], P["axle_x"]
 R, rt = P["rail"], P["rail_t"]
-box_len = 2 * P["deck_len"] + 2 * (P["deck_w"] - 2 * R) + len(P["cross_x"]) * (P["deck_w"] - 2 * R)
-box_area = R ** 2 - (R - 2 * rt) ** 2
-m_box = box_len * box_area * rho
-nose = (P["nose_x"], 0, P["nose_z"])
-nose_len = 2 * dist((x0 + 15, hw - 15, D["fz0"] + 15), nose)
-m_nose = nose_len * tube_area(*P["nose_tube"]) * rho
+COMP = build_components(P)
+vol = lambda *ks: sum(COMP[k].shape.volume for k in ks)  # noqa: E731
+m_box = vol("rails") * rho
+m_nose = vol("nose_bars") * rho
+m_arch = vol("arches") * rho
+m_plates = vol("dropouts") * rho
 zr = (D["fz0"] + D["fz1"]) / 2
-arch_len_side = (2 * (D["arch_y"] - hw) + 2 * hypot(80, D["arch_top"] - zr)
-                 + (2 * P["arch_half"] - 160) + (D["arch_top"] - (P["wheel_r"] + 20)))
-m_arch = 2 * arch_len_side * tube_area(*P["arch_tube"]) * rho
-m_plates = 2 * (90 * (D["fz0"] - (P["wheel_r"] - 40)) + 60 * 80) * P["plate_t"] * rho
-m_frame = m_box + m_nose + m_arch + m_plates + 0.40      # 0.40 kg: tie-down eyes, nose node, brackets
+m_frame = m_box + m_nose + m_arch + m_plates + 0.25      # 0.25 kg: weld metal, rivet nuts, end caps of open tubes
 pts = drawbar_points(P)
-db_len = sum(dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1)) - (P["coupler_x"][1] - P["cell_x"][0])
-m_drawbar = db_len * tube_area(*P["drawbar"]) * rho
-m_stand = (P["nose_z"] - 40) * tube_area(22, 2) * rho + 0.2
+m_drawbar = vol("drawbar") * rho                          # bent tube, end collar and anti-rotation pin
+m_coupler = vol("housing", "cage", "end_cap", "lever") * rho
+m_stand = vol("stand") * rho
+m_fittings = vol("corners", "brackets") * 2700.0 / 1e9    # aluminium angle corner pieces and board brackets
 ex0, el, ew, eh = P["enc"]
-enc_area = 2 * (el * ew + el * eh + ew * eh)
-m_enc = enc_area * 0.8 * rho + 0.3                     # 0.3 kg: hinges, lock, glands, vent
+m_enc = vol("enclosure", "door") * rho + 0.3              # 0.3 kg: hinge, lock, glands, vent, doubler strips
 ply = A["ply_rho"] / 1e9
 m_deck = P["deck_len"] * P["deck_w"] * P["deck_t"] * ply
 m_boards = (2 * P["deck_len"] + 2 * P["deck_w"]) * P["board_h"] * P["board_t"] * ply
 made = {"1 Chassis frame (welded steel)": m_frame, "2 Deck, 12 mm plywood": m_deck,
-        "2 Side boards, removable": m_boards, "3 Drawbar, 38 x 2.5 mm S355": m_drawbar,
-        "10 Enclosure, 0.8 mm steel": m_enc, "16 Parking stand": m_stand}
-say("A1", f"Frame: box section {box_len/1000:.2f} m at {box_area*rho*1000:.2f} kg/m = {m_box:.2f} kg; "
-          f"nose bars {m_nose:.2f} kg; arch frames {m_arch:.2f} kg; dropout plates {m_plates:.2f} kg; "
+        "2 Side boards, removable": m_boards, "2 Corner pieces and board brackets, aluminium": m_fittings,
+        "3 Drawbar, 38 x 2.5 mm S355, bent": m_drawbar,
+        "6 Coupler housing, end cap cartridge and brake lever (steel)": m_coupler,
+        "10 Enclosure and door, 0.8 mm steel": m_enc, "16 Parking stand": m_stand}
+say("A1", f"Frame, from the model: box section rails and crossmembers {m_box:.2f} kg; "
+          f"nose bars {m_nose:.2f} kg; arch frames and tie-down eyes {m_arch:.2f} kg; dropout plates {m_plates:.2f} kg; "
           f"frame total {m_frame:.1f} kg")
 for k, v in {**made, **BOUGHT}.items():
     say("A2", f"{k}: {v:.2f} kg")
@@ -136,14 +136,15 @@ fz0, fz1 = D["fz0"], D["fz1"]
 ez0, ez1 = D["enc_z"]
 cm = [
     (m_frame, (x0 + x1) / 2 - 40, zr + 20), (m_deck, (x0 + x1) / 2, fz1 + 5),
-    (m_boards, (x0 + x1) / 2, P["deck_z"] + 75), (m_drawbar, 500, 350), (BOUGHT["4 Universal axle hitch"], 20, 340),
-    (BOUGHT["5 Load cell, clevises and amplifier"], sum(P["cell_x"]) / 2, 355),
-    (BOUGHT["6 Overrun coupler (sleeve, spring, damper, lever)"], sum(P["coupler_x"]) / 2, 358),
+    (m_boards + m_fittings, (x0 + x1) / 2, P["deck_z"] + 75), (m_drawbar, 560, 350), (BOUGHT["4 Universal axle hitch"], 20, 340),
+    (BOUGHT["5 Load cell, rod end, clevis and amplifier"], sum(P["cell_x"]) / 2, 355),
+    (m_coupler + BOUGHT["6 Coupler internals (bushings, spring, pull rod, nut, bolts)"], sum(P["coupler_x"]) / 2, 340),
+    (BOUGHT["7 Torque arm and bolt"], ax, P["wheel_r"] + 30), (BOUGHT["9 Brake cable splitter and third cable"], 1600, 350),
     (BOUGHT["7 Hub motor wheel (geared hub 2.6 kg, rim, spokes, tyre 1.7 kg)"], ax, P["wheel_r"]),
     (BOUGHT["8 Idler wheel with disc hub"], ax, P["wheel_r"]), (BOUGHT["9 Disc brakes, two (caliper, 180 mm rotor, cable)"], ax + 40, P["wheel_r"]),
-    (m_enc, ex0 + el / 2, (ez0 + ez1) / 2), (BOUGHT["11 Battery pack, 12S LiFePO4 384 Wh with BMS"], ex0 + 12 + 125, ez0 + 80),
-    (BOUGHT["12 Motor controller"] + BOUGHT["13 Control board"], ex0 + 100, ez0 + 30),
-    (BOUGHT["14 Harness, fuse and key switch"], 1500, 300), (BOUGHT["15 Lights, reflectors and flag"], 2000, 700),
+    (m_enc, ex0 + el / 2, (ez0 + ez1) / 2), (BOUGHT["11 Battery pack, 12S LiFePO4 384 Wh with BMS"], ex0 + 6 + 125, ez0 + 76),
+    (BOUGHT["12 Motor controller"] + BOUGHT["13 Control board"], ex0 + 140, ez0 + 25),
+    (BOUGHT["14 Harness, fuse and key switch"], 1750, 340), (BOUGHT["15 Lights, reflectors and flag"], 2000, 700),
     (BOUGHT["18 Hardware, paint and consumables"], 1600, 380), (m_stand, P["stand_x"], 200),
 ]
 M0 = sum(m for m, _, _ in cm)
@@ -475,9 +476,9 @@ say("G2", f"Wheel reaction at {nb:.0f} g {Rw:.0f} N per side; torsion into the f
           f"{Mt:.0f} N m, carried by the axle crossmember in bending at {Mt*1000/Zr:.0f} MPa")
 od, t = P["drawbar"]
 Zd = tube_Z(od, t)
-Lt = (P["nose_x"] - P["hitch"][0]) / 1000
+Lt = (P["bush_front"][0] - P["hitch"][0]) / 1000          # the drawbar is held by the coupler's front bushing
 Mv = tongue * g * A["n_tongue"] * Lt
-say("G3", f"Drawbar {od:.0f} x {t} mm: Z {Zd:.0f} mm³; tongue {tongue:.1f} kg at {A['n_tongue']:.0f} g gives {Mv:.0f} N m at the nose, "
+say("G3", f"Drawbar {od:.0f} x {t} mm: Z {Zd:.0f} mm³; tongue {tongue:.1f} kg at {A['n_tongue']:.0f} g gives {Mv:.0f} N m at the coupler's front bushing, "
           f"{Mv*1000/Zd:.0f} MPa; factor on S355 {A['fy_s355']/(Mv*1000/Zd):.1f}")
 h, k_ = pts[0], pts[1]
 e_knee = max(abs(q[1] - h[1]) for q in pts) / 1000
@@ -509,7 +510,9 @@ say("G7", f"Deck {P['deck_t']:.0f} mm plywood, longest span {Ls*1000:.0f} mm: un
 
 # ================================================================== H. Geometry and fit
 say("H1", f"Deck {P['deck_len']:.0f} x {P['deck_w']:.0f} mm = {D['deck_area_m2']:.2f} m² (R1: 0.8 m² or more)")
-say("H2", f"Overall width {D['width']:.0f} mm (R9: 1,000 mm); hitched length from the bike axle {D['length']:.0f} mm (R9: 2,600 mm)")
+w_cable = max(-COMP["harness"].shape.bounding_box().min.Y, D["width"] / 2) + D["width"] / 2   # cable on the left side only
+say("H2", f"Overall width {D['width']:.0f} mm over the arch frames, {w_cable:.0f} mm over the motor cable clipped outside the left arch "
+          f"(R9: 1,000 mm); hitched length from the bike axle {D['length']:.0f} mm (R9: 2,600 mm)")
 say("H3", f"Tyre to side rail clearance {D['tyre_gap']:.1f} mm; dropout faces {D['d_in']:.0f} and {D['d_out']:.0f} mm from the center line "
           f"(hub spacing {P['hub_old']:.0f} mm); arch top {D['arch_top']:.0f} mm; enclosure ground clearance {D['ground_clear']:.0f} mm")
 say("H4", f"Flag top {D['flag_top']:.0f} mm above the ground (R14: 1,500 mm)")

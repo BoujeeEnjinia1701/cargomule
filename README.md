@@ -8,7 +8,7 @@ Electric-assist cargo trailer that fits most bicycles. A load cell in the drawba
 
 ![CargoMule: electric-assist cargo trailer for most bicycles, product render](media/render-hero.png)
 
-[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement (PDF)](cad/drawings/CGM-DWG-001.pdf) · [Calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
+[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement (PDF)](cad/drawings/CGM-DWG-001.pdf) · [Calculations](docs/04-calcs/01-sizing.md) · [Prototype build plan](docs/05-build-plan.md) · [Design decisions](docs/06-design-decisions.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
@@ -56,27 +56,34 @@ Small businesses and households need to move 100 to 150 kg loads short distances
 
 ## Concept
 
-A two-wheel, 150 kg trailer hitches to the bicycle's left rear axle end with no wiring to the bike. An S-type load cell in the drawbar coupling measures pull force, and a 250 W geared hub motor in one trailer wheel pushes with four times that force (the rider can select 2 to 6), so the rider feels about 6.5 N on the flat and about 37 N on an 8 % grade. When the bike slows, the drawbar goes into compression, the motor cuts out and a mechanical overrun coupler applies disc brakes on both trailer wheels. TRL 3 calculations give about 25 km per charge on a hilly loaded route and parts costing $979 against the $1,000 budget. The empty trailer weighs about 43 kg, within the 45 kg target for the first prototype. The hill climb (motor heating, handled by thermal derating and a stated use limit of about 300 m of continuous 8 % climbing), wet braking and hitch fit are still at risk.
+A two-wheel, 150 kg trailer hitches to the bicycle's left rear axle end with no wiring to the bike. An S-type load cell in the drawbar coupling measures pull force, and a 250 W geared hub motor in one trailer wheel pushes with four times that force (the rider can select 2 to 6), so the rider feels about 6.5 N on the flat and about 39 N on an 8 % grade. When the bike slows, the drawbar goes into compression, the motor cuts out and a mechanical overrun coupler applies disc brakes on both trailer wheels. TRL 3 calculations give about 24.5 km per charge on a hilly loaded route and parts costing $997 against the $1,000 budget. Made buildable, the empty trailer weighs about 46 kg, 1.2 kg over the 45 kg target for the first prototype; the response is an open decision. The hill climb (motor heating, handled by thermal derating and a stated use limit of about 300 m of continuous 8 % climbing), wet braking and hitch fit are still at risk.
 
-Design precis: [docs/02-concept.md](docs/02-concept.md) · Calculations: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [DDR-001](docs/decisions/0001-trl2-review-decisions.md), [DDR-002](docs/decisions/0002-recommendations-accepted.md)
+Design precis: [docs/02-concept.md](docs/02-concept.md) · Calculations: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [DDR-001](docs/decisions/0001-trl2-review-decisions.md), [DDR-002](docs/decisions/0002-recommendations-accepted.md), [DDR-003](docs/decisions/0003-design-for-construction.md), [register](docs/06-design-decisions.md)
 
 ## Key components
 
 - Welded steel trailer frame with a 1,200 x 700 mm plywood deck and wheel arch frames
-- Universal axle hitch for quick-release and thru-axle bikes, with a 3.8 kN safety strap
-- Offset 38 mm drawbar that clears the bike's rear tyre to 55° of yaw
-- Drawbar S-type load cell with HX711-class amplifier and a 0.7 Hz assist filter
-- Overrun brake coupler driving mechanical disc brakes (180 mm rotors, metallic pads) on both wheels
+- Universal axle hitch for quick-release and thru-axle bikes, with a 3.9 kN safety strap
+- Bent 38 mm drawbar that clears the bike's rear tyre to 55° of yaw and slides in the coupler
+- S-type load cell inside the coupler housing, with HX711-class amplifier and a 0.7 Hz assist filter
+- Overrun brake coupler (spring, 7.7:1 lever, cable splitter) driving mechanical disc brakes (180 mm rotors, metallic pads) on both wheels
 - 250 W, 36 V geared hub motor in one 20 in wheel, plus an idler wheel
 - 36 V sine-wave motor controller (15 A pack, 30 A phase) and a microcontroller control board
 - 36 V class LiFePO4 pack, 384 Wh, with BMS
 - Lights, reflectors, flag and parking stand
+- Battery enclosure bolted under the deck, with a lockable front door
 
 The bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py), with STEP files in `cad/step/` and the general arrangement drawing CGM-DWG-001 in `cad/drawings/`.
 
+## Building the prototype
+
+![CargoMule prototype: every component pulled apart and numbered in build order](docs/05-build-plan/overview.png)
+
+The [prototype build plan](docs/05-build-plan.md) (CGM-BLD-001) shows, in pictures, how to make each of the twenty components and put them together in sixteen steps; nothing has been built yet. The made parts are a steel coupler housing and spring cage, a welded box-section frame with dropout plates and arch frames, a bent drawbar, a brake lever, a parking stand, a plywood deck and boards with aluminium fittings, and a folded steel battery enclosure; the wheels, brakes, load cell, battery and electronics are bought. Writing the plan made the design buildable: the load cell now sits inside the coupler housing so the drawbar's weight goes through bushings, the coupler can be assembled in one order, the enclosure has a door and hangs from two crossmembers, and every part has a fixing (CGM-DDR-003, open for Amish's review). The constructable trailer weighs about 46 kg, over the 45 kg target; the open decisions are in the [design decisions register](docs/06-design-decisions.md).
+
 ## Safety
 
-> **Safety:** Check local rules for electrically assisted trailers before riding on public roads. The trailer must brake itself: at 150 kg it is well above the 45 to 60 kg limits for unbraked cycle trailers in ASTM F1975 and EN 15918. The controller must cut assist whenever the drawbar goes into compression, at standstill, above 25 km/h and on any sensor fault. Use a hitch with a secondary safety strap rated 3.8 kN or more, and keep the load centered on the marked zone so the drawbar never lifts. The trailer contains a lithium (LiFePO4) battery pack: use a BMS with cell-level protection, fuse the pack, and charge on a non-combustible surface. See the safety section of the [design precis](docs/02-concept.md).
+> **Safety:** Check local rules for electrically assisted trailers before riding on public roads. The trailer must brake itself: at 150 kg it is well above the 45 to 60 kg limits for unbraked cycle trailers in ASTM F1975 and EN 15918. The controller must cut assist whenever the drawbar goes into compression, at standstill, above 25 km/h and on any sensor fault. Use a hitch with a secondary safety strap rated 3.9 kN or more, and keep the load centered on the marked zone so the drawbar never lifts. The trailer contains a lithium (LiFePO4) battery pack: use a BMS with cell-level protection, fuse the pack, and charge on a non-combustible surface. See the safety section of the [design precis](docs/02-concept.md).
 
 ## Repository layout
 
