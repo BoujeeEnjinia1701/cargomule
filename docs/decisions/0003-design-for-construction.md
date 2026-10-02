@@ -3,9 +3,9 @@ doc_id: CGM-DDR-003
 title: CargoMule design for construction
 project: CargoMule
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target; cost wording only, no number changed
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Table 3 (A1 to A4) accepted by Amish as recommended on 2026-10-02; record stays Draft"
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-10-01
-- **Status:** Draft. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; they are open for his review. The items in Table 3 change a requirement status or the product's appearance and are Proposed, awaiting Amish.
+- **Status:** Draft. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; they are open for his review. The items in Table 3 change a requirement status or the product's appearance; Amish accepted all four as recommended on 2026-10-02: "i approve your recommendations for all 555 open decisions." They are recorded in the design decisions register (CGM-DEC-001). The record stays Draft.
 
 ## Context
 
@@ -64,18 +68,19 @@ The changes keep what CargoMule does: the same deck, wheels, track, hitch point 
 | Drawing | CGM-DWG-001 Rev P4; making sketches CGM-DWG-101 to 111 added. | Follows the model. |
 | Documents | CGM-CAL-001 v0.3, CGM-PRC-001 v0.5, CGM-REQ-001 v0.5. R8 changes from met to not met; no other requirement changes status. | Follows the model. |
 
-*Table 3. Proposed, awaiting Amish.*
+*Table 3. Items that change a requirement status or the appearance: proposed, then accepted by Amish as recommended on 2026-10-02.*
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
-| A1 | The constructable trailer weighs 46.2 kg, 1.2 kg over R8's 45 kg. | (a) relax R8 to 47 kg for the first prototype and weigh it at TRL 4; (b) take the later weight option of CGM-DDR-002 now: straps or mesh in place of the plywood side boards (about 43.9 kg); (c) look for mass elsewhere (4 mm dropout plates, a shorter housing with a stiffer spring), about 0.5 kg. | (a). The boards are part of what the trailer offers; the margin is small and the estimate is on catalogue masses. |
-| A2 | The key switch and charge port. The renders of 2026-09-26 put them on the enclosure's front face, which is now the door. | (a) on the enclosure's right wall near the front, reached under the deck edge; (b) on the door, with a flexible lead across the hinge. | (a): no cable flexes at the hinge. |
-| A3 | Friction damping on the lever pivot in place of a small hydraulic damper (the concept allowed either). | (a) friction washers for the prototype; (b) a small hydraulic damper between the cheeks and the lever. | (a), and check at TRL 4 that the coupler does not chatter on rough roads; (b) fits later without other changes. |
-| A4 | The photoreal renders and the appearance model (`cad/src/product_model.py`) show the concept's coupler, load cell guard, top-opening enclosure with an inspection window and the old harness. | (a) update the appearance model and renders on Amish's Mac to this design; (b) leave them until TRL 4. | (a), before the repo is made public. |
+| A1 | The constructable trailer weighs 46.2 kg, 1.2 kg over R8's 45 kg. | (a) relax R8 to 47 kg for the first prototype and weigh it at TRL 4; (b) take the later weight option of CGM-DDR-002 now: straps or mesh in place of the plywood side boards (about 43.9 kg); (c) look for mass elsewhere (4 mm dropout plates, a shorter housing with a stiffer spring), about 0.5 kg. | (a). The boards are part of what the trailer offers; the margin is small and the estimate is on catalogue masses. Accepted by Amish, 2026-10-02 ("i approve your recommendations for all 555 open decisions."): R8 becomes 47 kg as a hard cap for the first prototype only, not a new target; weigh at TRL 4; straps or mesh side boards if the weighed trailer is over 47 kg. |
+| A2 | The key switch and charge port. The renders of 2026-09-26 put them on the enclosure's front face, which is now the door. | (a) on the enclosure's right wall near the front, reached under the deck edge; (b) on the door, with a flexible lead across the hinge. | (a): no cable flexes at the hinge. Accepted by Amish, 2026-10-02 ("i approve your recommendations for all 555 open decisions."): (a). |
+| A3 | Friction damping on the lever pivot in place of a small hydraulic damper (the concept allowed either). | (a) friction washers for the prototype; (b) a small hydraulic damper between the cheeks and the lever. | (a), and check at TRL 4 that the coupler does not chatter on rough roads; (b) fits later without other changes. Accepted by Amish, 2026-10-02 ("i approve your recommendations for all 555 open decisions."): (a), with the rough-road chatter check made a pass condition at TRL 4; fit (b) if the brake chatters or grabs. |
+| A4 | The photoreal renders and the appearance model (`cad/src/product_model.py`) show the concept's coupler, load cell guard, top-opening enclosure with an inspection window and the old harness. | (a) update the appearance model and renders on Amish's Mac to this design; (b) leave them until TRL 4. | (a), before the repo is made public. Accepted by Amish, 2026-10-02 ("i approve your recommendations for all 555 open decisions."): (a), before the repo is made public. |
 
 ## Consequences
 
 - `design_state: constructable` in `project.yaml`. The build plan CGM-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`).
 - Requirement status (CGM-CAL-001 v0.3): one not met (R8), three at risk (R3, R6, R7), eight met on paper or by design, two not verifiable at TRL 3.
-- The renders `media/render-*.png`, `media/card.png` and `media/social-preview.png` and the appearance model still show the concept; they are made on Amish's Mac (A4).
+- The renders `media/render-*.png`, `media/card.png` and `media/social-preview.png` and the appearance model still show the concept; with A4 accepted they are to be updated on Amish's Mac before the repo is made public.
+- With A1 accepted, R8 is a 47 kg cap for the first prototype (CGM-REQ-001 v0.7) and is met on paper at 46.2 kg; the trailer is weighed at TRL 4. With A2 and A3 accepted, the key switch and charge port go on the enclosure's right wall, and the coupler is damped by friction washers with a chatter check at TRL 4.
 - The parts to confirm when bought (load cell size, hub motor axle and cable exit, caliper adapter, spring) are listed in the design decisions register, CGM-DEC-001.

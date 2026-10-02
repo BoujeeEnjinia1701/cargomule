@@ -3,9 +3,9 @@ doc_id: CGM-BLD-001
 title: CargoMule prototype build plan
 project: CargoMule
 doc_type: Build plan
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: First build plan, with pictures by component and step; design made constructable (CGM-DDR-003)
+  - version: "0.2"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "R8 acceptance figure set to the 47 kg prototype cap decided on 2026-10-02 (CGM-DDR-003, A1)"
 ---
 
 # CargoMule prototype build plan
@@ -436,7 +440,7 @@ These are the checks a TRL 4 test report would record; this plan only lists them
 | Fault cut | R13 | Unplug the load cell while assisting | Motor current zero within 100 ms; the brakes still work |
 | Articulation | R7, R9 | Hitched to a bicycle, swing the trailer through a turn both ways | The drawbar clears the rear tyre to about 55 degrees toward the drawbar side |
 | Hitch load | R10 | Bathroom scale under the hitch with 150 kg of sandbags centred in the loading zone | 3 to 10 kg (7.5 kg estimated) |
-| Mass | R8 | Weigh the empty trailer with the pack | 45 kg or less (46.2 kg estimated) |
+| Mass | R8 | Weigh the empty trailer with the pack | 47 kg or less, the prototype cap (46.2 kg estimated) |
 | Size | R9 | Tape measure | 1,000 mm or less wide; 2.6 m or less from the bicycle's axle |
 | Lights and flag | R14 | Look; measure the flag's top | Lights on from the pack; flag top 1.5 m or more above the ground |
 

@@ -3,9 +3,9 @@ doc_id: CGM-CAL-001
 title: CargoMule sizing calculations
 project: CargoMule
 doc_type: Calculation
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,11 +25,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target; cost wording only, no number changed
+- version: "0.5"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R8 status from the 2026-10-02 decision (47 kg prototype cap, CGM-DDR-003 A1): met on paper; counts updated. Figures not rerun; sizing.py still prints the 45 kg target"
 ---
 
 # CargoMule sizing calculations
 
-On paper, CargoMule meets eight of its fourteen requirements, has three at risk, misses one and has two that cannot be verified at TRL 3. Version 0.3 reruns every figure for the constructable design of CGM-DDR-003: the made parts' masses now come from the model's own volumes, and the coupler, enclosure, fixings and board fittings that make the design buildable are counted. The empty trailer rises from 43.2 kg to 46.2 kg, so **R8 (45 kg) is not met**; the response is proposed to Amish in CGM-DDR-003 (A1). Version 0.2 applied Amish's decisions of 2026-09-25 (CGM-DDR-002): R8 relaxed to 45 kg, 180 mm rotors with metallic pads, and a thermal derating rule with a stated use limit. The three at risk are the hill climb (R3), where the motor delivers the force but its winding reaches about 96 °C against a 100 °C limit after the 300 m design climb, on assumed motor constants; braking (R6), where the push is 93 N dry but about 111 N with wet pads; and hitch fit (R7). The calculations also changed three parts of the TRL 2 concept: the assist filter (the TRL 2 filter was unstable), the drawbar shape (a straight drawbar clears the bike's tyre only up to about 10°) and the deck thickness. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
+On paper, CargoMule meets nine of its fourteen requirements, has three at risk and has two that cannot be verified at TRL 3. Version 0.3 reruns every figure for the constructable design of CGM-DDR-003: the made parts' masses now come from the model's own volumes, and the coupler, enclosure, fixings and board fittings that make the design buildable are counted. The empty trailer rises from 43.2 kg to 46.2 kg, so R8 at 45 kg was not met; on 2026-10-02 Amish set R8 to 47 kg as a hard cap for the first prototype (CGM-DDR-003, A1), which the estimate meets. Version 0.2 applied Amish's decisions of 2026-09-25 (CGM-DDR-002): R8 relaxed to 45 kg, 180 mm rotors with metallic pads, and a thermal derating rule with a stated use limit. The three at risk are the hill climb (R3), where the motor delivers the force but its winding reaches about 96 °C against a 100 °C limit after the 300 m design climb, on assumed motor constants; braking (R6), where the push is 93 N dry but about 111 N with wet pads; and hitch fit (R7). The calculations also changed three parts of the TRL 2 concept: the assist filter (the TRL 2 filter was unstable), the drawbar shape (a straight drawbar clears the bike's tyre only up to about 10°) and the deck thickness. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles estimates for a paper proof of concept. They are not a substitute for the braking, hitch and structural tests of EN 15918 or ASTM F1975, or for electrical safety checks on the battery and controller. Nothing may be ridden or towed on the strength of this note. See CGM-PRC-001, Safety.
 
@@ -75,7 +79,7 @@ The frame, from the model's volumes, is about 13.0 kg: the 30 x 30 x 1.5 mm box 
 | 15 Lights and flag; 16 stand; 18 hardware and paint | 0.50; 0.58; 0.80 kg |
 | **Empty trailer** | **46.2 kg (102 lb)** |
 
-- **R8 is not met:** 46.2 kg against the 45 kg target that Amish set on 2026-09-25 (CGM-DDR-002); the target was 35 kg at TRL 2 and 40 kg under CGM-DDR-001 [A3]. Version 0.2 gave 43.2 kg. The 3.0 kg rise comes from designing the parts the concept only estimated: the coupler (2.9 kg in all, against 1.6 kg), the dropout plates' caliper tabs, the board fittings, a larger enclosure with a door, the torque arm and the brake cable splitter (CGM-DDR-003). Without the side boards the trailer weighs 43.4 kg. The response (relax R8 for the prototype, take the straps or mesh option now, or find mass elsewhere) is proposed to Amish in CGM-DDR-003, A1.
+- **R8 is not met:** 46.2 kg against the 45 kg target that Amish set on 2026-09-25 (CGM-DDR-002); the target was 35 kg at TRL 2 and 40 kg under CGM-DDR-001 [A3]. Version 0.2 gave 43.2 kg. The 3.0 kg rise comes from designing the parts the concept only estimated: the coupler (2.9 kg in all, against 1.6 kg), the dropout plates' caliper tabs, the board fittings, a larger enclosure with a door, the torque arm and the brake cable splitter (CGM-DDR-003). Without the side boards the trailer weighs 43.4 kg. Amish decided on 2026-10-02 (CGM-DDR-003, A1) to set R8 to 47 kg as a hard cap for the first prototype only and to weigh the trailer at TRL 4, with straps or mesh side boards as the fallback if it is over 47 kg. **R8 is met on paper** against the 47 kg cap.
 - **Loaded mass** in the design case is 196.2 kg [A4].
 - **Hitch down load.** The empty trailer's mass center is 1,675 mm behind the bike axle and 362 mm high [A5]; it moved 33 mm rearward because the enclosure now hangs between the crossmembers at 1,600 and 1,920 mm. With the axle 20 mm behind the deck center, the hitch carries 5.9 kg empty and 7.5 kg with the payload centered [A6]. R10 (3 to 10 kg) is met. The axle moved forward 30 mm from the TRL 2 layout, which would give 10.4 kg with this mass breakdown [A6].
 - **Payload placement.** The hitch load changes by 7.8 kg per 100 mm of payload shift. It stays within 3 to 10 kg only while the payload center sits between 32 mm ahead of and 57 mm behind the deck center, and the drawbar unloads completely with the payload center 96 mm behind it [A7]. This is inherent in a two-wheel trailer carrying four times its own mass, and it needs a clear loading mark on the deck.
@@ -171,7 +175,7 @@ The BOM has 18 lines totalling $997 (the estimated cost of the constructable des
 
 | ID | Requirement | Value | Target | Status |
 | --- | --- | --- | --- | --- |
-| R8 | Light enough to handle | 46.2 kg empty (43.4 kg without side boards) | 45 kg or less (relaxed, CGM-DDR-002) | **Not met** (response proposed, CGM-DDR-003 A1) |
+| R8 | Light enough to handle | 46.2 kg empty (43.4 kg without side boards) | 47 kg or less, prototype cap (CGM-DDR-003 A1, 2026-10-02) | Met on paper (weigh at TRL 4) |
 | R3 | Assist on hills | 38.7 N felt; winding 96 °C after 300 m; derating holds 100 °C beyond about 331 m | 40 N or less; no over-temperature (100 °C) | **At risk** (4 K thermal margin on assumed constants) |
 | R6 | Trailer brakes itself | 93 N push dry, 111 N wet; cut 60 ms | 100 N or less; 100 ms | **At risk** (wet pads, fade on long descents) |
 | R7 | Hitch to common bicycles | Axle stresses pass; thru-axle threads vary | QR and 12 mm thru-axle, 30 s, no wiring | **At risk** |
@@ -186,7 +190,7 @@ The BOM has 18 lines totalling $997 (the estimated cost of the constructable des
 | R11 | Weather and temperature | Datasheet items (IP65, IP54, BMS charge block) | As stated | Not verifiable at TRL 3 |
 | R13 | Fail safe | 60 ms fast path on paper | 100 ms | Not verifiable at TRL 3 |
 
-Counts: 8 met (6 on paper, 2 by design), 3 at risk, 1 not met (R8), 2 not verifiable at TRL 3. In v0.1, R8 was not met at 43.1 kg against 40 kg; in v0.2 it was met at 43.2 kg against 45 kg.
+Counts: 9 met (7 on paper, 2 by design), 3 at risk, 0 not met, 2 not verifiable at TRL 3. Before the 2026-10-02 decision on CGM-DDR-003 A1, R8 was not met at 46.2 kg against 45 kg. In v0.1, R8 was not met at 43.1 kg against 40 kg; in v0.2 it was met at 43.2 kg against 45 kg.
 
 ## Checks against the TRL 2 figures
 

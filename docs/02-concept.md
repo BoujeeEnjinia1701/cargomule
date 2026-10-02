@@ -3,9 +3,9 @@ doc_id: CGM-PRC-001
 title: CargoMule design precis
 project: CargoMule
 doc_type: Design precis
-version: "0.6"
+version: "0.7"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -33,11 +33,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target; cost wording only, no number changed
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Decisions of 2026-10-02: R8 47 kg prototype cap (met on paper), controls on the enclosure's right wall, friction damping with a TRL 4 chatter check, first candidate user type, private ground only until a legal check"
 ---
 
 # CargoMule design precis
 
-CargoMule is a two-wheel, 150 kg cargo trailer that hitches to a bicycle's rear axle and pushes itself. A load cell inside the drawbar coupling measures how hard the bicycle pulls, a small controller commands a 250 W geared hub motor in one trailer wheel to push with four times that force, and the rider feels a fraction of the trailer's load. When the bicycle slows, the drawbar goes into compression: the controller cuts the motor and a mechanical overrun coupler applies disc brakes on both trailer wheels. TRL 3 calculations (CGM-CAL-001 v0.3) give about 24.5 km per charge of a 384 Wh LiFePO4 pack on a hilly loaded route, about 6.5 N of felt pull on the flat and about 39 N on an 8 % grade, and parts costing $997 against the $1,000 budget. Made buildable (CGM-DDR-003, build plan CGM-BLD-001), the empty trailer weighs about 46.2 kg, 1.2 kg over the 45 kg target Amish set for the first prototype (R8, CGM-DDR-002); the response is proposed to him. The hill climb, braking and hitch fit are still at risk (R3, R6, R7).
+CargoMule is a two-wheel, 150 kg cargo trailer that hitches to a bicycle's rear axle and pushes itself. A load cell inside the drawbar coupling measures how hard the bicycle pulls, a small controller commands a 250 W geared hub motor in one trailer wheel to push with four times that force, and the rider feels a fraction of the trailer's load. When the bicycle slows, the drawbar goes into compression: the controller cuts the motor and a mechanical overrun coupler applies disc brakes on both trailer wheels. TRL 3 calculations (CGM-CAL-001 v0.3) give about 24.5 km per charge of a 384 Wh LiFePO4 pack on a hilly loaded route, about 6.5 N of felt pull on the flat and about 39 N on an 8 % grade, and parts costing $997 against the $1,000 budget. Made buildable (CGM-DDR-003, build plan CGM-BLD-001), the empty trailer weighs about 46.2 kg, within the 47 kg cap Amish set for the first prototype on 2026-10-02 (R8, CGM-DDR-003 A1); it is weighed at TRL 4. The hill climb, braking and hitch fit are still at risk (R3, R6, R7).
 
 ![Hero render](../media/hero.png)
 
@@ -105,13 +109,13 @@ Table 2. Mass and balance.
 | Wheels, motor, torque arm and brakes | 7.3 kg |
 | Enclosure, pack, controller, board, harness | 8.3 kg |
 | Lights, flag, hardware and paint | 1.3 kg |
-| **Empty trailer** | **46.2 kg (102 lb) [A3]; R8 (45 kg) not met** |
+| **Empty trailer** | **46.2 kg (102 lb) [A3]; R8 (47 kg prototype cap) met on paper** |
 | Loaded trailer, design case | 196.2 kg [A4] |
 | Hitch down load, payload centered | 7.5 kg [A6]; axle 20 mm behind the deck center; R10 met |
 | Loading window for 3 to 10 kg on the hitch | payload center 32 mm ahead to 57 mm behind the deck center [A7] |
 | Static rollover threshold | 0.77 g on the 800 mm track [A8] |
 
-Without the side boards the trailer weighs 43.4 kg. Amish decided on 2026-09-25 to relax R8 to 45 kg for the first prototype, keep the steel frame (CGM-DDR-001, D3) and hold straps or mesh in place of the side boards as a later weight option (CGM-DDR-002). Making the design buildable added 3.0 kg (CGM-DDR-003), mostly in the coupler; the response to the new miss is proposed to Amish there (A1).
+Without the side boards the trailer weighs 43.4 kg. Amish decided on 2026-09-25 to relax R8 to 45 kg for the first prototype, keep the steel frame (CGM-DDR-001, D3) and hold straps or mesh in place of the side boards as a later weight option (CGM-DDR-002). Making the design buildable added 3.0 kg (CGM-DDR-003), mostly in the coupler. On 2026-10-02 Amish set R8 to 47 kg as a hard cap for the first prototype only (A1); the trailer is weighed at TRL 4, and straps or mesh replace the side boards if it is over 47 kg.
 
 ### Forces, motor and heating
 
@@ -181,7 +185,7 @@ Amish decided the choices below on 2026-09-25 (CGM-DDR-001 and CGM-DDR-002), in 
 - **One hub motor in the left wheel (D4).** Cheapest, one controller, small yaw moment.
 - **Overrun mechanical brake plus assist cut (D6).** Works unpowered; known from car trailers and Carla Cargo.
 - **Battery (D2).** A 12S 36 V class LiFePO4 pack, 384 Wh. A SwapCell receiver is a later fleet variant; it would build to SwapCell interface v0.3 (wake without CAN, charge while discharging, vehicle latch vibration rating), and the shared pack would be priced once and left out of this kit's budget.
-- **Frame material (D3) and mass target (DDR-002).** Welded mild steel for the first prototype, with R8 relaxed to 40 kg and then to 45 kg. The constructable trailer weighs 46.2 kg (CGM-DDR-003); the response is proposed to Amish. Straps or mesh in place of the side boards are a later weight option.
+- **Frame material (D3) and mass target (DDR-002).** Welded mild steel for the first prototype, with R8 relaxed to 40 kg and then to 45 kg. The constructable trailer weighs 46.2 kg (CGM-DDR-003); on 2026-10-02 Amish set R8 to 47 kg as a hard cap for the first prototype (A1). Straps or mesh in place of the side boards are the fallback if the weighed trailer is over the cap.
 - **Long climbs (DDR-002).** Keep the 250 W motor, derate current on winding temperature and state a use limit of about 300 m of continuous 8 % climbing.
 - **Brakes (DDR-002).** 180 mm rotors with metallic pads on both wheels, with the 7.7:1 coupler lever kept.
 - **Gain range (DDR-002).** Keep G = 2 to 6 on paper; settle the top setting when the hitch joint stiffness is measured (TRL 4, on hold).
@@ -189,7 +193,11 @@ Amish decided the choices below on 2026-09-25 (CGM-DDR-001 and CGM-DDR-002), in 
 - **Value-engineering target (D1).** Cost cuts first, then `budget_usd` raised to $1,000 as a hypothetical control target, not a limit.
 - **Handcart mode (D10).** Out of scope for now.
 
-Still open, with no recommendation: the first users and region for co-design (O1) and the legal status of a motorized trailer on public roads (O2). Every open decision is listed in the design decisions register, CGM-DEC-001 (`docs/06-design-decisions.md`).
+- **Controls and damping (CGM-DDR-003, A2 and A3, 2026-10-02).** Key switch and charge port on the enclosure's right wall near the front; friction washers on the brake lever pivot, with a rough-road chatter check as a TRL 4 pass condition and the small hydraulic damper fitted if the brake chatters or grabs.
+- **First users (O1, 2026-10-02).** Chosen by one rule: a group moving 50 to 150 kg loads on short, repeated urban trips on paved, hilly routes. The first candidate type to approach is a community food bank's local delivery or pantry runs; nothing is agreed with any partner.
+- **Road use (O2, 2026-10-02).** Private ground only until a written legal check exists for the first partner's country; the EU pedal-assist limits stay the design rule.
+
+Every decision is listed in the design decisions register, CGM-DEC-001 (`docs/06-design-decisions.md`).
 
 ## Safety
 
@@ -206,12 +214,13 @@ Still open, with no recommendation: the first users and region for co-design (O1
 - **Tipping.** The static rollover threshold is 0.77 g with the design load; a high or off-center load lowers it. Keep loads low and centered.
 - **Pinch points and sharp edges.** The drawbar slides 50 mm into the coupler under load, the brake lever swings under the housing and the parking stand folds; keep fingers out of the fork slot, the side window and the lever cheeks (the window has a rubber cover). Deburr all frame edges and fit end caps to open tube ends. The tyres run 22.5 mm from the side rails.
 - **Visibility.** A long, wide combination is easy to misjudge; lights, reflectors and a flag are part of the design, not accessories.
+- **Road use.** Until a written legal check exists for the first partner's country, use the trailer on private ground only (decided 2026-10-02, CGM-DDR-001 O2).
 
 ## Open questions
 
 TRL 4 is on hold by Amish's instruction. These questions remain at TRL 3:
 
-- Legal status of a motorized bicycle trailer in the first target country (CGM-DDR-001, O2); first users and region (O1).
+- The written legal check of a motorized bicycle trailer for the first partner's country, needed before any public road use (CGM-DDR-001, O2).
 - Motor constants (winding, resistance, thermal) from a real datasheet, which decide whether R3 holds (decided, CGM-DDR-002; comes with part selection at TRL 4, on hold).
 - Stiffness and damping of the hitch joint, which set the real loop margin and the top gain setting (TRL 4 measurement, on hold).
 - Wet braking on long descents (R6): about 111 N of push remains with 180 mm rotors; wet pad friction data or a higher lever ratio would close the gap.

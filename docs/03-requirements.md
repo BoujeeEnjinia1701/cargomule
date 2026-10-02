@@ -3,9 +3,9 @@ doc_id: CGM-REQ-001
 title: CargoMule requirements
 project: CargoMule
 doc_type: Requirements
-version: "0.6"
+version: "0.7"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -33,11 +33,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target; cost wording only, no number changed
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R8 restated as a 47 kg hard cap for the first prototype (CGM-DDR-003 A1, accepted 2026-10-02), now met on paper; private-ground rule for O2 noted"
 ---
 
 # CargoMule requirements
 
-These requirements are checked by calculation in CGM-CAL-001 v0.3 at TRL 3, for the constructable design of CGM-DDR-003. Targets changed with Amish's decisions of 2026-09-25. Under CGM-DDR-001, R8 was relaxed from 35 kg to 40 kg for the steel frame (D3) and R12 was redefined against the $1,000 prototype value-engineering target (D1). Under CGM-DDR-002, R8 is relaxed again to 45 kg for the first prototype, and R3 is restated: the 300 m climb target stands, and beyond it the controller derates motor current to protect the winding, with the use limit stated to riders. Against the calculations, **one is missed (R8, 46.2 kg against 45 kg) and three are at risk (R3, R6, R7)**; eight are met on paper or by design, and two cannot be verified at TRL 3. The response to the R8 miss is proposed to Amish in CGM-DDR-003 (A1); no target has been changed. Targets are not yet validated with users; the first users and region for co-design are still open (CGM-DDR-001, O1).
+These requirements are checked by calculation in CGM-CAL-001 v0.3 at TRL 3, for the constructable design of CGM-DDR-003. Targets changed with Amish's decisions of 2026-09-25. Under CGM-DDR-001, R8 was relaxed from 35 kg to 40 kg for the steel frame (D3) and R12 was redefined against the $1,000 prototype value-engineering target (D1). Under CGM-DDR-002, R8 is relaxed again to 45 kg for the first prototype, and R3 is restated: the 300 m climb target stands, and beyond it the controller derates motor current to protect the winding, with the use limit stated to riders. On 2026-10-02 Amish accepted the response to the R8 miss (CGM-DDR-003, A1): R8 is 47 kg as a hard cap for the first prototype only, and the trailer is weighed at TRL 4. Against the calculations, **three are at risk (R3, R6, R7)**; nine are met on paper or by design, and two cannot be verified at TRL 3. Targets are not yet validated with users; the first users and region for co-design are still open (CGM-DDR-001, O1).
 
 The **design load case** is 150 kg of payload centered on the deck, the trailer (about 46 kg, CGM-CAL-001) and a towing bicycle with rider of about 100 kg, on a dry paved road. The **design route** is a 10 km round trip with 120 m of climbing, 120 m of descent and 20 stops.
 
@@ -52,7 +56,7 @@ Table 1. Requirements, targets and status at TRL 3.
 | R5 | Stay within pedal-assist limits | 250 W rated continuous motor output; assist only while the drawbar is in tension; no assist above 25 km/h; no throttle | Datasheets; controller settings | Met by design |
 | R6 | Trailer brakes itself | With the combination slowing at 3 m/s², the trailer pushes the bicycle with 100 N or less; assist cut within 100 ms of drawbar compression above 20 N | Braking calculation; later bench test | **At risk:** 93 N dry and about 111 N with wet pads on 180 mm rotors with metallic pads (CGM-DDR-002); rotor heating on long descents; cut about 60 ms on paper |
 | R7 | Hitch to common bicycles | Fits rear wheels with a 9 mm quick release or a 12 mm thru-axle, 130 to 148 mm spacing, 26 in to 700c; hitch and unhitch in 30 s or less; no wiring to the bike | Hitch design review; later fit survey | **At risk:** axle stresses pass; thru-axles need a hitch axle per thread pitch and length; nutted axles, some hub gears and some rear-motor e-bikes need adapters |
-| R8 | Light enough to handle | Empty trailer 45 kg (99 lb) or less, including the pack, for the first prototype (relaxed from 35 kg to 40 kg by CGM-DDR-001 D3, then to 45 kg by CGM-DDR-002) | Mass estimate; later weighing | **Not met:** 46.2 kg (43.4 kg without side boards) for the constructable design; response proposed in CGM-DDR-003, A1 |
+| R8 | Light enough to handle | Empty trailer 47 kg (104 lb) or less, including the pack: a hard cap for the first prototype only, not a product target (relaxed from 35 kg to 40 kg by CGM-DDR-001 D3, to 45 kg by CGM-DDR-002, then to 47 kg by CGM-DDR-003 A1 on 2026-10-02) | Mass estimate; weighing at TRL 4 | Met on paper: 46.2 kg (43.4 kg without side boards); if the weighed trailer is over 47 kg, straps or mesh replace the side boards |
 | R9 | Fit bike paths and doors | Overall width 1,000 mm or less; length 2.6 m or less hitched from the bike's rear axle | Model check | Met on paper: 960 mm wide (972 mm over the motor cable), 2.52 m long |
 | R10 | Stable hitch load | Downward load on the hitch 3 to 10 kg with the design payload centered | Mass and balance estimate | Met on paper: 7.5 kg; holds only for a payload center 32 mm ahead to 57 mm behind the deck center |
 | R11 | Weather and temperature | Electronics IP65; motor IP54 or better; operate −10 to 40 °C; the BMS blocks charging below 0 °C | Datasheets and design review | Not verifiable at TRL 3 |
@@ -66,5 +70,5 @@ Table 1. Requirements, targets and status at TRL 3.
 - Air density 1.2 kg/m³; gravitational acceleration 9.81 m/s².
 - Drive efficiency from a motor model at each operating point (CGM-CAL-001, section C) rather than a fixed 75 %; charger efficiency 90 %; cell charging efficiency 96 % for LiFePO4.
 - Usable pack energy 90 % of the nominal 384 Wh.
-- 250 W and 25 km/h follow the EU pedal-assist exclusion (Regulation (EU) No 168/2013); the US federal definition allows more (under 750 W, 20 mph), so the EU limits are the tighter case. Whether a motorized trailer falls under either rule is open (CGM-DDR-001, O2).
+- 250 W and 25 km/h follow the EU pedal-assist exclusion (Regulation (EU) No 168/2013); the US federal definition allows more (under 750 W, 20 mph), so the EU limits are the tighter case. Whether a motorized trailer falls under either rule is unsettled in both the EU and the US. Amish decided on 2026-10-02 (CGM-DDR-001, O2) that the trailer is for private ground only until a written legal check exists for the first partner's country, and that the EU limits stay the design rule as the strictest common case.
 - Brake and hitch loads follow the voluntary cycle trailer standards EN 15918 and ASTM F1975, which limit unbraked trailers to 60 kg and 45.4 kg; CargoMule exceeds both, so its brakes are required, not optional.

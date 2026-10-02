@@ -1,5 +1,50 @@
 # Review note: CargoMule
 
+## Session 2026-10-02: open decisions decided by Amish
+
+Amish wrote on 2026-10-02: "i approve your recommendations for all 555 open decisions." Every open decision in this repo's register was decided as recommended and moved to "Decisions made" in `docs/06-design-decisions.md`, dated 2026-10-02.
+
+### Decisions recorded
+
+8 decisions recorded (register items 1 to 8). The register's "Open decisions" section now reads: "None. All open decisions were decided on 2026-10-02."
+
+### Documents changed
+
+- `docs/06-design-decisions.md` v0.3
+- `docs/decisions/0003-design-for-construction.md` v0.3
+- `docs/decisions/0001-trl2-review-decisions.md` v0.3
+- `docs/decisions/0002-recommendations-accepted.md` v0.2
+- `docs/03-requirements.md` v0.7
+- `docs/04-calcs/01-sizing.md` v0.5
+- `docs/02-concept.md` v0.7
+- `docs/01-problem.md` v0.6
+- `docs/05-build-plan.md` v0.2
+- `README.md` (safety note; not a controlled document)
+
+PDFs re-rendered with `python3 .kit/render.py`. The CAD model, BOM quantities and prices, and pictures were not changed.
+
+### Follow-up actions to carry approved decisions into the design
+
+1. Decision 1 (calculations): Change the R8 target in `docs/04-calcs/sizing.py` (line A3 and the status table) from 45 kg to the 47 kg prototype cap so that a rerun reproduces CGM-CAL-001 v0.5, which was edited by hand.
+2. Decision 2 (model): Add the key switch and charge port holes to the enclosure's right wall near the front in `cad/src/model.py`, with the harness route to them, and rerun the constructability checks.
+3. Decision 2 (drawings): Regenerate the enclosure making sketch and CGM-DWG-001 with the key switch and charge port holes.
+4. Decision 2 (build plan pictures and renders): Regenerate the build plan pictures of the enclosure and harness steps and add the drilling of the two holes to the enclosure step text of CGM-BLD-001.
+5. Decision 3 (documents): When TRL 4 is opened, write the rough-road chatter check of the coupler into the test plan as a pass condition, with fitting the small hydraulic damper as the response to chatter or grabbing.
+6. Decision 4 (build plan pictures and renders): Update `cad/src/product_model.py` to the constructable design and regenerate `media/render-*.png`, `media/card.png` and `media/social-preview.png` on Amish's Mac before the repo is made public; show the key switch and charge port on the enclosure's right wall.
+7. Decision 5 (BOM): Add a drawbar reflector to `bom/bom.csv` and `bom/bom-notes.md` (price and mass), then rerun the cost and mass lines of CGM-CAL-001.
+8. Decision 5 (build plan pictures and renders): Caption the renders so that the powder coat, faced boards, badges, tie-down tracks and gaiter read as finished-product styling, not the prototype's paint and plywood.
+
+### Points found in the review
+
+- Item 1, option (b) gives about 43.9 kg without plywood boards, while R8's status row in CGM-REQ-001 v0.5 gives 43.4 kg without side boards; the two figures should be reconciled (the difference may be the straps or mesh).
+- REVIEW.md 2026-09-26 appearance items 1 to 3 (closed enclosure, controls on the front face, load cell guard and enclosure window) are not in the register. Items 1 and 3 appear superseded by CGM-DDR-003 (P1 and P8) and item 2 is replaced by register item 2; they should be closed explicitly.
+- R8 has been relaxed from 35 to 40 to 45 kg and is now proposed at 47 kg; the requirement may need restating as a prototype cap with a separate product target.
+- Descent speed limit: CGM-CAL-001 says a descent speed limit is still needed (225 K rotor rise on 10 % at 25 km/h), but it is not in the open decisions register.
+- CGM-DDR-003 Table 1 (the changes made for construction) was not itself an open decision in the register, so the record stays Draft and Table 1 is still open for Amish's review; only Table 3 was accepted on 2026-10-02.
+- Flag 2 above is now handled in the register: the 2026-09-26 appearance items 1 to 3 are recorded as closed under "Decisions made".
+
+TRL 4 remains on hold by Amish's instruction.
+
 ## Session 2026-10-01: kit 1.7.0, design for construction and prototype build plan
 
 Following Amish's 2026-09-30 instruction ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations") and the build plan format he approved for FieldNode, with outstanding decisions kept out of the plan and in a separate register.

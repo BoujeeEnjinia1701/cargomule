@@ -3,9 +3,9 @@ doc_id: CGM-DDR-002
 title: CargoMule TRL 3 recommendations accepted
 project: CargoMule
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,12 +13,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's acceptance of the TRL 3 review recommendations and what changed in the repo
+- version: "0.2"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "O1 and O2 decided by Amish on 2026-10-02 as recommended (CGM-DEC-001, items 7 and 8)"
 ---
 
 # 0002: TRL 3 recommendations accepted
 
 - **Date:** 2026-09-25
-- **Status:** accepted for items D11 to D14; items O1 and O2 remain proposed
+- **Status:** accepted for items D11 to D14; items O1 and O2 remained proposed at this record and were decided by Amish on 2026-10-02, as recommended in the design decisions register (CGM-DEC-001, items 7 and 8): "i approve your recommendations for all 555 open decisions."
 
 ## Context
 
@@ -37,12 +41,12 @@ The TRL 3 review note (`docs/REVIEW.md`, session 2026-09-25, TRL 3) listed four 
 
 The TRL 2 review items were already decided in CGM-DDR-001 (D1 to D10); CGM-DDR-001 is revised to v0.2 only to point its R8 note to D11.
 
-*Table 2. Items that remain open (no recommendation was made).*
+*Table 2. Items left open at this record (no recommendation was made here); decided on 2026-10-02.*
 
 | # | Item | Status |
 | --- | --- | --- |
-| O1 | First users and region for co-design: market traders, a trades cooperative or a community food bank | Proposed, awaiting Amish (co-design partners to be picked per area later) |
-| O2 | Legal status of a motorized bicycle trailer on public roads and bike lanes in the first target country | Proposed, awaiting Amish; no recommendation was made and none is made here |
+| O1 | First users and region for co-design: market traders, a trades cooperative or a community food bank | Proposed, awaiting Amish (co-design partners to be picked per area later) Decided by Amish, 2026-10-02 (CGM-DEC-001, item 7): first users chosen by one rule, a group moving 50 to 150 kg loads on short, repeated urban trips on paved, hilly routes; first candidate type to approach, a community food bank's local delivery or pantry runs. |
+| O2 | Legal status of a motorized bicycle trailer on public roads and bike lanes in the first target country | Proposed, awaiting Amish; no recommendation was made and none is made here Decided by Amish, 2026-10-02 (CGM-DEC-001, item 8): private ground only until a written legal check exists for the first partner's country; the EU pedal-assist limits stay the design rule. |
 
 ## Consequences
 

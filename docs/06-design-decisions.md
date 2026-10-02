@@ -3,9 +3,9 @@ doc_id: CGM-DEC-001
 title: CargoMule design decisions register
 project: CargoMule
 doc_type: Design decisions register
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Budget treated as a value-engineering target
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Amish approved the recommendations for all eight open decisions on 2026-10-02; moved to decisions made; R8 fallback line in value engineering updated; 2026-09-26 review note items 1 to 3 closed"
 ---
 
 # CargoMule design decisions register
@@ -25,18 +29,7 @@ Every design decision still to be made, and every decision made, in one place. E
 
 ## Open decisions
 
-| # | Decision needed | Options | Recommendation | Affects in the build | Source |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Response to the R8 miss: the constructable trailer weighs 46.2 kg against 45 kg | (a) relax R8 to 47 kg for the first prototype and weigh it at TRL 4; (b) straps or mesh in place of the plywood side boards now (about 43.9 kg); (c) find about 0.5 kg elsewhere | (a) | Side boards (build plan section 3.9) under (b); none under (a) | CGM-DDR-003, A1 |
-| 2 | Where the key switch and charge port go, now that the enclosure's front face is its door | (a) enclosure right wall near the front; (b) on the door with a lead across the hinge | (a) | Enclosure drilling (section 3.10), harness | CGM-DDR-003, A2 |
-| 3 | Coupler damping | (a) friction washers on the lever pivot; (b) a small hydraulic damper between the cheeks and the lever | (a) for the prototype; check for chatter at TRL 4 | Brake lever (section 3.6) | CGM-DDR-003, A3 |
-| 4 | Bringing the appearance model and photoreal renders up to the constructable design | (a) update on Amish's Mac; (b) leave until TRL 4 | (a), before the repo is made public | None; media only | CGM-DDR-003, A4 |
-| 5 | Finish and small parts on the renders: graphite powder coat, faced boards with badges, deck tie-down tracks, coupler gaiter, drawbar reflector | Keep the BOM's paint and plywood for the prototype, or adopt the styling | Keep the BOM for the prototype; treat the rest as finished-product styling | None for the prototype | Review note 2026-09-26, item 4 |
-| 6 | Hero render composition: the trailer fills about half the frame | Accept, or add a close-up camera option to the kit renderer | Accept | None | Review note 2026-09-26, item 5 |
-| 7 | First users and region for co-design | Market traders, a trades cooperative or a community food bank | None; partners to be picked per area later | Not part of the TRL 3 build | CGM-DDR-001, O1 |
-| 8 | Road legality of a motorized bicycle trailer in the first target country | EU pedal-assist exclusion, US federal and state rules | None | Not part of the TRL 3 build; needed before any public road use | CGM-DDR-001, O2 |
-
-The review note of 2026-09-26 also proposed a closed enclosure with a bottom or front access panel (item 1) and a clear guard over the load cell (item 3). Both are overtaken by CGM-DDR-003: the enclosure now has a front door and the load cell sits inside the coupler housing.
+None. All open decisions were decided on 2026-10-02.
 
 ## To confirm when parts are bought
 
@@ -59,7 +52,7 @@ Main cost drivers (CGM-CAL-001, I1): the battery pack (line 11, $180), the hub m
 Savings worth trying:
 
 - Salvaged 20 in wheels and brakes and a lighter enclosure, which the TRL 3 review estimated could bring the parts to about $900.
-- Straps or mesh in place of the plywood side boards (about 43.9 kg), which also answers the R8 mass miss (CGM-DDR-003, A1).
+- Straps or mesh in place of the plywood side boards (about 43.9 kg), the fallback if the weighed prototype is over the 47 kg cap of R8 (CGM-DDR-003, A1).
 - A SwapCell receiver in the fleet variant, which would price the shared pack once and leave it out of this kit (CGM-DDR-001, D2).
 
 ## Decisions made
@@ -68,4 +61,14 @@ Savings worth trying:
 | --- | --- | --- | --- |
 | 2026-09-25 | TRL 2 review items D1 to D10: cost cuts then a $1,000 budget, 36 V LiFePO4 384 Wh pack, steel frame, one hub motor in the left wheel, proportional assist G = 2 to 6, overrun mechanical brake plus assist cut, pitch reworded, drawbar force sensing, 20 in wheels with the hitch on the left axle end, handcart mode out of scope | Amish: "proceed with all of your recommendations across all batches. Make sure we don't proceed to TRL 4 on any of them." | CGM-DDR-001 |
 | 2026-09-25 | TRL 3 items D11 to D14: R8 relaxed to 45 kg with straps or mesh as a later weight option, thermal derating and a use limit for long climbs, 180 mm rotors with metallic pads, gain range kept at 2 to 6 | Amish: "i accept all your recommendations, go with them across all repos." | CGM-DDR-002 |
-| 2026-09-30 | Make the design physically buildable while drawing the build plan; outstanding decisions go in this register, not the plan | Amish: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." | CGM-DDR-003 (Draft, open for his review) |
+| 2026-09-30 | Make the design physically buildable while drawing the build plan; outstanding decisions go in this register, not the plan | Amish: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." | CGM-DDR-003 (Draft; Table 3 accepted on 2026-10-02) |
+| 2026-10-02 | R8 set to 47 kg as a hard cap for the first prototype only, not a new target; the trailer is weighed at TRL 4, and straps or mesh side boards are the fallback if it weighs more than 47 kg | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-003, A1 |
+| 2026-10-02 | Key switch and charge port on the enclosure's right wall near the front, so no lead flexes across the door hinge | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-003, A2 |
+| 2026-10-02 | Coupler damping: friction washers on the lever pivot for the prototype; a rough-road chatter check is a pass condition at TRL 4, and the small hydraulic damper is fitted if the brake chatters or grabs | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-003, A3 |
+| 2026-10-02 | Appearance model and photoreal renders to be updated to the constructable design on Amish's Mac before the repo is made public | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-003, A4 |
+| 2026-10-02 | Keep the BOM's paint and sealed plywood for the prototype; the powder coat, faced boards, badges, tie-down tracks and gaiter are labeled as finished-product styling in the renders; the drawbar reflector is to be added to the BOM | Amish: "i approve your recommendations for all 555 open decisions." | Review note 2026-09-26, item 4 |
+| 2026-10-02 | Hero render composition accepted as it is; a kit close-up camera only if a load cell detail shot is wanted | Amish: "i approve your recommendations for all 555 open decisions." | Review note 2026-09-26, item 5 |
+| 2026-10-02 | First users chosen by one rule: a group moving 50 to 150 kg loads on short, repeated urban trips by bicycle or hand cart on paved, hilly routes. First candidate type to approach: a community food bank's local delivery or pantry runs; market traders are the second choice | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-001, O1 |
+| 2026-10-02 | Until a written legal check exists for the first partner's country, the trailer is for private ground only; the EU pedal-assist limits (250 W, assist only under pull, cut at 25 km/h, no throttle) stay the design rule as the strictest common case | Amish: "i approve your recommendations for all 555 open decisions." | CGM-DDR-001, O2 |
+
+The review note of 2026-09-26 also proposed a closed enclosure with a bottom or front access panel (item 1), controls on the enclosure's front face (item 2) and a clear guard over the load cell with an enclosure window (item 3). Items 1 and 3 are closed: CGM-DDR-003 overtook them (the enclosure has a front door, P8, and the load cell sits inside the coupler housing, P1). Item 2 is closed by the 2026-10-02 decision on CGM-DDR-003, A2.

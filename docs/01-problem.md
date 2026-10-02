@@ -3,9 +3,9 @@ doc_id: CGM-PRB-001
 title: CargoMule problem statement
 project: CargoMule
 doc_type: Problem statement
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target; cost wording only, no number changed
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Open questions O1 and O2 answered by Amish's 2026-10-02 decisions (first candidate user type; private ground only until a legal check)"
 ---
 
 # CargoMule problem statement
@@ -91,8 +95,8 @@ The gap CargoMule addresses is an open, garage-buildable design that senses pull
 
 ## Open questions
 
-- Is a motorized bicycle trailer legal on public roads and bike lanes in the first target country, and under which category? Carla Cargo's sale in Germany suggests a path in the EU; US state rules need checking. Proposed, awaiting Amish (CGM-DDR-001, O2).
-- Which users first: a market trader group, a trades cooperative, or a community food bank? Proposed, awaiting Amish (CGM-DDR-001, O1); co-design partners are to be picked per area later.
+- Is a motorized bicycle trailer legal on public roads and bike lanes in the first target country, and under which category? Carla Cargo's sale in Germany suggests a path in the EU; US state rules need checking. Decided by Amish, 2026-10-02 (CGM-DDR-001, O2): private ground only until a written legal check exists for the first partner's country.
+- Which users first: a market trader group, a trades cooperative, or a community food bank? Decided by Amish, 2026-10-02 (CGM-DDR-001, O1): a group moving 50 to 150 kg loads on short, repeated urban trips on paved, hilly routes; the first candidate type to approach is a community food bank's local delivery or pantry runs, with market traders second. No partner is agreed.
 - Is 150 kg the right payload, or do most target loads fall under 100 kg, which would allow a lighter trailer?
 - How many target bikes have a quick-release or thru-axle rear wheel, and what share need a nutted-axle or hub-gear adapter?
 
