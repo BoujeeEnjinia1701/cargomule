@@ -1,14 +1,19 @@
 """CargoMule product appearance model (build123d), TRL 3.
 
-Finished-product look for photoreal renders: graphite chassis with rounded plywood deck, off-white
-side boards with hand slots, aluminium corner caps and a raised name badge; the drawbar load cell
-in its pinned clevises under a clear polycarbonate guard; the overrun coupler with a rubber gaiter,
-damper housing and brake lever; a detailed axle hitch with its lock indicator and safety strap;
-the 250 W hub motor with a teal cover ring and cable exit; slotted brake rotors and calipers; a
-closed galvanized enclosure with a parting seam, vents, screws, key switch, gain dial, lit status
-light, charge port and an inspection window onto the pack; lit rear lights, reflectors and a
-fabric safety flag. Context is a simple bicycle with the shared clay mannequin riding it and a
-small strapped load on the deck.
+Updated 2026-10-02 to the constructable design (CGM-DDR-003, accepted 2026-10-02) and the decisions
+of that day. Shows the trailer as built to the plan: the coupler housing welded into the frame nose
+with the load cell, spring cage, pull rod and bushings inside it, the end cap, the side window
+under its rubber cover, the fork and overload pin, the brake lever on its cheeks with friction
+washers, the cable splitter and three brake cables; calipers on the inner dropout tabs and the
+torque arm; the closed enclosure hung under the crossmembers with its bottom-hinged front door
+and lock, and the key switch and charge socket on its right wall near the front; the drawbar
+reflector. Finished-product styling kept for the renders and captioned as such (decided
+2026-10-02): graphite powder coat (the prototype is painted), off-white faced side boards with
+hand slots, name badges and trim (the prototype has sealed plywood), deck tie-down tracks and a
+rubber gaiter on the drawbar where it enters the coupler. A detailed axle hitch with its lock
+indicator and safety strap, the 250 W hub motor with a cover ring, slotted rotors, lit rear
+lights and a fabric flag. Context is a simple bicycle with the shared clay mannequin riding it
+and a small strapped load on the deck.
 APPEARANCE MODEL ONLY: no tolerances, no fabrication detail. CONCEPT, NOT FOR FABRICATION.
 
 Every main dimension and interface comes from PARAMS, derived(), drawbar_points() and
@@ -28,23 +33,23 @@ sys.path.insert(0, str(HERE.parents[1] / ".kit"))
 
 from build123d import (Axis, Box, Cylinder, Plane, Pos, RectangleRounded, RegularPolygon, Rot,
                        SlotOverall, Sphere, Text, Torus, extrude, fillet)
-from model import PARAMS, derived, drawbar_points, build_parts, box, tube, fuse
+from model import PARAMS, derived, drawbar_points, build_components, build_parts, box, tube, fuse
 
 TITLE = "CargoMule: electric-assist cargo trailer for most bicycles"
 
 RENDER_VIEWS = [
     {"name": "hero", "groups": ["shell", "internal", "context"], "explode": False, "el": 20, "az": -38,
-     "note": "Product render from the rear left and above (about 20 deg elevation); loaded trailer in the "
-             "foreground with the hub motor wheel nearest, drawbar running forward to the hitch on the "
-             "bicycle's left rear axle, rider in the saddle"},
+     "note": "From the rear left and above (about 20 deg): loaded trailer, hub motor wheel nearest, drawbar "
+             "to the hitch on the bicycle's left rear axle. Powder coat, faced boards, badges, tie-down tracks "
+             "and gaiter are finished-product styling; the prototype is painted steel and sealed plywood"},
     {"name": "exploded", "groups": ["shell", "internal", "accessory"], "explode": True, "el": 28, "az": -125,
-     "note": "Exploded view from the front left and above (about 28 deg elevation): side boards and deck, "
-             "chassis, hub motor and idler wheels, disc brakes, enclosure with pack, controller and control "
-             "board, drawbar with load cell and overrun coupler, hitch, stand, lights, flag and charger"},
-    {"name": "detail", "groups": ["shell", "internal"], "explode": False, "el": 16, "az": -150,
-     "note": "Detail from the front left and above (about 16 deg elevation), without the bicycle and rider: "
-             "drawbar load cell behind its clear guard and the overrun coupler at lower left, hitch at the "
-             "drawbar tip, enclosure window onto the pack, hub motor wheel at right"},
+     "note": "Exploded, from the front left and above (about 28 deg): boards and deck, chassis, wheels, brakes, "
+             "enclosure with pack, controller and board, drawbar and coupler with the load cell inside, hitch, "
+             "stand, lights, flag and charger. Board facing, badges, tracks and gaiter are product styling"},
+    {"name": "detail", "groups": ["shell", "internal"], "explode": False, "el": 16, "az": 150,
+     "note": "From the front right and above (about 16 deg), without the bicycle: coupler housing with the "
+             "load cell inside and its window cover, brake lever, enclosure door, key switch and charge "
+             "socket on the right wall. Powder coat, faced boards and gaiter are finished-product styling"},
 ]
 
 # Colours (restrained product palette; kit accent)
@@ -201,7 +206,8 @@ _LM, _RIDER_SHIFT, BIKE_BAR = _rider_frame()
 
 def product_parts(P=PARAMS):
     D = derived(P)
-    m = build_parts(P)
+    C = build_components(P)
+    m = build_parts(P, C)
     out = []
 
     def add(name, shape, color, material, bom, group, explode):
@@ -274,8 +280,7 @@ def product_parts(P=PARAMS):
     zc = lambda x: s_[2] + (n[2] - s_[2]) * (x - s_[0]) / (n[0] - s_[0])
     E_BAR = (-60, -260, -380)
     add("Drawbar, powder coated", m["drawbar"], C_DRAW, "painted", 3, "shell", E_BAR)
-    ref = box(k[0] + 200, k[0] + 300, k[1] - 20.5, k[1] - 17.0, k[2] - 12, k[2] + 12)   # on the outer face
-    add("Drawbar reflector strip", ref, C_AMBER, "plastic", 15, "shell", E_BAR)
+    add("Drawbar reflector on hose clips", C["dw_reflector"].shape, C_AMBER, "plastic", 15, "shell", E_BAR)
 
     # ---------------------------------------------------------------- 4 hitch: axle plate, joint with boot, lock, strap
     E_HITCH = (-200, -520, -380)
@@ -307,52 +312,33 @@ def product_parts(P=PARAMS):
                   Pos(-160, -52, 320) * Rot(0, 0, 0) * Sphere(9)])
     add("Safety strap (fabric)", strap, C_BLACK, "fabric", 4, "shell", (-200, -520, -380))
 
-    # ---------------------------------------------------------------- 5 load cell, clevises, clear guard
+    # ---------------------------------------------------------------- 5 load cell, inside the coupler housing (as model.py)
     E_CELL = (0, -420, -560)
-    cz = zc((c0 + c1) / 2)
-    cell = box(c0 + 30, c1 - 30, -22, 22, cz - 32, cz + 32)
-    cell -= box(c0 + 30 - 1, c0 + 30 + 34, -30, 30, cz - 2, cz + 6)        # the S shape: two opposed slots
-    cell -= box(c1 - 30 - 34, c1 - 30 + 1, -30, 30, cz - 6, cz + 2)
-    cell = _fillet_try(cell, cell.edges().filter_by(Axis.Y), [1.5, 0.8])
-    cell += _cyl_y((c0 + c1) / 2, 0, cz + 14, 4.5, 50)                        # gauge window plugs
-    add("S-type load cell", cell, C_CELL, "metal", 5, "internal", E_CELL)
-    clev = []
-    for xa, xb in ((c0, c0 + 30), (c1 - 30, c1)):
-        cl = box(xa, xb, -18, 18, cz - 36 if xa == c0 else cz - 36, cz + 36) - box(xa + (8 if xa == c0 else -1), xb - (-1 if xa == c0 else 8), -8, 8, cz - 40, cz + 40)
-        cl = _fillet_try(cl, cl.edges().filter_by(Axis.Y), [3.0, 1.5])
-        clev.append(cl)
-        clev.append(_cyl_y((xa + xb) / 2, 0, cz, 5, 48))                     # clevis pins
-    clev.append(tube((c0 - 6, 0, zc(c0 - 6)), (c0, 0, zc(c0)), 14))
-    clev.append(tube((c1, 0, zc(c1)), (c1 + 6, 0, zc(c1 + 6)), 14))
-    add("Load cell clevises and pins", fuse(clev), C_STEEL, "metal", 5, "internal", E_CELL)
-    add("Load cell cable", fuse([tube((c1 - 34, 22, cz + 10), (c1 - 20, 34, cz + 10), 3.5),
-                                  tube((c1 - 20, 34, cz + 10), (k0 + 40, 32, zc(k0 + 40) - 10), 3.5)]),
-        C_BLACK, "rubber", 5, "internal", E_CELL)
-    gr = 44.0
-    guard = _cyl_x((c0 + c1) / 2, 0, cz, gr, c1 - c0 + 12) - _cyl_x((c0 + c1) / 2, 0, cz, gr - 2.5, c1 - c0 + 16)
-    add("Load cell guard, clear polycarbonate", guard, C_GUARD, "clear", 5, "shell", (0, -420, -380))
-    rings = fuse([_cyl_x(x, 0, zc(x), gr + 2, 10) - _cyl_x(x, 0, zc(x), 20.5, 12) for x in (c0 - 1, c1 + 1)])
-    add("Guard end rings", rings, C_ACCENT, "plastic", 5, "shell", (0, -420, -380))
+    add("S-type load cell and clevis", C["cell"].shape, C_CELL, "metal", 5, "internal", E_CELL)
+    add("Rod end and clevis pin", C["rod_end"].shape + C["clevis_pin"].shape, C_STEEL, "metal", 5, "internal", E_CELL)
 
-    # ---------------------------------------------------------------- 6 overrun coupler
+    # ---------------------------------------------------------------- 6 overrun coupler (as model.py)
     E_CPL = (0, -140, -700)
-    sleeve = tube((k0 + 60, 0, zc(k0 + 60)), (k1, 0, zc(k1)), 27)
-    add("Coupler sleeve", sleeve, C_DRAW, "painted", 6, "shell", E_CPL)
-    gait = None
-    for i in range(7):
-        xa = k0 + 4 + i * 8
-        r_ = 30 if i % 2 == 0 else 25
-        g = tube((xa, 0, zc(xa)), (xa + 8, 0, zc(xa + 8)), r_)
-        gait = g if gait is None else gait + g
-    add("Coupler gaiter (rubber)", gait, C_RUBBER, "rubber", 6, "shell", E_CPL)
-    damp = _rbox(k0 + 60, k0 + 170, -15, 15, zc(k0) + 25, zc(k0) + 55, r_all=6.0)
-    add("Damper housing", damp, C_ALU, "metal", 6, "shell", E_CPL)
-    lever = _rbox(k1 - 50, k1 - 20, -40, 40, zc(k1) - 45, zc(k1) - 20, r_all=4.0)
-    add("Brake lever and equalizer", lever, C_STEEL, "metal", 6, "shell", E_CPL)
-    cables = fuse([tube((k1 - 35, s * 40, zc(k1) - 32), (x0 + 200, s * 200, fz0 - 6), 3.0) for s in (-1, 1)]
-                  + [tube((x0 + 200, s * 200, fz0 - 6), (ax - 40, s * (D["d_in"] - 10), wr + 30), 3.0) for s in (-1, 1)])
-    add("Brake cables", cables, C_BLACK, "rubber", 6, "shell", E_CPL)
-    add("Coupler bolts", fuse([_cyl_y(x, 0, zc(x), 6, 64) for x in (k0 + 80, k1 - 10)]), C_ALU, "metal", 18, "shell", E_CPL)
+    zc0 = D["zc"]
+    add("Coupler housing, powder coated", C["housing"].shape, C_DRAW, "painted", 6, "shell", E_CPL)
+    add("Coupler bushings, spring cage, pull rod and spring",
+        fuse([C[k].shape for k in ("bushings", "cage", "pull_rod", "spring")]), C_STEEL, "metal", 6, "internal", E_CPL)
+    add("Coupler end cap", C["end_cap"].shape, C_STEEL, "metal", 6, "shell", E_CPL)
+    add("Brake lever and friction washers", C["lever"].shape + C["lever_bolt"].shape, C_STEEL, "metal", 6, "shell", E_CPL)
+    w0, w1 = P["window"]
+    hr = P["housing"][0] / 2
+    cover = _rbox(w0 - 6, w1 + 6, hr - 1.0, hr + 1.5, zc0 - 17, zc0 + 17, r_vert=4.0)
+    add("Side window rubber cover", cover - _cyl_x((w0 + w1) / 2, 0, zc0, hr - 0.01, w1 - w0 + 20), C_RUBBER, "rubber", 6, "shell", E_CPL)
+    gait = None                                                          # finished-product styling (decided 2026-10-02)
+    dr = P["drawbar"][0] / 2
+    hx0 = P["housing"][2]
+    for i in range(6):
+        xa = hx0 - 48 + i * 8
+        r_ = dr + 6 if i % 2 == 0 else dr + 3
+        g_ = _cyl_x(xa + 4, 0, zc0, r_, 8) - _cyl_x(xa + 4, 0, zc0, dr, 10)
+        gait = g_ if gait is None else gait + g_
+    add("Drawbar gaiter (rubber, product styling)", gait, C_RUBBER, "rubber", 6, "shell", E_CPL)
+    add("Brake cables and splitter", C["brake_cables"].shape + C["splitter"].shape, C_BLACK, "rubber", 9, "shell", E_CPL)
 
     # ---------------------------------------------------------------- 7 hub motor wheel, 8 idler wheel
     E_MW = (0, -620, 0)
@@ -372,9 +358,7 @@ def product_parts(P=PARAMS):
     bolts += _cyl_y(ax, yL, wr, 7, P["hub_old"] + 30)                   # axle ends
     bolts += Pos(ax, yL - P["hub_old"] / 2 - 12, wr) * Rot(90, 0, 0) * extrude(RegularPolygon(10, 6), amount=10, both=True)
     add("Hub motor bolts and axle", bolts, C_ALU, "metal", 7, "shell", E_MW)
-    add("Hub motor cable", fuse([tube((ax, yL + 50, wr), (ax - 60, yL + 60, wr + 70), 4),
-                                  tube((ax - 60, yL + 60, wr + 70), (ax - 120, -hw + 40, fz0 - 20), 4)]),
-        C_BLACK, "rubber", 7, "shell", E_MW)
+    add("Torque arm", C["torque_arm"].shape, C_STEEL, "metal", 7, "shell", E_MW)
     E_IW = (0, 480, 0)
     t, r_, sp = _wheel(ax, yR, wr, wr, P["tyre_w"], 16, 28.0, 30.0)
     add("Idler wheel tyre", t, C_TYRE, "rubber", 8, "shell", E_IW)
@@ -398,85 +382,67 @@ def product_parts(P=PARAMS):
             rt -= Pos(ax + 62 * math.cos(a), y, wr + 62 * math.sin(a)) * Rot(90, 0, 0) * Rot(0, 0, -math.degrees(a) + 90) * \
                 extrude(SlotOverall(26, 9), amount=4, both=True)
         rot_s.append(rt)
-        cal = _rbox(ax + rr - 25, ax + rr + 20, y - 14, y + 14, wr - 25, wr + 25, r_all=5.0)
+        yc0, yc1 = sorted((s * D["d_in"], s * (D["d_in"] + 30)))      # on the inner dropout tab, as model.py
+        cal = _rbox(ax + 80, ax + 120, yc0, yc1, wr - 25, wr + 25, r_all=4.0)
+        ys0, ys1 = sorted((s * (D["d_in"] + 12), s * (D["d_in"] + 18)))
+        cal -= box(ax + 79, ax + 93, ys0, ys1, wr - 26, wr + 26)
         cal_s.append(cal)
     E_BRK = (260, 0, -300)
     add("Brake rotors, 180 mm", fuse(rot_s), C_STEEL, "metal", 9, "shell", E_BRK)
     add("Brake calipers", fuse(cal_s), C_BLACK, "painted", 9, "shell", E_BRK)
 
-    # ---------------------------------------------------------------- 10 enclosure: closed, vents, window, controls
+    # ---------------------------------------------------------------- 10 enclosure: closed box, front door, right wall controls
     ex0, el, ew, eh = P["enc"]
     ez0, ez1 = D["enc_z"]
     ex1 = ex0 + el
+    wt = P["enc_wall"]
     E_ENC = (0, 0, -520)
-    enc = _rbox(ex0, ex1, -ew / 2, ew / 2, ez0, ez1, r_vert=10.0)
-    enc = _fillet_try(enc, enc.faces().sort_by(Axis.Z)[0].edges(), [6.0, 3.0])
-    enc -= _rbox(ex0 + 3, ex1 - 3, -ew / 2 + 3, ew / 2 - 3, ez0 + 3, ez1 - 3, r_vert=7.0)
-    seam_z = ez1 - 28
-    enc -= _rbox(ex0 - 2, ex1 + 2, -ew / 2 - 2, ew / 2 + 2, seam_z - 0.8, seam_z + 0.8, r_vert=12.0) - \
-        _rbox(ex0 + 0.8, ex1 - 0.8, -ew / 2 + 0.8, ew / 2 - 0.8, seam_z - 2, seam_z + 2, r_vert=9.2)
-    for i in range(6):                                               # louvre vents on the +Y side
-        enc -= box(ex0 + 70 + i * 32, ex0 + 86 + i * 32, ew / 2 - 5, ew / 2 + 1, ez0 + 40, ez0 + 110)
-    win = (ex0 + 30, ex0 + 250, ez0 + 40, ez0 + 130)                 # inspection window on the -Y side
-    enc -= box(win[0], win[1], -ew / 2 - 1, -ew / 2 + 5, win[2], win[3])
-    for (yy, zz, rr_) in ((-90, 335, 11), (-20, 330, 13), (40, 335, 4.5), (100, 325, 13)):
-        enc -= _cyl_x(ex0, yy, zz - (ez1 - 378), rr_, 8)
+    enc = _rbox(ex0, ex1, -ew / 2, ew / 2, ez0, ez1, r_vert=4.0)
+    enc -= box(ex0 + wt, ex1 - wt, -ew / 2 + wt, ew / 2 - wt, ez0 + wt, ez1 - wt)
+    enc -= box(ex0 - 1, ex0 + wt + 1, -140, 140, ez0 + wt, ez0 + 164)          # door opening
+    kx, kz, kd = ex0 + P["key_hole"][0], ez0 + P["key_hole"][1], P["key_hole"][2]
+    qx, qz, qd = ex0 + P["port_hole"][0], ez0 + P["port_hole"][1], P["port_hole"][2]
+    enc -= _cyl_y(kx, ew / 2, kz, kd / 2, 4) + _cyl_y(qx, ew / 2, qz, qd / 2, 4)
+    for i in range(5):                                               # vent, low on the rear face
+        enc -= box(ex1 - 2, ex1 + 1, -60 + i * 26, -46 + i * 26, ez0 + 20, ez0 + 55)
     add("Enclosure, galvanized steel", enc, C_GALV, "metal", 10, "shell", E_ENC)
-    glass = box(win[0] - 8, win[1] + 8, -ew / 2 - 1.5, -ew / 2, win[2] - 8, win[3] + 8)
-    glass = _fillet_try(glass, glass.edges().filter_by(Axis.Y), [6.0, 3.0])
-    add("Enclosure window, clear polycarbonate", glass, C_GUARD, "clear", 10, "shell", (0, -160, -520))
-    screws = []
-    for yy in (-ew / 2 + 18, ew / 2 - 18):
-        for zz in (ez0 + 18, ez1 - 12):
-            screws.append(_cyl_x(ex0 - 1, yy, zz, 4.5, 2.5))
-    for xx in (ex0 + 18, ex1 - 18):
-        for zz in (ez0 + 18, ez1 - 12):
-            screws.append(Pos(xx, -ew / 2 - 1, zz) * Rot(90, 0, 0) * Cylinder(4.5, 2.5))
-            screws.append(Pos(xx, ew / 2 + 1, zz) * Rot(90, 0, 0) * Cylinder(4.5, 2.5))
-    add("Enclosure screws", fuse(screws), C_ALU, "metal", 18, "shell", E_ENC)
-    dzs = ez1 - 378
-    key = _cyl_x(ex0 - 5, -90, 335 + dzs, 13, 12) + box(ex0 - 12, ex0 - 9, -90 - 2, -90 + 2, 335 + dzs - 8, 335 + dzs + 8)
-    add("Key switch", key, C_ALU, "metal", 14, "shell", E_ENC)
-    knob = _cyl_x(ex0 - 10, -20, 330 + dzs, 16, 18)
-    knob = _fillet_try(knob, knob.faces().sort_by(Axis.X)[0].edges(), [3.0, 1.5])
-    for kk in range(12):                                             # knurl flutes
-        a = math.radians(kk * 30)
-        knob -= _cyl_x(ex0 - 10, -20 + 16.5 * math.cos(a), 330 + dzs + 16.5 * math.sin(a), 1.6, 20)
-    add("Assist gain dial (G 2 to 6)", knob, C_BLACK, "rubber", 13, "shell", E_ENC)
-    ptr = box(ex0 - 20, ex0 - 18.5, -21.5, -18.5, 330 + dzs + 4, 330 + dzs + 14)
-    dots = fuse([_cyl_x(ex0 - 0.6, -20 + 26 * math.cos(math.radians(a)), 330 + dzs + 26 * math.sin(math.radians(a)), 2.0, 1.2)
-                 for a in (-30, 15, 60, 105, 150)])
-    add("Gain dial pointer and scale", ptr + dots, C_ACCENT, "plastic", 13, "shell", E_ENC)
-    led = _cyl_x(ex0 - 2.5, 40, 335 + dzs, 4.2, 5)
-    led = _fillet_try(led, led.faces().sort_by(Axis.X)[0].edges(), [2.0, 1.2, 0.6])
-    add("Status light (lit)", led, C_GREEN_LIT, "emissive", 13, "shell", E_ENC)
-    port = _cyl_x(ex0 - 6, 100, 325 + dzs, 14, 12) - _cyl_x(ex0 - 12, 100, 325 + dzs, 9, 6)
-    port += _cyl_x(ex0 - 6, 100, 325 + dzs, 4, 6)
-    add("Charge port with cap", port, C_BLACK, "rubber", 14, "shell", E_ENC)
-    glands = fuse([_cyl_x(ex1 + 6, yy, ez0 + 30, 9, 12) for yy in (-100, 100)] + [_cyl_x(ex0 - 6, 0, ez0 + 60, 9, 12)])
+    add("Enclosure door", C["door"].shape, C_GALV, "metal", 10, "shell", E_ENC)
+    hinge = _cyl_y(ex0 - 3, 0, ez0 + 4, 3.0, 280)
+    lock = _cyl_x(ex0 - 4, 0, ez0 + 150, 8.0, 6) - _cyl_x(ex0 - 6, 0, ez0 + 150, 1.2, 4)
+    add("Door hinge and lock", hinge + lock, C_ALU, "metal", 10, "shell", E_ENC)
+    add("Key switch and charge socket (right wall)", C["panel"].shape, C_BLACK, "rubber", 14, "shell", E_ENC)
+    rivets = []
+    for xx in (ex0 + 30, ex1 - 30):
+        for zz in (ez0 + 18, ez1 - 14):
+            rivets.append(Pos(xx, -ew / 2 - 0.5, zz) * Rot(90, 0, 0) * Cylinder(3.0, 1.5))
+    for xx in (ex1 - 30,):
+        for zz in (ez0 + 18, ez1 - 14):
+            rivets.append(Pos(xx, ew / 2 + 0.5, zz) * Rot(90, 0, 0) * Cylinder(3.0, 1.5))
+    add("Enclosure rivets", fuse(rivets), C_ALU, "metal", 18, "shell", E_ENC)
+    glands = fuse([_cyl_x(ex1 + 6, yy, ez0 + 120, 8, 12) for yy in (-60, 60)]
+                  + [_cyl_y(ex0 + 200, -ew / 2 - 6, ez0 + 120, 8, 12), _cyl_y(ex0 + 40, ew / 2 + 6, 320, 8, 12)])
     add("Cable glands", glands, C_BLACK, "plastic", 14, "shell", E_ENC)
-    lab = box(ex0 + 30, ex0 + 250, -ew / 2 - 0.8, -ew / 2, ez0 + 140, ez0 + 158)
+    lab = box(ex0 + 60, ex0 + 260, -ew / 2 - 0.8, -ew / 2, ez0 + 120, ez0 + 140)
     add("Enclosure warning label", lab, C_AMBER, "paper", 10, "shell", E_ENC)
 
-    # ---------------------------------------------------------------- 11 pack, 12 controller, 13 board (inside)
+    # ---------------------------------------------------------------- 11 pack, 12 controller, 13 board (inside, as model.py)
     pl, pw, ph = P["pack"]
-    pk = _rbox(ex0 + 12, ex0 + 12 + pl, -ew / 2 + 12, -ew / 2 + 12 + pw, ez0 + 4, ez0 + 4 + ph, r_all=6.0)
+    fz = ez0 + wt
+    pk = _rbox(ex0 + 6, ex0 + 6 + pl, -136, -136 + pw, fz, fz + ph, r_all=5.0)
     add("LiFePO4 pack, 384 Wh", pk, C_PACK, "plastic", 11, "internal", (0, -380, -1000))
-    plab = box(ex0 + 40, ex0 + 12 + pl - 28, -ew / 2 + 11.4, -ew / 2 + 12, ez0 + 50, ez0 + 110)
+    plab = box(ex0 + 40, ex0 + pl - 20, -136.6, -136, fz + 40, fz + 100)
     add("Pack label", plab, "#F3F4F6", "paper", 11, "internal", (0, -380, -1000))
-    ctl = _rbox(ex0 + 12, ex0 + 132, 45, 115, ez0 + 4, ez0 + 40, r_vert=4.0)
+    ctl = _rbox(ex0 + 30, ex0 + 150, 50, 120, fz, fz + 37, r_vert=4.0)
     for i in range(7):
-        ctl += box(ex0 + 18 + i * 16, ex0 + 24 + i * 16, 47, 113, ez0 + 40, ez0 + 49)
+        ctl += box(ex0 + 36 + i * 16, ex0 + 42 + i * 16, 52, 118, fz + 37, fz + 45)
     add("Motor controller, finned", ctl, "#6B7280", "metal", 12, "internal", (0, 240, -900))
-    bx0, bx1 = ex0 + 150, ex0 + 240
-    pcb = box(bx0, bx1, 60, 120, ez0 + 4, ez0 + 6)
-    add("Control board PCB", pcb, C_PCB, "plastic", 13, "internal", (0, 380, -820))
-    comps = fuse([box(bx0 + 10, bx0 + 30, 70, 90, ez0 + 6, ez0 + 9), box(bx0 + 40, bx0 + 55, 75, 85, ez0 + 6, ez0 + 8),
-                  box(bx1 - 20, bx1 - 5, 95, 115, ez0 + 6, ez0 + 18), box(bx0 + 10, bx0 + 40, 100, 115, ez0 + 6, ez0 + 30)])
-    add("Control board components", comps, C_CHIP, "plastic", 13, "internal", (0, 380, -820))
+    bx0, bx1 = ex0 + 180, ex0 + 270
+    pcb = _rbox(bx0, bx1, 55, 125, fz, fz + 30, r_all=3.0)
+    add("Control board, potted housing", pcb, C_PCB, "plastic", 13, "internal", (0, 380, -820))
 
     # ---------------------------------------------------------------- 14 harness (as model.py)
-    add("Wiring harness", m["harness"], C_BLACK, "rubber", 14, "internal", (0, 0, -700))
+    add("Wiring harness", C["harness"].shape, C_BLACK, "rubber", 14, "internal", (0, 0, -700))
+    add("Key switch and charge socket leads", C["panel_leads"].shape, C_BLACK, "rubber", 14, "internal", (0, 0, -700))
 
     # ---------------------------------------------------------------- 15 lights, reflectors, flag
     E_LT = (360, 0, 300)

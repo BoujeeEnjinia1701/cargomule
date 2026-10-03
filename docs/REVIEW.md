@@ -1,5 +1,76 @@
 # Review note: CargoMule
 
+## Session 2026-10-02: approved follow-ups carried out
+
+Amish, 2026-10-02: "497 follow-up actions that need CAD, drawing, picture, BOM or calculation work ... APPROVED CHANGES, COMPLETE THESE" and "Photoreal renders are out of date in most repos ... COMPLETE THESE". The follow-up actions listed in the session "open decisions decided by Amish" below were carried into the design. trl stays 3; nothing was built or tested.
+
+### Follow-ups
+
+| # | Follow-up | Status | What changed |
+| --- | --- | --- | --- |
+| 1 | R8 target in `docs/04-calcs/sizing.py` to the 47 kg prototype cap | Done | Line [A3] and the status table now use the 47 kg cap; a rerun reproduces CGM-CAL-001 (v0.6) |
+| 2 | Key switch and charge port holes in the enclosure's right wall near the front, harness route, constructability checks | Done | `cad/src/model.py`: a 19 mm key switch hole 80 mm and a 24 mm charge socket hole 145 mm behind the front face, 95 mm up, with the socket's two flange screw holes; the switch and socket as parts; their leads inside the box (charge lead to the pack's side, key switch lead over the controller to the board), none across the door's hinge. 13 checks added (86 in all, all pass), including "no lead across the door hinge" (77 mm clear of the door). STEP and STL re-exported |
+| 3 | Regenerate the enclosure making sketch and CGM-DWG-001 | Done | CGM-DWG-110 Rev P2 (holes and note); CGM-DWG-001 Rev P5 (note line with the hole positions) |
+| 4 | Build plan pictures of the enclosure and harness steps; drilling of the two holes in the enclosure text | Done | Overview, steps 10 to 16 regenerated (the switch and socket are on the far side in the step 11 view, which is seen from below on the left; the making sketch shows the holes); CGM-BLD-001 v0.4: making step 6 of the enclosure (the two holes), its fit and check, step 11 (fitting the switch and socket and running their leads), step 15 (plugging in and unplugging the charge lead), bought-parts list, first checks and safety stop S7 |
+| 5 | Chatter check in the TRL 4 test plan | Not done, by rule | A test plan is TRL 4 work and the portfolio is capped at TRL 3 (CLAUDE.md section 1). The decision stays recorded in CGM-DEC-001; write the check into the test plan when TRL 4 is opened |
+| 6 | `cad/src/product_model.py` to the constructable design; key switch and charge port on the right wall; renders, card and social preview on Amish's Mac | Model done; renders pending on the Mac | Appearance model rebuilt from `build_components()`: coupler housing with the load cell, cage, rod and bushings inside, end cap, window cover, brake lever, model brake cables and splitter, calipers on the dropout tabs, torque arm; closed enclosure with the bottom-hinged door and lock, rear vent, glands, and the key switch and charge socket on the right wall; model pack, controller and board positions and leads. Removed: the clear load cell guard, the damper housing, the enclosure window and seam, the front-face controls. Render scenes exported (below). `media/render-*.png`, `media/card.png` and `media/social-preview.png` are still the old ones until they are rendered on the Mac |
+| 7 | Drawbar reflector in `bom/bom.csv` and `bom/bom-notes.md`; rerun cost and mass | Done | Line 15: amber drawbar reflector on two hose clips, about $3 and 0.05 kg; also modelled on the drawbar's outer face (2 checks). Line 14 names the key switch and a 3-pin charge socket with cap (about $4 added); line 10 names the two holes |
+| 8 | Captions that label powder coat, faced boards, badges, tie-down tracks and gaiter as finished-product styling | Done in the scene notes | Each RENDER_VIEWS note says so; the captions are applied with the renders on the Mac. Caption layout was tried on a blank 1,600 x 1,200 image and fits |
+
+### Key results (CGM-CAL-001 v0.6)
+
+- Empty mass 46.3 kg (was 46.2 kg), 0.7 kg under the 47 kg prototype cap: R8 met on paper, unchanged status. Without side boards 43.5 kg. Small knock-on changes: loaded 196.3 kg, motor asked 136.5 N, wheel reaction 1,853 N, ultimate hitch case 1,926 N; no other figure moved.
+- Value-engineering target: USD 1,000. Estimated cost of the constructable design: USD 1,004 (USD 4 over the target). **R12 status changed** from "within the value-engineering target ($3 under)" to "over the value-engineering target by $4". `budget_usd` unchanged.
+- Requirement counts: 8 met (6 on paper, 2 by design), 3 at risk (R3, R6, R7), R12 over its value-engineering target, 2 not verifiable at TRL 3.
+
+### Documents changed
+
+- `cad/src/model.py`, `cad/step/*.step`, `cad/stl/*.stl`
+- `bom/bom.csv`, `bom/bom-notes.md`
+- `docs/04-calcs/sizing.py`; `docs/04-calcs/01-sizing.md` (CGM-CAL-001 v0.6)
+- `docs/03-requirements.md` (CGM-REQ-001 v0.8), `docs/02-concept.md` (CGM-PRC-001 v0.8), `docs/05-build-plan.md` (CGM-BLD-001 v0.4), `docs/06-design-decisions.md` (CGM-DEC-001 v0.5), `README.md`
+- `cad/src/sheets.py`, `cad/drawings/CGM-DWG-001` Rev P5; `cad/src/build_plan_media.py`, `cad/drawings/CGM-DWG-110` Rev P2, `docs/05-build-plan/overview.png`, `step-10.png` to `step-16.png`
+- `cad/src/concept_media.py` and `media/` concept set (hero, blueprint, cutaway, exploded, flow, model.glb)
+- `cad/src/product_model.py`; render scenes in `/home/claude/renders/cargomule/` (hero, exploded, detail: one .npz and .json each, plus `cargomule__jobs.json`)
+- PDFs regenerated
+
+### Proposed, awaiting Amish
+
+- **Gain selector and status light position** (register item 9, new). The 2026-09-26 renders had them on the front face, now the door; the BOM puts them on the control board inside the locked box. Recommendation: put them on the right wall beside the key switch (about $3 more). Until decided, the appearance model shows neither outside the box.
+- **Appearance deviations** (STANDARDS section 12): the drawbar gaiter, powder coat, faced side boards with hand slots, trim, name badges and deck tie-down tracks are finished-product styling decided on 2026-10-02 and captioned as such; the hitch, hub motor shell, slotted rotors, rider and bicycle are drawn for realism and are not in `model.py`; the enclosure is drawn with rounded vertical corners and rivets. Recommendation: accept as styling.
+
+### Points found
+
+- The 2026-10-02 key switch decision names a "charge port"; the BOM did not price one. A 3-pin charge socket with a cap was added at about $4, which with the reflector puts the estimate $4 over the target. A cheaper fit (an inline keyed connector on a short pigtail through a gland) would save about $3 if wanted.
+
+### Cross-repo actions
+
+None for this repo.
+
+### Safety
+
+The charge socket brings charging to the trailer's side: safety stop S7 now says to charge only through it, with the key switch off. Leads stay inside the box and do not flex at the door. No change to the safety case.
+
+### Recommended next step
+
+Render `media/render-hero.png`, `render-exploded.png` and `render-detail.png` from the exported scenes on Amish's Mac, then `python .kit/cards.py .`. Amish decides register item 9. TRL 4 remains on hold.
+
+## Session 2026-10-02: design-for-construction changes accepted
+
+Amish, 2026-10-02: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)". This accepts the design-for-construction changes P1 to P15 in Table 1 of CGM-DDR-003, which were left open for his review when the open decisions were decided earlier the same day (session below). No other item is decided by it. trl stays 3; no build or test work was done, and the model, BOM quantities and prices, calculations and pictures are unchanged.
+
+### Documents changed
+
+- `docs/decisions/0003-design-for-construction.md` (CGM-DDR-003 v0.4, status Draft): status line now "accepted" with Amish's words.
+- `docs/06-design-decisions.md` (CGM-DEC-001 v0.4): Decisions made row added, dated 2026-10-02.
+- `docs/05-build-plan.md` (CGM-BLD-001 v0.3): section 2 says the Table 1 changes are accepted.
+- `README.md` and `bom/bom-notes.md` (not controlled documents): CGM-DDR-003 no longer described as open for review.
+- PDFs regenerated.
+
+### Recommended next step
+
+No change: the follow-up actions of the session below stand. TRL 4 remains on hold by Amish's instruction.
+
 ## Session 2026-10-02: open decisions decided by Amish
 
 Amish wrote on 2026-10-02: "i approve your recommendations for all 555 open decisions." Every open decision in this repo's register was decided as recommended and moved to "Decisions made" in `docs/06-design-decisions.md`, dated 2026-10-02.
@@ -40,7 +111,7 @@ PDFs re-rendered with `python3 .kit/render.py`. The CAD model, BOM quantities an
 - REVIEW.md 2026-09-26 appearance items 1 to 3 (closed enclosure, controls on the front face, load cell guard and enclosure window) are not in the register. Items 1 and 3 appear superseded by CGM-DDR-003 (P1 and P8) and item 2 is replaced by register item 2; they should be closed explicitly.
 - R8 has been relaxed from 35 to 40 to 45 kg and is now proposed at 47 kg; the requirement may need restating as a prototype cap with a separate product target.
 - Descent speed limit: CGM-CAL-001 says a descent speed limit is still needed (225 K rotor rise on 10 % at 25 km/h), but it is not in the open decisions register.
-- CGM-DDR-003 Table 1 (the changes made for construction) was not itself an open decision in the register, so the record stays Draft and Table 1 is still open for Amish's review; only Table 3 was accepted on 2026-10-02.
+- CGM-DDR-003 Table 1 (the changes made for construction) was not itself an open decision in the register, so only Table 3 was accepted in this session. Amish accepted Table 1 later on 2026-10-02 (see the session above); the record stays Draft.
 - Flag 2 above is now handled in the register: the 2026-09-26 appearance items 1 to 3 are recorded as closed under "Decisions made".
 
 TRL 4 remains on hold by Amish's instruction.
@@ -358,3 +429,7 @@ This is an appearance model only: no tolerances, no fabrication detail, nothing 
 - Kit 1.5.0 synced: STANDARDS v1.5 (sections 12 to 15: product renders, storefront images and image quality, public release, authorship and signing), `.kit/cards.py`, `.kit/image_qc.py`, `.kit/release_gate.py`, issue templates, and the `/render-product` and `/release` commands. `CLAUDE.md` now matches `.kit/CLAUDE.md`.
 - Every `media/render-*.png` recaptioned from its original render with the new layout: the title, concept label and repository sit in a band above the render and the view note in a band below it, each line wrapped to the image width, so no text overlaps other text or the render or runs off the image. `media/card.png` and `media/social-preview.png` regenerated with the same rules.
 - `python .kit/image_qc.py` and `python .kit/release_gate.py` pass. trl stays 3.
+
+## 2026-10-02: photoreal renders redone on the constructable design
+
+Rendered with Blender Cycles on Amish's Mac from the updated appearance model (`cad/src/product_model.py`); captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, detail. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.

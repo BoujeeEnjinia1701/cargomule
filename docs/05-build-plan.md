@@ -3,7 +3,7 @@ doc_id: CGM-BLD-001
 title: CargoMule prototype build plan
 project: CargoMule
 doc_type: Build plan
-version: "0.2"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -17,6 +17,14 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "R8 acceptance figure set to the 47 kg prototype cap decided on 2026-10-02 (CGM-DDR-003, A1)"
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Section 2: the Table 1 changes of CGM-DDR-003 accepted by Amish on 2026-10-02"
+  - version: "0.4"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Decisions of 2026-10-02 carried in: key switch and charge socket holes in the enclosure's right wall (making sketch, enclosure step and harness step), drawbar reflector (lights step); pictures regenerated; figures from CGM-CAL-001 v0.6"
 ---
 
 # CargoMule prototype build plan
@@ -29,13 +37,13 @@ revisions:
 
 *Figure 1. Every component pulled apart and numbered in build order, seen from the left; the bicycle would be on the left.*
 
-The prototype is one CargoMule trailer: a welded steel frame on two 20 in wheels with a plywood deck 1,200 x 700 mm and removable side boards, towed from a bicycle's left rear axle end by a bent steel drawbar. The drawbar's straight rear end slides in a steel tube at the frame's nose, the coupler housing. Inside the housing a load cell measures how hard the bike pulls, and a hub motor in the left wheel pushes in proportion. When the bike slows, the drawbar slides back against a spring and a lever pulls the disc brakes on both wheels. A battery pack, motor controller and control board sit in a steel box under the deck. Figure 1 shows the 20 components in the order you make or fit them. Ten are made in a workshop: the coupler housing, the spring cage and end cap, the dropout plates, the frame, the drawbar, the brake lever, the parking stand, the deck, the boards with their fittings, and the battery enclosure. Everything else is bought and fitted. The work is sawing, drilling, filing and welding steel tube and plate, bending one tube in a tube bender, folding thin sheet, cutting plywood, and wiring bought electrical parts with plug-in connectors. The parts cost about $997 from the bill of materials.
+The prototype is one CargoMule trailer: a welded steel frame on two 20 in wheels with a plywood deck 1,200 x 700 mm and removable side boards, towed from a bicycle's left rear axle end by a bent steel drawbar. The drawbar's straight rear end slides in a steel tube at the frame's nose, the coupler housing. Inside the housing a load cell measures how hard the bike pulls, and a hub motor in the left wheel pushes in proportion. When the bike slows, the drawbar slides back against a spring and a lever pulls the disc brakes on both wheels. A battery pack, motor controller and control board sit in a steel box under the deck. Figure 1 shows the 20 components in the order you make or fit them. Ten are made in a workshop: the coupler housing, the spring cage and end cap, the dropout plates, the frame, the drawbar, the brake lever, the parking stand, the deck, the boards with their fittings, and the battery enclosure. Everything else is bought and fitted. The work is sawing, drilling, filing and welding steel tube and plate, bending one tube in a tube bender, folding thin sheet, cutting plywood, and wiring bought electrical parts with plug-in connectors. The parts cost about $1,004 from the bill of materials.
 
 > **Safety:** This trailer carries 150 kg behind a bicycle, has a 384 Wh lithium iron phosphate battery and a motor that pushes, and brakes itself with a spring-loaded coupler. Welding, grinding and tube bending need eye, hand and hearing protection and a fire-safe area. The battery stays out of the workshop until stop S3 in section 6, and the trailer is never ridden or towed on a public road as part of this plan. The first loaded tests happen only after every stop in section 6 is passed.
 
 ## 2. What changed to make it buildable
 
-The concept showed what the trailer does; some of its parts could not be made, fixed or put together as drawn. Each change below keeps what the trailer does, and all of them are recorded in decision record CGM-DDR-003, open for Amish's review.
+The concept showed what the trailer does; some of its parts could not be made, fixed or put together as drawn. Each change below keeps what the trailer does, and all of them are recorded in decision record CGM-DDR-003; Amish accepted the changes in its Table 1 on 2026-10-02.
 
 *Table 1. Changes from the concept.*
 
@@ -51,7 +59,7 @@ The concept showed what the trailer does; some of its parts could not be made, f
 | Brakes and dropouts | Calipers running into the motor; no axle slots; no torque arm | Calipers on tabs of the inner dropout plates, slotted dropouts and a torque arm (Figure 8) | Standard bicycle parts fit |
 | Deck, boards, lights, flag, stand | No fixings | Bolts into rivet nuts, wing-nut brackets, pole clips and a pivoted stand (Figure 20) | Everything is held, and the boards still come off by hand |
 
-The constructable trailer weighs 46.2 kg empty, 3.0 kg more than the concept estimate, mostly in the coupler and the fixings.
+The constructable trailer weighs 46.3 kg empty, 3.0 kg more than the concept estimate, mostly in the coupler and the fixings.
 
 ## 3. Making the components
 
@@ -290,7 +298,7 @@ Make and check each component before the assembly step that needs it. Sizes are 
 
 *Figure 21. Battery enclosure and door making sketch (CGM-DWG-110).*
 
-**What it is and what it is made from.** A closed steel box under the front of the deck for the battery pack, motor controller and control board, with a lockable door on its front face. Galvanized steel sheet 0.8 mm.
+**What it is and what it is made from.** A closed steel box under the front of the deck for the battery pack, motor controller and control board, with a lockable door on its front face and the key switch and charge socket in its right wall near the front. Galvanized steel sheet 0.8 mm.
 
 **How to make it.**
 
@@ -298,15 +306,16 @@ Make and check each component before the assembly step that needs it. Sizes are 
 2. Front face (toward the drawbar): cut a 280 x 163 mm door opening, centred, from the floor up.
 3. Door: 292 x 166 mm with 11 mm folded sides; hinge it along its bottom edge; fit a keyed lock at its top and a foam gasket round the opening.
 4. Top: four 6.5 mm holes, 15 and 335 mm from the front face, 100 mm each side of centre. Rivet a 1.5 mm steel doubler strip inside under each pair.
-5. Fit a vent low on the rear face, pointing down and away from the load, and cable glands in the left wall (motor cable), right wall (load cell cable) and rear wall (light cables).
+5. Fit a vent low on the rear face, pointing down and away from the load, and cable glands in the left wall (motor cable), right wall (load cell cable, 40 mm behind the front face) and rear wall (light cables).
+6. Right wall, near the front: drill or punch a 19 mm hole for the key switch, centred 80 mm behind the front face and 95 mm up from the bottom, and a 24 mm hole for the charge socket, centred 145 mm behind the front face at the same height. Mark the socket's two small flange screw holes from the socket itself (3.2 mm, about 24 mm apart, above the hole) and drill them. Deburr every hole and touch up the zinc on the cut edges. Keeping both on this wall means no lead has to bend across the door's hinge.
 
-**How it fits the parts next to it.** The box's top sits flat under the crossmembers at 300 and 620 mm from the frame's front, held by four M6 bolts from inside into the rivet nuts, with large washers (Figure 22). The controller and control board are screwed to its floor on the right; the pack sits on a rubber mat on the left and is strapped down; it slides out forward through the door, under the deck.
+**How it fits the parts next to it.** The box's top sits flat under the crossmembers at 300 and 620 mm from the frame's front, held by four M6 bolts from inside into the rivet nuts, with large washers (Figure 22). The controller and control board are screwed to its floor on the right; the pack sits on a rubber mat on the left and is strapped down; it slides out forward through the door, under the deck. The key switch and charge socket are reached from the right side of the trailer, under the deck's edge.
 
 ![Figure 22. Joint 8: enclosure under a crossmember](05-build-plan/joint-08.png)
 
 *Figure 22. Cut through the front right enclosure bolt: the bolt goes up from inside the box into a rivet nut in the crossmember.*
 
-**Check before moving on.** The door closes and locks over its gasket; an empty pack case slides in and out through the door.
+**Check before moving on.** The door closes and locks over its gasket; an empty pack case slides in and out through the door; the key switch and charge socket fit their holes with their seals flat on the wall.
 
 ### 3.11 Bought components and what to do to them
 
@@ -318,8 +327,8 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **Hub motor wheel (line 7).** 36 V 250 W geared front-style hub, 100 mm spacing, disc mount, 10 mm axle flats, cable exit on the non-disc side, laced in a 20 in rim; a torque arm to suit.
 - **Idler wheel (line 8).** 20 in wheel with a 100 mm disc hub.
 - **Disc brakes (line 9).** Two cable calipers with 180 mm rotors, metallic pads and post-mount adapters. Fit each rotor on its hub at the bench with its six screws and threadlocker, with the rotor on the side that faces the trailer's centre.
-- **Pack, controller, board, harness (lines 11 to 14).** As the bill of materials. The harness has keyed waterproof connectors, so the pack and each cable unplug.
-- **Lights, reflectors and flag (line 15).** Two rear lights, side reflectors, a 12 mm flag pole and two pole clips.
+- **Pack, controller, board, harness (lines 11 to 14).** As the bill of materials. The harness has keyed waterproof connectors, so the pack and each cable unplug. Line 14 also has a keyed on-off switch for a 19 mm panel hole and a 3-pin charge socket with a hinged cap for a 24 mm panel hole; check that the socket mates with the charger's plug before drilling.
+- **Lights, reflectors and flag (line 15).** Two rear lights, side reflectors, an amber drawbar reflector about 100 x 24 mm with two stainless hose clips, a 12 mm flag pole and two pole clips.
 - **Fixings (line 18).** 20 M6 and 4 M5 rivet nuts; M6 countersunk bolts for the deck; M6 bolts and wing nuts for the boards; M5 screws for the end cap and lights; M8 and M10 bolts with nyloc nuts for the lever, clevis pin and stand; cable clips and ties.
 
 ## 4. Putting it together
@@ -390,7 +399,7 @@ Seen from below. Hold the box up under the two crossmembers and fit the four M6 
 
 ![Step 11](05-build-plan/step-11.png)
 
-Screw the controller and the control board to the enclosure floor on the right, leaving the left free for the pack. Run the motor cable from the motor's axle up the arch strut, along the arch frame and the left rail into the enclosure's left gland; the load cell cable from the end cap's gland under the deck to the right gland; the light cables from the rear gland to each rear light. Clip every cable to the frame, clear of the wheels and of the drawbar's 50 mm slide. **Hold point:** no pack yet; every connector checked against the harness maker's wiring diagram.
+Screw the controller and the control board to the enclosure floor on the right, leaving the left free for the pack. Fit the key switch and the charge socket in their holes in the right wall from outside, with their seals, and tighten the switch's nut and the socket's two screws from inside. Run the key switch's lead over the controller to the control board, and the charge socket's lead toward the pack's side, where it plugs in at step 15; keep both leads inside the box and clipped away from the door. Run the motor cable from the motor's axle up the arch strut, along the arch frame and the left rail into the enclosure's left gland; the load cell cable from the end cap's gland under the deck to the right gland; the light cables from the rear gland to each rear light. Clip every cable to the frame, clear of the wheels and of the drawbar's 50 mm slide. **Hold point:** no pack yet; every connector checked against the harness maker's wiring diagram.
 
 ### Step 12: deck onto the frame
 
@@ -408,13 +417,13 @@ Bolt the ten brackets down through the deck into their rivet nuts. Stand the boa
 
 ![Step 14](05-build-plan/step-14.png)
 
-Rear lights on M5 screws into the rear rail's rivet nuts; plug in their cables. Side reflectors on the side rails' outer faces. Flag pole into its two clips.
+Rear lights on M5 screws into the rear rail's rivet nuts; plug in their cables. Side reflectors on the side rails' outer faces. Drawbar reflector on the outer face of the drawbar's long run beside the bicycle's rear wheel, centred about 280 mm behind the bicycle's axle, on its two hose clips. Flag pole into its two clips.
 
 ### Step 15: battery pack into the enclosure
 
 ![Step 15](05-build-plan/step-15.png)
 
-Seen from below with the deck left out. **Only after safety stop S3.** Slide the pack in through the door onto its mat, strap it down, plug it in, fit the fuse, close and lock the door.
+Seen from below with the deck left out. **Only after safety stop S3.** Slide the pack in through the door onto its mat, strap it down, plug in its power lead and the charge socket's lead, fit the fuse, close and lock the door. To take the pack out, unplug both leads first.
 
 ### Step 16: hitch onto the bicycle and into the drawbar
 
@@ -440,9 +449,9 @@ These are the checks a TRL 4 test report would record; this plan only lists them
 | Fault cut | R13 | Unplug the load cell while assisting | Motor current zero within 100 ms; the brakes still work |
 | Articulation | R7, R9 | Hitched to a bicycle, swing the trailer through a turn both ways | The drawbar clears the rear tyre to about 55 degrees toward the drawbar side |
 | Hitch load | R10 | Bathroom scale under the hitch with 150 kg of sandbags centred in the loading zone | 3 to 10 kg (7.5 kg estimated) |
-| Mass | R8 | Weigh the empty trailer with the pack | 47 kg or less, the prototype cap (46.2 kg estimated) |
+| Mass | R8 | Weigh the empty trailer with the pack | 47 kg or less, the prototype cap (46.3 kg estimated) |
 | Size | R9 | Tape measure | 1,000 mm or less wide; 2.6 m or less from the bicycle's axle |
-| Lights and flag | R14 | Look; measure the flag's top | Lights on from the pack; flag top 1.5 m or more above the ground |
+| Lights, reflectors and flag | R14 | Look; measure the flag's top | Lights on from the pack; side and drawbar reflectors fitted; flag top 1.5 m or more above the ground |
 
 ## 6. Safety stops
 
@@ -454,7 +463,7 @@ Stop at each point. Carry on only when everything listed is true.
 - **S4. Before the motor first turns.** The motor wheel is off the ground; hands, cables and clothing are clear of the spokes; the assist cut on push and the fault cut (section 5) pass with a current-limited bench supply in place of the pack.
 - **S5. Before the trailer is hitched or loaded.** Every bolt is tight with its nut or threadlocker; the overload pin and clevis pin are in; both brakes lock on a push of the drawbar with the power off; the hitch's lock indicator shows locked and the safety strap is on; the stand is up.
 - **S6. Before the first loaded roll.** On private, level ground only, at walking pace, with the load strapped down inside the loading zone. Never on a public road: its legal status is not settled.
-- **S7. Charging.** Only with the charger on the bill of materials, on the charging spot, attended, never below 0 °C and never with a damaged or wet pack.
+- **S7. Charging.** Only through the charge socket in the enclosure's right wall, with the key switch off, with the charger on the bill of materials, on the charging spot, attended, never below 0 °C and never with a damaged or wet pack.
 
 ## 7. Tools, skills and workspace
 
@@ -468,10 +477,10 @@ Stop at each point. Carry on only when everything listed is true.
 
 ## 8. Where the numbers come from
 
-- Model and constructability checks: `cad/src/model.py` (`python cad/src/model.py --check`, 73 checks); STEP and STL exports in `cad/step/` and `cad/stl/`.
+- Model and constructability checks: `cad/src/model.py` (`python cad/src/model.py --check`, 86 checks); STEP and STL exports in `cad/step/` and `cad/stl/`.
 - Pictures: `cad/src/build_plan_media.py`, using `.kit/build_views.py`; written to `docs/05-build-plan/` and `cad/drawings/CGM-DWG-101` to `CGM-DWG-111`.
-- General arrangement: `cad/drawings/CGM-DWG-001.pdf`, Rev P4.
-- Calculations: `docs/04-calcs/01-sizing.md` (CGM-CAL-001 v0.3) and `docs/04-calcs/sizing.py`: masses [A1] to [A3], hitch load and loading zone [A6], [A7], brake gain and push [F3], [F4], drawbar strength [G3], [G4], articulation [H5].
+- General arrangement: `cad/drawings/CGM-DWG-001.pdf`, Rev P5.
+- Calculations: `docs/04-calcs/01-sizing.md` (CGM-CAL-001 v0.6) and `docs/04-calcs/sizing.py`: masses [A1] to [A3], hitch load and loading zone [A6], [A7], brake gain and push [F3], [F4], drawbar strength [G3], [G4], articulation [H5].
 - Bill of materials: `bom/bom.csv`.
 - Decisions: `docs/decisions/0003-design-for-construction.md` (CGM-DDR-003), with CGM-DDR-001 and CGM-DDR-002.
-- Requirements: `docs/03-requirements.md` (CGM-REQ-001 v0.5).
+- Requirements: `docs/03-requirements.md` (CGM-REQ-001 v0.8).

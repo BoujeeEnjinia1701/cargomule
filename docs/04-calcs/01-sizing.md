@@ -3,7 +3,7 @@ doc_id: CGM-CAL-001
 title: CargoMule sizing calculations
 project: CargoMule
 doc_type: Calculation
-version: "0.5"
+version: "0.6"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -29,17 +29,21 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "R8 status from the 2026-10-02 decision (47 kg prototype cap, CGM-DDR-003 A1): met on paper; counts updated. Figures not rerun; sizing.py still prints the 45 kg target"
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Decisions of 2026-10-02 carried in and every figure rerun: sizing.py now checks R8 against the 47 kg prototype cap; key switch, charge socket and drawbar reflector added (empty 46.3 kg); BOM $1,004, $4 over the value-engineering target (R12)"
 ---
 
 # CargoMule sizing calculations
 
-On paper, CargoMule meets nine of its fourteen requirements, has three at risk and has two that cannot be verified at TRL 3. Version 0.3 reruns every figure for the constructable design of CGM-DDR-003: the made parts' masses now come from the model's own volumes, and the coupler, enclosure, fixings and board fittings that make the design buildable are counted. The empty trailer rises from 43.2 kg to 46.2 kg, so R8 at 45 kg was not met; on 2026-10-02 Amish set R8 to 47 kg as a hard cap for the first prototype (CGM-DDR-003, A1), which the estimate meets. Version 0.2 applied Amish's decisions of 2026-09-25 (CGM-DDR-002): R8 relaxed to 45 kg, 180 mm rotors with metallic pads, and a thermal derating rule with a stated use limit. The three at risk are the hill climb (R3), where the motor delivers the force but its winding reaches about 96 °C against a 100 °C limit after the 300 m design climb, on assumed motor constants; braking (R6), where the push is 93 N dry but about 111 N with wet pads; and hitch fit (R7). The calculations also changed three parts of the TRL 2 concept: the assist filter (the TRL 2 filter was unstable), the drawbar shape (a straight drawbar clears the bike's tyre only up to about 10°) and the deck thickness. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
+On paper, CargoMule meets eight of its fourteen requirements, has three at risk, is $4 over its value-engineering target on cost (R12) and has two requirements that cannot be verified at TRL 3. Version 0.3 reruns every figure for the constructable design of CGM-DDR-003: the made parts' masses now come from the model's own volumes, and the coupler, enclosure, fixings and board fittings that make the design buildable are counted. The empty trailer rises from 43.2 kg to 46.2 kg, so R8 at 45 kg was not met; on 2026-10-02 Amish set R8 to 47 kg as a hard cap for the first prototype (CGM-DDR-003, A1), which the estimate meets. Version 0.6 carries in the rest of that day's decisions: the key switch and charge socket on the enclosure's right wall and the drawbar reflector add 0.1 kg (46.3 kg empty) and $7, so the parts are now estimated at $1,004, $4 over the $1,000 value-engineering target. Version 0.2 applied Amish's decisions of 2026-09-25 (CGM-DDR-002): R8 relaxed to 45 kg, 180 mm rotors with metallic pads, and a thermal derating rule with a stated use limit. The three at risk are the hill climb (R3), where the motor delivers the force but its winding reaches about 96 °C against a 100 °C limit after the 300 m design climb, on assumed motor constants; braking (R6), where the push is 93 N dry but about 111 N with wet pads; and hitch fit (R7). The calculations also changed three parts of the TRL 2 concept: the assist filter (the TRL 2 filter was unstable), the drawbar shape (a straight drawbar clears the bike's tyre only up to about 10°) and the deck thickness. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles estimates for a paper proof of concept. They are not a substitute for the braking, hitch and structural tests of EN 15918 or ASTM F1975, or for electrical safety checks on the battery and controller. Nothing may be ridden or towed on the strength of this note. See CGM-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in CGM-REQ-001 v0.5 against the design in CGM-PRC-001 v0.5 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, and builds the model's components to take the volumes of the made steel parts, so the deck, frame, drawbar, wheel and enclosure dimensions used here are the ones in the STEP files and in drawing CGM-DWG-001. The script also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in CGM-REQ-001 v0.8 against the design in CGM-PRC-001 v0.8 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, and builds the model's components to take the volumes of the made steel parts, so the deck, frame, drawbar, wheel and enclosure dimensions used here are the ones in the STEP files and in drawing CGM-DWG-001. The script also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The design load case is 150 kg of payload centered on the deck, the trailer's own mass and a towing bicycle with rider of 100 kg, on a dry paved road. The design route is a 10 km round trip with 120 m of climbing, 120 m of descent and 20 stops.
 
@@ -75,12 +79,12 @@ The frame, from the model's volumes, is about 13.0 kg: the 30 x 30 x 1.5 mm box 
 | 6 Coupler housing, spring cage, end cap and brake lever (steel); coupler internals | 2.53; 0.40 kg |
 | 7 Hub motor wheel; torque arm; 8 idler wheel | 4.30; 0.10; 1.90 kg |
 | 9 Two disc brakes, 180 mm rotors; cable splitter and third cable | 0.87; 0.12 kg |
-| 10 Enclosure and door, 0.8 mm steel; 11 pack; 12 controller; 13 board; 14 harness | 3.03; 4.20; 0.40; 0.15; 0.50 kg |
-| 15 Lights and flag; 16 stand; 18 hardware and paint | 0.50; 0.58; 0.80 kg |
-| **Empty trailer** | **46.2 kg (102 lb)** |
+| 10 Enclosure and door, 0.8 mm steel; 11 pack; 12 controller; 13 board; 14 harness, key switch and charge socket | 3.03; 4.20; 0.40; 0.15; 0.55 kg |
+| 15 Lights, reflectors (with the drawbar reflector) and flag; 16 stand; 18 hardware and paint | 0.55; 0.58; 0.80 kg |
+| **Empty trailer** | **46.3 kg (102 lb)** |
 
-- **R8 is not met:** 46.2 kg against the 45 kg target that Amish set on 2026-09-25 (CGM-DDR-002); the target was 35 kg at TRL 2 and 40 kg under CGM-DDR-001 [A3]. Version 0.2 gave 43.2 kg. The 3.0 kg rise comes from designing the parts the concept only estimated: the coupler (2.9 kg in all, against 1.6 kg), the dropout plates' caliper tabs, the board fittings, a larger enclosure with a door, the torque arm and the brake cable splitter (CGM-DDR-003). Without the side boards the trailer weighs 43.4 kg. Amish decided on 2026-10-02 (CGM-DDR-003, A1) to set R8 to 47 kg as a hard cap for the first prototype only and to weigh the trailer at TRL 4, with straps or mesh side boards as the fallback if it is over 47 kg. **R8 is met on paper** against the 47 kg cap.
-- **Loaded mass** in the design case is 196.2 kg [A4].
+- **R8 is met on paper:** 46.3 kg against the 47 kg cap for the first prototype [A3]. Version 0.3 gave 46.2 kg against the 45 kg target that Amish set on 2026-09-25 (CGM-DDR-002), so R8 was then not met; the target was 35 kg at TRL 2 and 40 kg under CGM-DDR-001. Version 0.2 gave 43.2 kg. The 3.0 kg rise of version 0.3 comes from designing the parts the concept only estimated: the coupler (2.9 kg in all, against 1.6 kg), the dropout plates' caliper tabs, the board fittings, a larger enclosure with a door, the torque arm and the brake cable splitter (CGM-DDR-003). Amish decided on 2026-10-02 (CGM-DDR-003, A1) to set R8 to 47 kg as a hard cap for the first prototype only and to weigh the trailer at TRL 4, with straps or mesh side boards as the fallback if it is over 47 kg. The key switch, charge socket and drawbar reflector decided the same day add about 0.1 kg. The margin under the cap is 0.7 kg; without the side boards the trailer weighs 43.5 kg.
+- **Loaded mass** in the design case is 196.3 kg [A4].
 - **Hitch down load.** The empty trailer's mass center is 1,675 mm behind the bike axle and 362 mm high [A5]; it moved 33 mm rearward because the enclosure now hangs between the crossmembers at 1,600 and 1,920 mm. With the axle 20 mm behind the deck center, the hitch carries 5.9 kg empty and 7.5 kg with the payload centered [A6]. R10 (3 to 10 kg) is met. The axle moved forward 30 mm from the TRL 2 layout, which would give 10.4 kg with this mass breakdown [A6].
 - **Payload placement.** The hitch load changes by 7.8 kg per 100 mm of payload shift. It stays within 3 to 10 kg only while the payload center sits between 32 mm ahead of and 57 mm behind the deck center, and the drawbar unloads completely with the payload center 96 mm behind it [A7]. This is inherent in a two-wheel trailer carrying four times its own mass, and it needs a clear loading mark on the deck.
 - **Tipping.** The loaded mass center is 521 mm high, giving a static rollover threshold of 0.77 g on the 800 mm track; a 5 m radius turn at 15 km/h needs 0.35 g, a margin of 2.2 [A8].
@@ -88,15 +92,15 @@ The frame, from the model's volumes, is about 13.0 kg: the 30 x 30 x 1.5 mm box 
 ## B. Resistance and felt pull (R4)
 
 - **Flat.** The loaded trailer's resistance is 19.4 N at 5 km/h, 20.8 N at 18 km/h and 21.1 N at 20 km/h. With G = 4 and the 3 N deadband, the rider feels 6.3 to 6.6 N [B1]. R4 (15 N or less) is met. The deadband adds about 2.4 N to the 4 N quoted at TRL 2.
-- **8 % climb.** At 8 km/h the trailer needs 173.6 N (154.0 N grade, 19.3 N rolling). Unassisted, that is 386 W on top of the rider's own climb [B2].
+- **8 % climb.** At 8 km/h the trailer needs 173.6 N (154.1 N grade, 19.3 N rolling). Unassisted, that is 386 W on top of the rider's own climb [B2].
 
 ## C. Motor, controller and heating (R3, R5)
 
 The motor model has a no-load speed of 230 rpm at 38.4 V, which is 22.4 km/h on the 20 in wheel, and gives 1.43 N·m per phase ampere at the wheel [C1].
 
-- **Force on the climb.** On 8 % at 8 km/h the motor is asked for 136.4 N (35.2 N·m) and, at the 15.0 A pack limit, delivers 134.9 N at 24.3 A phase current. Output is 300 W, losses 247 W: the motor runs at about 55 % efficiency at this low speed and high torque [C2]. The rider feels 38.7 N [C3], within R3's 40 N but with only 1.3 N to spare.
+- **Force on the climb.** On 8 % at 8 km/h the motor is asked for 136.5 N (35.2 N·m) and, at the 15.0 A pack limit, delivers 134.9 N at 24.3 A phase current. Output is 300 W, losses 247 W: the motor runs at about 55 % efficiency at this low speed and high torque [C2]. The rider feels 38.7 N [C3], within R3's 40 N but with only 1.3 N to spare.
 - **Current limit sensitivity.** The result depends on the controller settings. With a 12 A pack limit the rider would feel 59 N, and with 10 A, 74 N [C4]. A controller with a 15 A battery limit and at least a 25 A phase limit is therefore part of the design.
-- **The rider's own climb.** Even with assist, the rider must lift their own bike and body: about 273 W in all at 8 km/h. A rider giving 150 W climbs at about 4.4 km/h, at which the felt pull is about the same [C5]. R3's 8 km/h is reached only by a fit rider; the felt pull target is met at any speed.
+- **The rider's own climb.** Even with assist, the rider must lift their own bike and body: about 274 W in all at 8 km/h. A rider giving 150 W climbs at about 4.4 km/h, at which the felt pull is about the same [C5]. R3's 8 km/h is reached only by a fit rider; the felt pull target is met at any speed.
 - **Heating.** After flat cruising the winding sits at about 52 °C. The 300 m design climb takes 135 s and brings it to about 96 °C against the 100 °C limit; a 1,000 m climb would reach about 175 °C [C6]. The steady rise, if the climb never ended, is 297 K [C7]. **R3 is at risk:** the force is met with 1.3 N to spare, and the thermal margin is 4 K on assumed motor constants.
 - **Thermal derating (CGM-DDR-002).** Amish decided to keep the 250 W motor, add thermal derating and state a use limit. At full assist the winding reaches 100 °C after about 149 s, or 331 m of 8 % climbing at 8 km/h. From there the firmware must reduce motor current so the winding stays at or below 100 °C: with 58 W of allowed loss the motor gives about 57 N, and the rider's felt pull rises toward about 117 N on a climb that never ends [C10]. The stated use limit is therefore about 300 m of continuous 8 % climbing with full assist; beyond it the assist fades rather than stops. The motor constants still need a datasheet, which comes with part selection at TRL 4 (on hold).
 - **Top of the speed range.** At 20 km/h on a nearly empty pack (36.0 V) the motor can still give the 14.5 N asked [C8], so R4 holds to 20 km/h. The 25 km/h assist cut-off in R5 sits above the motor's 22.4 km/h no-load speed, so the firmware limit is a backstop [C9]. R5 is met by design: the motor is rated 250 W continuous, the peak output of about 300 W on climbs is within the usual rating convention for pedelec motors, and there is no throttle.
@@ -141,7 +145,7 @@ The TRL 2 estimate charged rolling resistance over the whole route and assumed 7
 ## F. Braking (R6)
 
 - **Need.** At 20 km/h the loaded trailer carries 3.03 kJ, about twice the bicycle and rider's 1.54 kJ. To slow at 3 m/s² it needs 589 N; with the bike taking no more than 100 N of push, the trailer brakes must give 489 N [F1].
-- **Brakes.** Amish decided on 2026-09-25 to fit 180 mm rotors with metallic pads (CGM-DDR-002; v0.1 used 160 mm rotors). The 489 N is 244 N per tyre, 769 N at the 82 mm rotor radius and 961 N of pad clamp, which needs 240 N of cable tension per caliper [F2]. This is well within the range of cable disc brakes.
+- **Brakes.** Amish decided on 2026-09-25 to fit 180 mm rotors with metallic pads (CGM-DDR-002; v0.1 used 160 mm rotors). The 489 N is 245 N per tyre, 769 N at the 82 mm rotor radius and 962 N of pad clamp, which needs 240 N of cable tension per caliper [F2]. This is well within the range of cable disc brakes.
 - **Coupler.** The 30 N preload spring and the 7.7:1 lever are kept; in the constructable design the lever pulls one cable to a splitter that feeds both calipers (CGM-DDR-003, P4). That lever was sized to give 100 N of push dry on 160 mm rotors (gain 6.88); with 180 mm rotors the gain rises to 7.83 N per newton of compression above the preload, and the dry push at 3 m/s² is 93 N. Taking up pad clearance and cable stretch uses 27 mm of the 50 mm stroke [F3].
 - **R6 is still at risk.** With wet pads (friction 0.30) the push is about 111 N, against 121 N with 160 mm rotors and the 100 N target [F4]. Closing the rest of the gap would need a higher lever ratio (more stroke) or wet-weather pad data. The 100 ms assist cut is met on paper (section D). Stopping distance from 20 km/h at 3 m/s² with a 1 s reaction is 10.7 m [F5].
 - **Descents.** On 8 % at 20 km/h the overrun brake settles with the rider feeling about 42 N of push, while the trailer brakes absorb 516 W, 258 W per rotor; the rotor's temperature rise tends to about 131 K with a 37 s time constant. On 10 % at 25 km/h this becomes 441 W per rotor and about 225 K [F6]. Long, steep descents still risk pad fade and heat flowing into the hub motor, which carries the left rotor; a descent speed limit is still needed.
@@ -149,8 +153,8 @@ The TRL 2 estimate charged rolling resistance over the whole route and assumed 7
 ## G. Structure (R1, hitch safety)
 
 - **Side rails.** At a 2 g bump the rails see 230 N·m over the axle, where the deck overhangs by 580 mm, giving 149 MPa in the 30 x 30 x 1.5 mm box, a factor of 1.6 on S235 yield [G1]. This passes as a screen; fatigue at the welded dropouts is not assessed.
-- **Wheel offset.** Each wheel reacts 1,852 N at 2 g, 50 mm outboard of the side rail; the 93 N·m of torsion is carried by the axle crossmember at 60 MPa [G2].
-- **Drawbar.** The 38 x 2.5 mm S355 tube carries the tongue load at 3 g as 193 N·m where the coupler's front bushing holds it, 83 MPa, a factor of 4.3 [G3]. (Version 0.2 took the moment at the old nose point, 300 mm further back: 271 N·m and a factor of 3.0.) In the ultimate case (1 g of the loaded trailer, 1,925 N, through the hitch, as when the bike stops against an obstacle with the trailer brakes failed), the offset run 265 mm off the load line sees 510 N·m and 227 MPa, a factor of 1.6 [G4]. In service, pulling away up the 8 % grade without assist gives 31 MPa [G5]. The TRL 2 drawbar (32 x 2 mm, straight) was upsized when the offset was added.
+- **Wheel offset.** Each wheel reacts 1,853 N at 2 g, 50 mm outboard of the side rail; the 93 N·m of torsion is carried by the axle crossmember at 60 MPa [G2].
+- **Drawbar.** The 38 x 2.5 mm S355 tube carries the tongue load at 3 g as 193 N·m where the coupler's front bushing holds it, 83 MPa, a factor of 4.3 [G3]. (Version 0.2 took the moment at the old nose point, 300 mm further back: 271 N·m and a factor of 3.0.) In the ultimate case (1 g of the loaded trailer, 1,926 N, through the hitch, as when the bike stops against an obstacle with the trailer brakes failed), the offset run 265 mm off the load line sees 510 N·m and 227 MPa, a factor of 1.6 [G4]. In service, pulling away up the 8 % grade without assist gives 31 MPa [G5]. The TRL 2 drawbar (32 x 2 mm, straight) was upsized when the offset was added.
 - **Hitch on the axle end.** At the ultimate load and a 12 mm lever, a 10 mm hollow quick-release axle sees 270 MPa (factor 2.4) and a 12 mm thru-axle 170 MPa (factor 3.8). The secondary safety strap should be rated 3.9 kN or more [G6].
 - **Deck.** The 12 mm plywood deck spans at most 330 mm between crossmembers. A uniform 2 g payload (3.5 kPa) gives 2.0 MPa, and a 75 kg point load at mid-span on a 300 mm strip gives 8.4 MPa against 10 MPa allowable. A 9 mm deck would give 15.0 MPa for the point load [G7], so the deck stays at 12 mm.
 
@@ -167,7 +171,7 @@ R1 is met on paper: the deck is 0.84 m² and every member passes the screen with
 
 ## I. Cost (R12)
 
-The BOM has 18 lines totalling $997 (the estimated cost of the constructable design) against the $1,000 value-engineering target `budget_usd`, $3 under it [I1]. The 180 mm rotors and metallic pads added $10 to the $969 of v0.1, and the parts that make the design buildable added $18 (board fittings, coupler parts, rivet nuts; CGM-DDR-003). R12, redefined against the $1,000 value-engineering target by CGM-DDR-001 D1 (a hypothetical control target, not a limit), is within the target with almost no margin.
+Value-engineering target: USD 1,000. Estimated cost of the constructable design: USD 1,004 (USD 4 over the target) [I1]. The BOM has 18 lines. The 180 mm rotors and metallic pads added $10 to the $969 of v0.1, the parts that make the design buildable added $18 (board fittings, coupler parts, rivet nuts; CGM-DDR-003), and the decisions of 2026-10-02 added $7 (a 3-pin charge socket with cap, about $4, and the drawbar reflector, about $3). R12, redefined against the $1,000 value-engineering target by CGM-DDR-001 D1 (a hypothetical control target, not a limit), is over the value-engineering target by $4; the savings worth trying are listed in the design decisions register (CGM-DEC-001).
 
 ## J. Results against every requirement
 
@@ -175,7 +179,7 @@ The BOM has 18 lines totalling $997 (the estimated cost of the constructable des
 
 | ID | Requirement | Value | Target | Status |
 | --- | --- | --- | --- | --- |
-| R8 | Light enough to handle | 46.2 kg empty (43.4 kg without side boards) | 47 kg or less, prototype cap (CGM-DDR-003 A1, 2026-10-02) | Met on paper (weigh at TRL 4) |
+| R8 | Light enough to handle | 46.3 kg empty (43.5 kg without side boards) | 47 kg or less, prototype cap (CGM-DDR-003 A1, 2026-10-02) | Met on paper (weigh at TRL 4) |
 | R3 | Assist on hills | 38.7 N felt; winding 96 °C after 300 m; derating holds 100 °C beyond about 331 m | 40 N or less; no over-temperature (100 °C) | **At risk** (4 K thermal margin on assumed constants) |
 | R6 | Trailer brakes itself | 93 N push dry, 111 N wet; cut 60 ms | 100 N or less; 100 ms | **At risk** (wet pads, fade on long descents) |
 | R7 | Hitch to common bicycles | Axle stresses pass; thru-axle threads vary | QR and 12 mm thru-axle, 30 s, no wiring | **At risk** |
@@ -184,19 +188,19 @@ The BOM has 18 lines totalling $997 (the estimated cost of the constructable des
 | R4 | Near-zero added load on the flat | 6.3 to 6.6 N; stable, G crit 11.7 | 15 N or less at 5 to 20 km/h | Met on paper |
 | R9 | Fit bike paths and doors | 960 mm wide (972 mm over the motor cable), 2.52 m long | 1,000 mm; 2.6 m | Met on paper |
 | R10 | Stable hitch load | 7.5 kg centered | 3 to 10 kg | Met on paper (narrow loading window) |
-| R12 | Affordable | $997 | $1,000 value-engineering target (redefined) | Within the value-engineering target ($3 under) |
+| R12 | Affordable | $1,004 | $1,000 value-engineering target (redefined) | Over the value-engineering target by $4 |
 | R5 | Stay within pedal-assist limits | 250 W rated; tension only; 25 km/h; no throttle | As stated | Met by design |
 | R14 | Be seen | Flag top 1,570 mm; lights and reflectors | 1,500 mm or more | Met by design |
 | R11 | Weather and temperature | Datasheet items (IP65, IP54, BMS charge block) | As stated | Not verifiable at TRL 3 |
 | R13 | Fail safe | 60 ms fast path on paper | 100 ms | Not verifiable at TRL 3 |
 
-Counts: 9 met (7 on paper, 2 by design), 3 at risk, 0 not met, 2 not verifiable at TRL 3. Before the 2026-10-02 decision on CGM-DDR-003 A1, R8 was not met at 46.2 kg against 45 kg. In v0.1, R8 was not met at 43.1 kg against 40 kg; in v0.2 it was met at 43.2 kg against 45 kg.
+Counts: 8 met (6 on paper, 2 by design), 3 at risk, 1 over the value-engineering target (R12, a target, not a limit), 0 not met, 2 not verifiable at TRL 3. In v0.5, R12 was within the target at $997. Before the 2026-10-02 decision on CGM-DDR-003 A1, R8 was not met at 46.2 kg against 45 kg. In v0.1, R8 was not met at 43.1 kg against 40 kg; in v0.2 it was met at 43.2 kg against 45 kg.
 
 ## Checks against the TRL 2 figures
 
 | TRL 2 claim (CGM-PRC-001 v0.2) | This note | Action |
 | --- | --- | --- |
-| Empty mass about 38 kg | 46.2 kg (constructable design) | Precis corrected |
+| Empty mass about 38 kg | 46.3 kg (constructable design) | Precis corrected |
 | Felt pull about 4 N flat, 33 N on 8 % | 6.3 to 6.6 N, 38.7 N (with the 3 N deadband) | Precis corrected |
 | Motor about 290 W, 34 N·m, about 10 A | 300 W, 35.2 N·m asked, 24.3 A phase, 15.0 A pack | Precis corrected |
 | Filter about 2 Hz | Unstable at G = 4; 0.7 Hz second order | Precis corrected |
@@ -205,4 +209,4 @@ Counts: 9 met (7 on paper, 2 by design), 3 at risk, 0 not met, 2 not verifiable 
 | Braking about 560 N; 460 N from the trailer | 589 N; 489 N (heavier trailer) | Precis corrected |
 | Hitch load about 9 kg | 7.5 kg (axle moved forward 30 mm) | Precis corrected |
 | About 910 mm wide, 2.5 m long | 960 mm (arch frames), 972 mm over the motor cable, 2.52 m | Precis corrected |
-| Cost about $965 | $997 (180 mm rotors of CGM-DDR-002; fittings of CGM-DDR-003) | Precis corrected |
+| Cost about $965 | $1,004 (180 mm rotors of CGM-DDR-002; fittings of CGM-DDR-003; charge socket and drawbar reflector of 2026-10-02) | Precis corrected |

@@ -28,6 +28,7 @@ drawing.project_views = safe_project_views
 OUT = ROOT / "docs" / "05-build-plan"
 DWG = ROOT / "cad" / "drawings"
 DATE = "2026-10-01"
+DATE_ENC = "2026-10-02"     # enclosure sketch: key switch and charge socket holes added
 D = derived(P)
 _C = None
 
@@ -79,10 +80,10 @@ def made():
         "cables": part("Brake cables and splitter", S("brake_cables", "splitter"), COL["cables"]),
         "enclosure": part("Enclosure and door", S("enclosure", "door", "enc_bolts"), COL["enc"]),
         "ctrl": part("Controller and control board", S("controller", "board"), COL["ctrl"]),
-        "harness": part("Wiring harness", S("harness"), COL["harness"]),
+        "harness": part("Wiring harness, key switch and charge socket", S("harness", "panel", "panel_leads"), COL["harness"]),
         "deck": part("Plywood deck", S("deck"), COL["deck"]),
         "boards": part("Side and end boards, corner pieces, brackets", S("board_l", "board_r", "board_f", "board_b", "corners", "brackets"), COL["boards"]),
-        "lights": part("Lights, reflectors and flag", S("lights", "flag", "pole_clips"), COL["lights"]),
+        "lights": part("Lights, reflectors and flag", S("lights", "flag", "pole_clips", "dw_reflector"), COL["lights"]),
         "pack": part("Battery pack", S("pack"), COL["pack"]),
         "hitch": part("Axle hitch and locking pin", S("hitch", "hitch_pin"), COL["hitch"]),
     }
@@ -339,7 +340,7 @@ def sheets(only=None):
             Part("Enclosure and door", en, COL["enc"]), [M["frame"], M["pack"], M["ctrl"]],
             dwg_no="CGM-DWG-110", title="CargoMule battery enclosure and door: making sketch",
             material="Galvanized steel sheet 0.8 mm", view_shape=b.Pos(-P["enc"][0], 0, -D["enc_z"][0]) * en,
-            inset_view=(-25, -125),
+            inset_view=(-25, 125),
             notes=["Box 350 long x 300 wide x 170 tall, folded from 0.8 mm",
                    "  galvanized sheet, seams riveted and sealed. Closed top.",
                    "Front face (toward the drawbar): door opening 280 x 163 mm,",
@@ -351,10 +352,15 @@ def sheets(only=None):
                    "  inside under each pair.",
                    "Vent low on the rear face, pointing down and away from the load;",
                    "  cable glands on the left, right and rear faces.",
+                   "Right wall, near the front: 19 mm hole (key switch) 80 mm and",
+                   "  24 mm hole (charge socket) 145 mm behind the front face, both",
+                   "  95 mm up; socket's two 3.2 mm screw holes from the socket.",
                    "Fit: four M6 bolts from inside, up into the rivet nuts in the",
                    "  crossmembers, with large washers.",
                    "Check: the pack slides in and out with the door open."],
-            **base))
+            rev="P2", revisions=[("P1", "Making sketch for the prototype build plan", DATE, "AC"),
+                                 ("P2", "Key switch and charge socket holes in the right wall", DATE_ENC, "AC")],
+            **dict(base, date=DATE_ENC)))
 
     if want(111):
         st = S("stand")
@@ -568,7 +574,7 @@ def steps(only=None):
     b10 = b9 + [M["enclosure"]]
     st(11, b10, [mv(M["ctrl"], (-260, 0, 0)), mv(M["harness"], (0, 0, -140))],
        "controller, control board and harness",
-       "Controller and board on the enclosure floor; motor, load cell and light cables through glands. No pack yet",
+       "Seen from below. Controller and board on the floor; key switch and charge socket into the right wall; cables through glands",
        elev=-25, azim=-120, label_done=False)
     b11 = b10 + [M["ctrl"], M["harness"]]
     st(12, b11, [mv(M["deck"], (0, 0, 260))], "deck onto the frame",
@@ -577,13 +583,15 @@ def steps(only=None):
     st(13, b12, [mv(M["boards"], (0, 0, 300))], "boards, corner pieces and brackets",
        "Brackets bolted down through the deck; boards on with M6 bolts and wing nuts", elev=25, azim=-125, label_done=False)
     b13 = b12 + [M["boards"]]
-    st(14, b13, [mv(M["lights"], (250, 0, 250))], "lights, reflectors and flag",
-       "Rear lights on M5 screws into the rear rail; reflectors on the side rails; pole in its two clips",
+    st(14, b13, [mv(part("Rear lights, side reflectors and flag", S("lights", "flag", "pole_clips"), COL["lights"]), (250, 0, 250)),
+                 mv(part("Drawbar reflector on two hose clips", S("dw_reflector"), "#D97706"), (0, -140, 0))],
+       "lights, reflectors and flag",
+       "Rear lights on M5 screws into the rear rail; reflectors on the side rails and the drawbar; pole in its two clips",
        elev=22, azim=-125, label_done=False)
     b14 = b13 + [M["lights"]]
     st(15, [p for p in b14 if p.name not in ("Plywood deck", "Side and end boards, corner pieces, brackets", "Lights, reflectors and flag")],
        [mv(M["pack"], (-300, 0, 0))], "battery pack into the enclosure",
-       "Only after safety stop S3. Slide it in through the front door, strap it down, plug in, lock the door",
+       "Only after safety stop S3. Slide it in through the front door, strap it down, plug in both leads, lock the door",
        elev=-20, azim=-130, label_done=False)
     b15 = b14 + [M["pack"]]
     st(16, b15, [mv(M["hitch"], (0, -200, 120))], "hitch onto the bicycle and into the drawbar",

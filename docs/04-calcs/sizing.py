@@ -1,4 +1,5 @@
-"""CargoMule sizing calculations, CGM-CAL-001 v0.3 (TRL 3; constructable design per CGM-DDR-003).
+"""CargoMule sizing calculations, CGM-CAL-001 v0.6 (TRL 3; constructable design per CGM-DDR-003,
+with the decisions of 2026-10-02 carried in).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number that CGM-CAL-001 (docs/04-calcs/01-sizing.md) quotes, each on a line
@@ -62,8 +63,8 @@ BOUGHT = {
     "7 Hub motor wheel (geared hub 2.6 kg, rim, spokes, tyre 1.7 kg)": 4.30,
     "8 Idler wheel with disc hub": 1.90, "9 Disc brakes, two (caliper, 180 mm rotor, cable)": round(0.80 + 2 * (A["rotor_m"] - A["rotor_m_160"]), 2),
     "11 Battery pack, 12S LiFePO4 384 Wh with BMS": 4.20, "12 Motor controller": 0.40,
-    "13 Control board": 0.15, "14 Harness, fuse and key switch": 0.50,
-    "15 Lights, reflectors and flag": 0.50, "18 Hardware, paint and consumables": 0.80,
+    "13 Control board": 0.15, "14 Harness, fuse, key switch and charge socket": 0.55,
+    "15 Lights, reflectors (with the drawbar reflector) and flag": 0.55, "18 Hardware, paint and consumables": 0.80,
 }
 
 out = []
@@ -127,7 +128,9 @@ for k, v in {**made, **BOUGHT}.items():
     say("A2", f"{k}: {v:.2f} kg")
 m_empty = sum(made.values()) + sum(BOUGHT.values())
 m_loaded = m_empty + A["payload"]
-say("A3", f"Empty trailer {m_empty:.1f} kg ({m_empty*2.2046:.0f} lb) against R8 45 kg (relaxed from 35 kg to 40 kg, then 45 kg by CGM-DDR-002); "
+R8_CAP = 47.0   # R8: hard cap for the first prototype only (CGM-DDR-003 A1, decided 2026-10-02)
+say("A3", f"Empty trailer {m_empty:.1f} kg ({m_empty*2.2046:.0f} lb) against the R8 prototype cap of {R8_CAP:.0f} kg "
+          f"(35 kg at TRL 2, 40 kg by CGM-DDR-001, 45 kg by CGM-DDR-002, 47 kg cap by CGM-DDR-003 A1); "
           f"without side boards {m_empty-m_boards:.1f} kg")
 say("A4", f"Loaded trailer, design case: {m_loaded:.1f} kg")
 
@@ -144,7 +147,7 @@ cm = [
     (BOUGHT["8 Idler wheel with disc hub"], ax, P["wheel_r"]), (BOUGHT["9 Disc brakes, two (caliper, 180 mm rotor, cable)"], ax + 40, P["wheel_r"]),
     (m_enc, ex0 + el / 2, (ez0 + ez1) / 2), (BOUGHT["11 Battery pack, 12S LiFePO4 384 Wh with BMS"], ex0 + 6 + 125, ez0 + 76),
     (BOUGHT["12 Motor controller"] + BOUGHT["13 Control board"], ex0 + 140, ez0 + 25),
-    (BOUGHT["14 Harness, fuse and key switch"], 1750, 340), (BOUGHT["15 Lights, reflectors and flag"], 2000, 700),
+    (BOUGHT["14 Harness, fuse, key switch and charge socket"], 1750, 340), (BOUGHT["15 Lights, reflectors (with the drawbar reflector) and flag"], 2000, 700),
     (BOUGHT["18 Hardware, paint and consumables"], 1600, 380), (m_stand, P["stand_x"], 200),
 ]
 M0 = sum(m for m, _, _ in cm)
@@ -551,8 +554,8 @@ say("H6", f"At {ang_str} deg a steady turn is possible down to a radius of about
 rows = list(csv.DictReader((ROOT / "bom" / "bom.csv").open()))
 total = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in rows)
 budget = float(yaml.safe_load((ROOT / "project.yaml").read_text())["budget_usd"])
-say("I1", f"BOM: {len(rows)} lines, total ${total:,.2f} against budget_usd ${budget:,.0f} "
-          f"({'within' if total <= budget else 'over'} by ${abs(budget-total):,.2f})")
+say("I1", f"BOM: {len(rows)} lines. Value-engineering target: USD {budget:,.0f}. Estimated cost of the constructable "
+          f"design: USD {total:,.0f} (USD {abs(budget-total):,.0f} {'under' if total <= budget else 'over'} the target)")
 
 # ================================================================== J. Results table
 status = [
@@ -564,11 +567,12 @@ status = [
     ("R5", "250 W rated, tension only, 25 km/h, no throttle", "250 W nameplate; no-load 22 km/h", "Met by design"),
     ("R6", "Push 100 N or less at 3 m/s²; cut 100 ms", f"{push_dry:.0f} N dry, {push_wet:.0f} N wet; cut {t_cut*1000:.0f} ms", "Met on paper" if push_wet <= 100 else "At risk"),
     ("R7", "QR and 12 mm thru-axle, 30 s, no wiring", "Axle loads pass; thru-axle threads vary", "At risk"),
-    ("R8", "Empty 45 kg or less (relaxed, CGM-DDR-002)", f"{m_empty:.1f} kg", "Met on paper" if m_empty <= 45 else "Not met"),
+    ("R8", f"Empty {R8_CAP:.0f} kg or less, prototype cap (CGM-DDR-003 A1)", f"{m_empty:.1f} kg", "Met on paper" if m_empty <= R8_CAP else "Not met"),
     ("R9", "Width 1,000 mm, length 2.6 m", f"{D['width']:.0f} mm, {D['length']/1000:.2f} m", "Met on paper"),
     ("R10", "Hitch load 3 to 10 kg, centered", f"{tongue:.1f} kg", "Met on paper" if 3 <= tongue <= 10 else "Not met"),
     ("R11", "IP65 electronics, -10 to 40 °C, charge block below 0 °C", "Datasheet items", "Not verifiable at TRL 3"),
-    ("R12", f"Parts ${budget:,.0f} or less (budget_usd)", f"${total:,.0f}", "Met on paper" if total <= budget else "Not met"),
+    ("R12", f"Parts against the ${budget:,.0f} value-engineering target (budget_usd)", f"${total:,.0f}",
+     f"Within the value-engineering target (${budget-total:,.0f} under)" if total <= budget else f"Over the value-engineering target by ${total-budget:,.0f}"),
     ("R13", "Faults zero motor current in 100 ms", f"{t_cut*1000:.0f} ms fast path", "Not verifiable at TRL 3"),
     ("R14", "Lights, reflectors, flag 1.5 m", f"flag {D['flag_top']:.0f} mm", "Met by design"),
 ]

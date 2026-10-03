@@ -1,4 +1,4 @@
-"""CargoMule general arrangement sheet CGM-DWG-001, Rev P4 (TRL 3, constructable design).
+"""CargoMule general arrangement sheet CGM-DWG-001, Rev P5 (TRL 3, constructable design).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CGM-DWG-001.svg, .pdf and .png from the parametric model in
@@ -17,6 +17,7 @@ from model import PARAMS as P, assembly, derived  # noqa: E402
 
 DATE = "2026-09-25"
 DATE_P4 = "2026-10-01"
+DATE_P5 = "2026-10-02"
 
 
 _NUM = r"[-+]?\d*\.?\d+(?:e[-+]?\d+)?"
@@ -110,13 +111,14 @@ def main():
     asm = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P4",
-              author="Amish Chadha", date=DATE_P4, scale=None, theme="technical",
+    s = Sheet(project="CargoMule", title="General arrangement", dwg_no="CGM-DWG-001", rev="P5",
+              author="Amish Chadha", date=DATE_P5, scale=None, theme="technical",
               material="S235 box frame, S355 drawbar; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "180 mm rotors, metallic pads (CGM-DDR-002)", DATE, "AC"),
                          ("P3", "Layout and labels tidied", DATE, "AC"),
-                         ("P4", "Design for construction (CGM-DDR-003)", DATE_P4, "AC")])
+                         ("P4", "Design for construction (CGM-DDR-003)", DATE_P4, "AC"),
+                         ("P5", "Key switch, charge socket, drawbar reflector", DATE_P5, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -167,6 +169,7 @@ def main():
         f"Coupler housing X {P['housing'][2]:.0f} to {P['coupler_x'][1]:.0f}; load cell inside, X {cx0:.0f} to {cx1:.0f}",
         f"Coupler stroke {P['coupler_stroke']:.0f}; brake lever {D['lever_ratio']:.1f} to 1",
         f"Enclosure {P['enc'][1]:.0f} x {P['enc'][2]:.0f} x {P['enc'][3]:.0f}, X {P['enc'][0]:.0f}, door at front",
+        f"Key switch (19 hole) and charge socket (24 hole) in enclosure right wall, X {P['enc'][0] + P['key_hole'][0]:.0f} and {P['enc'][0] + P['port_hole'][0]:.0f}",
         f"Ground clearance {D['ground_clear']:.0f} under enclosure; tyre to rail {D['tyre_gap']:.1f}",
         "Empty about 46 kg; hitch load about 7.5 kg (CGM-CAL-001)",
         "Third-angle; front view from -Y; X rearward from bike axle",

@@ -3,7 +3,7 @@ doc_id: CGM-DDR-003
 title: CargoMule design for construction
 project: CargoMule
 doc_type: Design decision record
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,12 +21,16 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "Table 3 (A1 to A4) accepted by Amish as recommended on 2026-10-02; record stays Draft"
+- version: "0.4"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Table 1 changes (P1 to P15) accepted by Amish on 2026-10-02; record stays Draft"
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-10-01
-- **Status:** Draft. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; they are open for his review. The items in Table 3 change a requirement status or the product's appearance; Amish accepted all four as recommended on 2026-10-02: "i approve your recommendations for all 555 open decisions." They are recorded in the design decisions register (CGM-DEC-001). The record stays Draft.
+- **Status:** accepted. Amish, 2026-10-02: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)". This covers the changes P1 to P15 in Table 1, made under Amish's 2026-09-30 instruction to make the design physically buildable, and is recorded in the design decisions register (CGM-DEC-001). The items in Table 3 change a requirement status or the product's appearance; Amish accepted all four as recommended earlier the same day: "i approve your recommendations for all 555 open decisions." They are recorded in the design decisions register (CGM-DEC-001). The record stays Draft.
 
 ## Context
 

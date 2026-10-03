@@ -66,6 +66,10 @@ PARAMS = {
     "enc": (1585.0, 350.0, 300.0, 170.0),   # x0, length, width, height
     "enc_wall": 0.8,
     "pack": (250.0, 170.0, 150.0),
+    # controls on the enclosure's right wall near the front (CGM-DDR-003 A2, decided 2026-10-02):
+    # (centre behind the front face, centre above the enclosure floor, hole diameter)
+    "key_hole": (80.0, 95.0, 19.0),     # keyed on-off switch, 19 mm panel hole
+    "port_hole": (145.0, 95.0, 24.0),   # 3-pin charge socket with hinged cap, 24 mm panel hole
     # stand, lights and flag
     "stand_x": 905.0, "flag_h": 1150.0,
 }
@@ -471,6 +475,12 @@ def build_components(p=PARAMS):
     for x in p["cross_x"][:2]:
         for y in (-100.0, 100.0):
             shell -= zcyl(ez1 - wt - 1, ez1 + 1, x, y, 3.0)
+    yw0, yw1 = ew / 2 - wt, ew / 2                    # right wall, inner and outer faces
+    kx, kz, kd = ex0 + p["key_hole"][0], ez0 + p["key_hole"][1], p["key_hole"][2]
+    qx, qz, qd = ex0 + p["port_hole"][0], ez0 + p["port_hole"][1], p["port_hole"][2]
+    shell -= ycyl(yw0 - 1, yw1 + 1, kx, kz, kd / 2) + ycyl(yw0 - 1, yw1 + 1, qx, qz, qd / 2)
+    for dx in (-12.0, 12.0):                          # the charge socket's two M3 flange screws
+        shell -= ycyl(yw0 - 1, yw1 + 1, qx + dx, qz + 9.5, 1.6)
     add("enclosure", "Enclosure body", shell, 10, "made")
     door = box(ex0 - 0.8, ex0, -146, 146, ez0 + 2, ez0 + 168) + box(ex0 - 12, ex0 - 0.8, -146, -145.2, ez0 + 2, ez0 + 168) \
         + box(ex0 - 12, ex0 - 0.8, 145.2, 146, ez0 + 2, ez0 + 168)
@@ -497,11 +507,35 @@ def build_components(p=PARAMS):
         hrn += polyline_tube([(ex0 + el, s * 60, ez0 + 120), (ex0 + el + 40, s * 60, zs), (x1 - 60, s * 270, zs),
                               (x1 + 10, s * 270, fz0 - 3)], 3.0)
     add("harness", "Wiring harness", hrn, 14, "bought")
+    # key switch and charge socket in the right wall: body inside, bezel or flange outside, nut inside
+    ks = ycyl(yw0 - 29, yw1, kx, kz, kd / 2 - 0.2) + ycyl(yw0 - 4, yw0, kx, kz, 13.0)
+    ks += ycyl(yw1, yw1 + 3, kx, kz, 13.0) + ycyl(yw1 + 3, yw1 + 18, kx, kz, 7.0)
+    cp = ycyl(yw0 - 28, yw1, qx, qz, qd / 2 - 0.2) + box(qx - 15.5, qx + 15.5, yw1, yw1 + 3, qz - 13, qz + 13)
+    cp += ycyl(yw1 + 3, yw1 + 14, qx, qz, 11.0)       # hinged cap, closed
+    cp += fuse([ycyl(yw0 - 2, yw1 + 3, qx + dx, qz + 9.5, 1.5) for dx in (-12.0, 12.0)])
+    add("panel", "Key switch and charge socket", ks + cp, 14, "bought")
+    # their leads stay inside the box and never cross the door's hinge: the charge lead to the pack's
+    # side (plugged, so the pack still slides out), the key switch lead over the controller to the board
+    pk_y = -136 + p["pack"][1]
+    lead = polyline_tube([(qx, yw0 - 28, qz), (qx, yw0 - 45, qz), (qx, yw0 - 70, qz + 20), (qx, pk_y, qz + 20)], 3.0)
+    lead += polyline_tube([(kx, yw0 - 29, kz), (kx, yw0 - 40, kz), (kx + 25, yw0 - 19, kz + 27), (ex0 + 215, yw0 - 19, kz + 27),
+                           (ex0 + 225, yw0 - 49, kz - 13), (ex0 + 225, yw0 - 49, fz + 30)], 3.0)
+    add("panel_leads", "Key switch and charge socket leads", lead, 14, "bought")
 
     # ---------------- 15 lights, reflectors, flag pole in two clips
     lt = [box(x1, x1 + 20, min(s * 220, s * 320), max(s * 220, s * 320), fz0, fz1) for s in (-1, 1)]
     lt += [box(x0 + 400, x0 + 480, -hw - 4, -hw, fz0, fz1), box(x0 + 400, x0 + 480, hw, hw + 4, fz0, fz1)]
     add("lights", "Rear lights and side reflectors", fuse(lt), 15, "bought")
+    # drawbar reflector (decided 2026-10-02): amber, on the outer face of the drawbar's outward run,
+    # held by two stainless hose clips
+    ka, kb = p["knees"]
+    rx0, rx1 = ka[0] + 200, ka[0] + 300
+    rzc = ka[2] + (kb[2] - ka[2]) * ((rx0 + rx1) / 2 - ka[0]) / (kb[0] - ka[0])
+    ry = ka[1] - dr
+    refl = box(rx0, rx1, ry - 4.0, ry, rzc - 12, rzc + 12)
+    for xc in (rx0 + 15, rx1 - 15):
+        refl += box(xc - 4, xc + 4, ry - 5.0, ry - 4.0, rzc - 14, rzc + 14)
+    add("dw_reflector", "Drawbar reflector and clips", refl, 15, "bought")
     fy = -hw + bt + 8
     flag = zcyl(dz, D["flag_top"], x0 + 30, fy, 6.0) + box(x0 + 30, x0 + 250, fy - 3, fy + 3, D["flag_top"] - 150, D["flag_top"])
     add("flag", "Flag and pole", flag, 15, "bought")
@@ -532,8 +566,8 @@ GROUPS = {
     "pack": ("pack",),
     "controller": ("controller",),
     "board": ("board",),
-    "harness": ("harness",),
-    "lights": ("lights", "flag", "pole_clips"),
+    "harness": ("harness", "panel", "panel_leads"),
+    "lights": ("lights", "flag", "pole_clips", "dw_reflector"),
     "stand": ("stand", "stand_bolt"),
 }
 
@@ -624,6 +658,8 @@ def checks(p=PARAMS, C=None):
     chk("Anti-rotation pin between the fork tines", S("drawbar"), S("housing") - b.Pos(0, 0, 0) * box(860, 1300, -40, 40, 300, 384), 0.1)
     chk("Hitch arm in the drawbar bore", S("hitch"), S("drawbar"), 0.4)
     chk("Drawbar clear of the frame", S("drawbar"), frame, 20.0)
+    chk("Drawbar reflector on the drawbar's outer face", S("dw_reflector"), S("drawbar"), "touch")
+    chk("Drawbar reflector clear of the hitch", S("dw_reflector"), S("hitch") + S("hitch_pin"), 20.0)
     chk("Stand leg in its clevis", S("stand"), S("housing"), "touch")
     chk("Stand pivot bolt through the clevis and leg", S("stand_bolt"), S("stand") + S("housing"), "touch")
     # the coupler at full stroke: drawbar, cell and pull rod moved 50 mm rearward
@@ -653,6 +689,18 @@ def checks(p=PARAMS, C=None):
     chk("Pack clear of the controller", S("pack"), S("controller") + S("board"), 5.0)
     chk("Pack clear of the enclosure bolts", S("pack"), S("enc_bolts"), 3.0)
     chk("Enclosure clear of the wheels and brakes", S("enclosure"), wheels + S("brakes"), 20.0)
+    # key switch and charge socket on the right wall near the front (CGM-DDR-003 A2)
+    chk("Key switch and charge socket in their right wall holes", S("panel"), S("enclosure"), "touch")
+    chk("Key switch and charge socket clear of the pack, controller and board", S("panel"), S("pack") + S("controller") + S("board"), 10.0)
+    chk("Key switch and charge socket 50 mm or more behind the door", S("panel"), S("door"), 50.0)
+    chk("Key switch and charge socket clear of the rails and brake cables", S("panel"), S("rails") + S("brake_cables"), 20.0)
+    chk("Key switch and charge socket clear of the load cell cable", S("panel"), S("harness"), 10.0)
+    chk("Leads on the key switch and charge socket", S("panel_leads"), S("panel"), "touch")
+    chk("Charge lead plugged into the pack's side", S("panel_leads"), S("pack"), "touch")
+    chk("Key switch lead on the control board", S("panel_leads"), S("board"), "touch")
+    chk("Leads clear of the controller and enclosure bolts", S("panel_leads"), S("controller") + S("enc_bolts"), 5.0)
+    chk("Leads inside the box, clear of its walls and top", S("panel_leads"), S("enclosure"), 3.0)
+    chk("No lead across the door hinge: leads clear of the door", S("panel_leads"), S("door"), 50.0)
     # cables
     chk("Brake cables clear of the tyres and spokes", S("brake_cables"), wheels, 5.0)
     chk("Brake cables clear of the rotors", S("brake_cables") - box(1950, 2100, -400, 400, 250, 320), S("brakes"), 5.0)
